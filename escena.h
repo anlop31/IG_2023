@@ -4,7 +4,12 @@
 #include "ejes.h"
 #include "malla.h"
 #include "cubo.h"
-#include "piramidepentagonal.h"
+#include "piramidehexagonal.h"
+#include "objply.h"
+#include "objrevolucion.h"
+#include "esfera.h"
+#include "cilindro.h"
+#include "cono.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION} menu;
 class Escena
@@ -36,10 +41,25 @@ class Escena
    // Objetos de la escena
    Ejes ejes;
    Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'
-   PiramidePentagonal * piramide = nullptr ; // es importante inicializarlo a 'nullptr'
-
+   PiramideHexagonal * piramide = nullptr ; // es importante inicializarlo a 'nullptr'
+   Esfera * esfera = nullptr;
+   Cilindro * cilindro = nullptr;
+   Cono * cono = nullptr;
    
-    int figura = 0; // seleccion figura a visualizar
+   ObjPLY * ObjPLY_1 = nullptr;
+   ObjPLY * ObjPLY_2 = nullptr;
+   ObjRevolucion * ObjPLY_3 = nullptr;
+
+    // variables para controlar la figura a visualizar
+    bool hayCubo = false;
+    bool hayPiramide = false;
+
+    bool hayPLY_1 = false;
+    bool hayPLY_2 = false;
+    bool hayPLY_3 = false;
+    
+
+    // variables para controlar el modo de visualización, y poder combinarlos
     bool modoPunto = false;
     bool modoLinea = false;
     bool modoSolido = true;

@@ -3,6 +3,8 @@
 #include "auxiliar.h"     // includes de OpenGL/glut/glew, windows, y librería std de C++
 #include "escena.h"
 #include "malla.h" // objetos: Cubo y otros....
+#include "objply.h"
+#include "ply_reader.h"
 
 //**************************************************************************
 // constructor de la escena (no puede usar ordenes de OpenGL)
@@ -22,8 +24,23 @@ Escena::Escena()
     // .......completar: ...
     // .....
 
-    cubo = new Cubo(60.0);
+    cubo = new Cubo(60.0); // cubo creado
+    piramide = new PiramideHexagonal(80.0, 80.0, 40.0); // piramide creada
 
+    esfera = new Esfera(30, 30, 40);
+    cilindro = new Cilindro(4, 10, 50.0, 50.0); 
+    cono = new Cono(3, 10, 70, 25);
+
+    ObjPLY_1 = new ObjPLY("./plys/ant.ply");
+    ObjPLY_2 = new ObjPLY("./plys/beethoven.ply");
+    ObjPLY_2->setColor(Tupla4f(0.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(1.0f, 0.0f, 0.0f, 1.0f));
+    ObjPLY_3 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
+    ObjPLY_3->setColor(Tupla4f(1.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(0.1f, 0.6f, 0.1f, 1.0f));
+
+
+    // constructor de revolucion a partir de vector de puntos (y se usa) (esfera cono y cilindro?)
+
+    
 }
 
 //**************************************************************************
@@ -38,7 +55,7 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
 
-   glEnable( GL_CULL_FACE );
+   glEnable( GL_CULL_FACE ); // se habilita cull face
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
@@ -49,15 +66,80 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 
 void Escena::dibujarObjetos(){
-   if(figura == 0){
+   //// CUBO
+   if(hayCubo){
       cubo->draw();
-      std::cout << "cubo dibujado" << std::endl;
+      std::cout << "---Cubo dibujado" << std::endl;
    }
-   
-   if(figura == 1){
+   else{
+      std::cout << "---Cubo ocultado" << std::endl;
+   }
+
+
+   //// PIRAMIDE
+   if(hayPiramide){
       piramide->draw();
-      std::cout << "piramide dibujada" << std::endl;
+      std::cout << "---Piramide dibujada" << std::endl;
    }
+   else{
+      std::cout << "---Piramide ocultada" << std::endl;
+   }
+
+
+   //// PLYs
+   if(hayPLY_1){
+      std::cout << "---OBJPLY1 dibujado" << std::endl;
+      glPushMatrix();
+         glScalef(2, 2, 2);
+         ObjPLY_1->draw();
+      glPopMatrix();
+   }
+   else{
+      std::cout << "---OBJPLY1 ocultado" << std::endl;
+   }
+
+   if(hayPLY_2){
+      std::cout << "---OBJPLY2 dibujado" << std::endl;
+      glPushMatrix();
+         glScalef(10, 10, 10);
+         ObjPLY_2->draw();
+      glPopMatrix();
+   }
+   else{
+      std::cout << "---OBJPLY2 ocultado" << std::endl;
+   }
+
+   if(hayPLY_3){
+      std::cout << "---OBJPLY3 dibujado" << std::endl;
+      glPushMatrix();
+         glScalef(15, 15, 15);
+         ObjPLY_3->draw();
+      glPopMatrix();
+   }
+   else{
+      std::cout << "---OBJPLY3 ocultado" << std::endl;
+   }
+
+
+   //// ESFERA
+   glPushMatrix();
+      glTranslatef(0, 160, 0);
+      esfera->draw();
+   glPopMatrix();
+
+
+   //// CILINDRO
+   glPushMatrix();
+      glTranslatef(-150, 0, 0);
+      cilindro->draw();
+   glPopMatrix();
+
+
+   //// CONO
+   glPushMatrix();
+      glTranslatef(100, 0, -100);
+      cono->draw();
+   glPopMatrix();
 }
 
 
@@ -70,6 +152,7 @@ void Escena::dibujarObjetos(){
 
 void Escena::dibujar()
 {
+   // no puedo usar opengl fuera de aqui
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
     ejes.draw();
@@ -80,16 +163,21 @@ void Escena::dibujar()
     // cubo->draw()
     // o    piramide->draw()
 
+   // para estos modos, las luces deben estar desactivadas
+   // si hay luz, el color deja de tener efecto.
    if (modoPunto) {
-      glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); // puntos
+      glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); // puntos (front)
+      std::cout << "MODO PUNTOS ACTIVO" << std::endl;
       dibujarObjetos();
    }
    if (modoLinea) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // lineas
+      std::cout << "MODO LINEAS ACTIVO" << std::endl;
       dibujarObjetos();
    }
    if (modoSolido) {
-      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // solido
+      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // solido (back)
+      std::cout << "MODO SOLIDO ACTIVO" << std::endl;
       dibujarObjetos();
    }
 
@@ -127,22 +215,25 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
          modoMenu=SELVISUALIZACION;
          break ;
-
-         // COMPLETAR con los diferentes opciones de teclado
-         //if(selobjeto)
-            //case C,P
-         //if(selvisualizacion)  
-            //case D,L,S 
+      case '1':
+         hayPLY_1 = !hayPLY_1;
+         break;
+      case '2':
+         hayPLY_2 = !hayPLY_2;
+         break;
+      case '3':
+         hayPLY_3 = !hayPLY_3;
+         break;
    }
 
    // SELECCION OBJETO
    if(modoMenu == SELOBJETO)
       switch (toupper(tecla)){
          case 'C': 
-            figura = 0; // cubo
+            hayCubo = !hayCubo; // cubo
             break;
          case 'P': 
-            figura = 1; // modo lineas
+            hayPiramide = !hayPiramide; // modo lineas
             break;
       }
 

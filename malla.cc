@@ -1,6 +1,9 @@
 #include "auxiliar.h"
 #include "malla.h"
 
+using namespace std;
+
+
 // *****************************************************************************
 //
 // IG_D Clase Malla3D
@@ -9,6 +12,45 @@
 // -----------------------------------------------------------------------------
 // Función de visualización de la malla,
 
+// Cálculo de las normales
+void Malla3D::calcularNormales(){
+   nc.resize(f.size());
+   nv.resize(v.size());
+
+   Tupla3f p, q, r;
+   Tupla3f a, b;
+   Tupla3f normal_c;
+
+   // Inicializar a 0 el vector de normales de vértices.
+   for(int i=0; i<nv.size(); ++i){
+      nv[i] = {0.0, 0.0, 0.0};
+   }
+
+   for(int i=0; i<f.size(); ++i){
+      
+      cout << "*****iteracion " << i << endl;
+
+      if(f[i][0] != 0){
+         if(f[i][1] != 0){
+            if(f[i][2] != 0){
+               q = v[f[i][0]]; 
+               
+               p = v[f[i][1]]; 
+               r = v[f[i][2]]; 
+               a = q - p; b = r - p;
+
+               normal_c = b.cross(a);
+               nc[i] = normal_c.normalized();
+
+               nv[f[i][0]] = nv[f[i][0]] + nc[i];
+               nv[f[i][1]] = nv[f[i][1]] + nc[i];
+               nv[f[i][2]] = nv[f[i][2]] + nc[i];
+           }
+         }
+      }
+}
+
+// Dibujar malla
 void Malla3D::draw()
 {
    // (la primera vez, se deben crear los VBOs y guardar sus identificadores en el objeto)
@@ -20,19 +62,58 @@ void Malla3D::draw()
       id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, 3*v.size()*sizeof(float), v.data());
 
    if(id_vbo_tri == 0) // si no está creado el vbo de triángulos
-      id_vbo_tri = CrearVBO(GL_ELEMENT_ARRAY_BUFFER, 3*f.size()*sizeof(unsigned int), f.data());
+      id_vbo_tri = CrearVBO(GL_ELEMENT_ARRAY_BUFFER, 3*f.size()*sizeof(int), f.data());
 
-   // if (id_vbo_c != 0)
-   // {
-   //    // habilitar uso de array de colores
-   //    glEnableClientState(GL_COLOR_ARRAY);
-   //    // especifícar cual es el VBO que vamos a usar
-   //    glBindBuffer(GL_ARRAY_BUFFER, id_vbo_c);
-   //    // Usar el buffer activo para el color
-   //    glColorPointer(3, GL_FLOAT, 0, 0);
-   // }
+   // Crear VBO colores
+   if(id_vbo_cd == 0)
+      id_vbo_cd = CrearVBO(GL_ARRAY_BUFFER, 4*cVertices.size()*sizeof(float), cVertices.data());
+   if(id_vbo_cl == 0)
+      id_vbo_cl = CrearVBO(GL_ARRAY_BUFFER, 4*cLineas.size()*sizeof(float), cLineas.data());
+   if(id_vbo_cs == 0)
+      id_vbo_cs = CrearVBO(GL_ARRAY_BUFFER, 4*cSolido.size()*sizeof(float), cSolido.data());
 
-   std::cout << "draw de malla" << std::endl;
+
+
+   // Tamaño de los puntos
+   glPointSize(5.0);
+
+   //// revisar. si hay luces hay materiales.
+   if(glIsEnabled(GL_LIGHTING)){
+      glEnableClientState(GL_NORMAL_ARRAY);
+      glBindBuffer(GL_ARRAY_BUFFER, id_vbo_nv);
+      glNormalPointer(GL_FLOAT,0, 0 );
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+      m.aplicar();
+
+   } 
+   ////
+   
+   // Segun el modo de dibujo, activar un color u otro
+   if (id_vbo_cd != 0 && id_vbo_cl != 0 && id_vbo_cs != 0) {
+      GLint mode[2];
+
+      // GLint mode;
+      glGetIntegerv(GL_POLYGON_MODE, mode);
+
+      // habilitar uso de array de colores
+      glEnableClientState( GL_COLOR_ARRAY );
+
+      // especificar cual es el VBO que vamos a usar
+      if (mode[1] == GL_POINT) { // si está en modo puntos
+         glBindBuffer( GL_ARRAY_BUFFER, id_vbo_cd);
+      } else if (mode[1] == GL_LINE) { // si está en modo líneas
+         glBindBuffer( GL_ARRAY_BUFFER, id_vbo_cl);
+      } else if (mode[1] == GL_FILL) { // si está en modo sólido
+         glBindBuffer(GL_ARRAY_BUFFER, id_vbo_cs);
+      }
+
+      // usar el buffer activo para el color
+      glColorPointer(4, GL_FLOAT, 0, 0);
+
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+   }
+
 
    /// Para activar los VBOs 
    // activar buffer: VBO de vértices
@@ -70,4 +151,16 @@ GLuint Malla3D::CrearVBO ( GLuint tipo_vbo , GLuint tam , GLvoid * puntero_ram )
    glBindBuffer ( tipo_vbo , 0 ); // desactivacion del VBO
    
    return id_vbo ; // devolver el identificador resultado
+}
+
+void Malla3D::setColor(Tupla4f colorVertices, Tupla4f colorLineas, Tupla4f colorSolido){
+   cVertices.resize(v.size());
+   cLineas.resize(v.size()); ///
+   cSolido.resize(v.size()); ///
+
+   for(int i=0; i < v.size(); ++i){
+      cVertices[i] = colorVertices;
+      cLineas[i] = colorLineas;
+      cSolido[i] = colorSolido;
+   }
 }

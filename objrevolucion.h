@@ -2,15 +2,18 @@
 //
 // Informática Gráfica (Grado Informática)
 //
-// Archivo: piramidepentagonal.h
+// Archivo: Cubo.h
 
 //
 // #############################################################################
 
-#ifndef PIRAMIDE_PENTAGONAL_H_INCLUDED
-#define PIRAMIDE_PENTAGONAL_H_INCLUDED
+#ifndef OBJREVOLUCION_H_INCLUDED
+#define OBJREVOLUCION_H_INCLUDED
 
 #include "auxiliar.h"
+#include "malla.h"
+
+#define EPSILON 0.0001
 
 // *****************************************************************************
 //
@@ -19,12 +22,17 @@
 // *****************************************************************************
 
 // *****************************************************************************
-// Pirámide de base pentagonal con base centrada en el origen 
+// Cubo con centro en el origen y lado unidad por defecto
+// (tiene 9 vertices y 6 caras)
 
-class PiramidePentagonal: public Malla3D
+class ObjRevolucion : public Malla3D
 {
    public:
-      PiramidePentagonal(float h=1.0,float r=0.5);
+       ObjRevolucion();
+   ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
+   ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
+protected:
+    void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias);
 
 } ;
 

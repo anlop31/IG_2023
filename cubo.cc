@@ -49,5 +49,9 @@ Cubo::Cubo(float lado)
    // cara de abajo
    f[10] = {5, 6, 0};
    f[11] = {0, 6, 1};
+
+
+   setColor(Tupla4f(1.0f, 0.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(1.0f, 1.0f, 0.0f, 1.0f));
 }
+
 
