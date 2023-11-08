@@ -27,7 +27,7 @@ void Malla3D::calcularNormales(){
    }
 
    for(int i=0; i<f.size(); ++i){
-      
+
       cout << "*****iteracion " << i << endl;
 
       if(f[i][0] != 0){
@@ -48,6 +48,12 @@ void Malla3D::calcularNormales(){
            }
          }
       }
+   }
+
+   // una vez tengamos las normales de los vértices, normalizarlas
+   for(int i=0; i<nv.size(); ++i){
+      nv[i] = nv[i].normalized();
+   }
 }
 
 // Dibujar malla
@@ -72,21 +78,27 @@ void Malla3D::draw()
    if(id_vbo_cs == 0)
       id_vbo_cs = CrearVBO(GL_ARRAY_BUFFER, 4*cSolido.size()*sizeof(float), cSolido.data());
 
+   // Crear VBO normales
+   if(id_vbo_nc == 0)
+      id_vbo_nc = CrearVBO(GL_ARRAY_BUFFER, 3*nc.size()*sizeof(float), nc.data());
+   if(id_vbo_nv == 0)
+      id_vbo_nv = CrearVBO(GL_ARRAY_BUFFER, 3*nv.size()*sizeof(float), nv.data());
+
 
 
    // Tamaño de los puntos
    glPointSize(5.0);
 
    //// revisar. si hay luces hay materiales.
-   if(glIsEnabled(GL_LIGHTING)){
-      glEnableClientState(GL_NORMAL_ARRAY);
-      glBindBuffer(GL_ARRAY_BUFFER, id_vbo_nv);
-      glNormalPointer(GL_FLOAT,0, 0 );
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
+   // if(glIsEnabled(GL_LIGHTING)){
+   //    glEnableClientState(GL_NORMAL_ARRAY);
+   //    glBindBuffer(GL_ARRAY_BUFFER, id_vbo_nv);
+   //    glNormalPointer(GL_FLOAT,0, 0 );
+   //    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-      m.aplicar();
+   //    m.aplicar();
 
-   } 
+   // } 
    ////
    
    // Segun el modo de dibujo, activar un color u otro

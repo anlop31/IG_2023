@@ -12,34 +12,33 @@
 
 Escena::Escena()
 {
-    Front_plane       = 50.0;
-    Back_plane        = 2000.0;
-    Observer_distance = 4*Front_plane;
-    Observer_angle_x  = 0.0 ;
-    Observer_angle_y  = 0.0 ;
+   Front_plane       = 50.0;
+   Back_plane        = 2000.0;
+   Observer_distance = 4*Front_plane;
+   Observer_angle_x  = 0.0 ;
+   Observer_angle_y  = 0.0 ;
 
-    ejes.changeAxisSize( 5000 );
+   ejes.changeAxisSize( 5000 );
 
-    // crear los objetos de la escena....
-    // .......completar: ...
-    // .....
+   // crear los objetos de la escena....
+   // .......completar: ...
+   // .....
 
-    cubo = new Cubo(60.0); // cubo creado
-    piramide = new PiramideHexagonal(80.0, 80.0, 40.0); // piramide creada
+   cubo = new Cubo(60.0); // cubo creado
+   piramide = new PiramideHexagonal(80.0, 80.0, 40.0); // piramide creada
 
-    esfera = new Esfera(30, 30, 40);
-    cilindro = new Cilindro(4, 10, 50.0, 50.0); 
-    cono = new Cono(3, 10, 70, 25);
+   esfera = new Esfera(30, 30, 40);
+   cilindro = new Cilindro(4, 10, 50.0, 50.0); 
+   cono = new Cono(3, 10, 70, 25);
 
-    ObjPLY_1 = new ObjPLY("./plys/ant.ply");
-    ObjPLY_2 = new ObjPLY("./plys/beethoven.ply");
-    ObjPLY_2->setColor(Tupla4f(0.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(1.0f, 0.0f, 0.0f, 1.0f));
-    ObjPLY_3 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
-    ObjPLY_3->setColor(Tupla4f(1.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(0.1f, 0.6f, 0.1f, 1.0f));
+   ObjPLY_1 = new ObjPLY("./plys/ant.ply");
+   ObjPLY_2 = new ObjPLY("./plys/beethoven.ply");
+   ObjPLY_2->setColor(Tupla4f(0.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(1.0f, 0.0f, 0.0f, 1.0f));
+   ObjPLY_3 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
+   ObjPLY_3->setColor(Tupla4f(1.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(0.1f, 0.6f, 0.1f, 1.0f));
 
-
-    // constructor de revolucion a partir de vector de puntos (y se usa) (esfera cono y cilindro?)
-
+   LuzPos = new LuzPosicional({200, 100, 200}, 1, {0.2, 0.2, 0.2, 1}, {0.6, 0.6, 0.6, 1.0}, {1.0, 1.0, 1.0, 1.0});   
+   LuzDir = new LuzDireccional({20, 20}, 1, {0.2, 0.2, 0.2, 1}, {0.6, 0.6, 0.6, 1.0}, {1.0, 1.0, 1.0, 1.0});
     
 }
 
@@ -57,11 +56,38 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
    glEnable( GL_CULL_FACE ); // se habilita cull face
 
+   // para evitar que se altere la longitud de las normales:
+   glEnable(GL_NORMALIZE);
+
+   // Modo de visualización sombreado suave
+   // glShadeModel(GL_SMOOTH);
+   // glShadeModel(GL_FLAT);
+
+
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
 
    change_projection( float(UI_window_width)/float(UI_window_height) );
 	glViewport( 0, 0, UI_window_width, UI_window_height );
+}
+
+
+void Escena::activar_luces(){
+   glEnable(GL_LIGHTING); // activamos luces
+   glShadeModel(GL_SMOOTH); // sombreado suave
+
+   if(LuzPos != nullptr){
+      glPushMatrix();
+         LuzPos->activar();
+      glPopMatrix();
+   }
+
+
+   if(LuzDir != nullptr){
+      glPushMatrix();
+         LuzDir->activar();
+      glPopMatrix();
+   }
 }
 
 
@@ -155,13 +181,15 @@ void Escena::dibujar()
    // no puedo usar opengl fuera de aqui
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
-    ejes.draw();
-    // COMPLETAR
-    //   Dibujar los diferentes elementos de la escena
-    // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
-    // y hacer 
-    // cubo->draw()
-    // o    piramide->draw()
+
+   // ejes en color plano
+   glDisable(GL_LIGHTING);
+   ejes.draw();
+
+
+   // asignar materiales
+   if (iluminacionActiva)
+      activar_luces();
 
    // para estos modos, las luces deben estar desactivadas
    // si hay luz, el color deja de tener efecto.

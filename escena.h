@@ -10,6 +10,8 @@
 #include "esfera.h"
 #include "cilindro.h"
 #include "cono.h"
+#include <LuzDireccional.h>
+#include <LuzPosicional.h>
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION} menu;
 class Escena
@@ -64,6 +66,14 @@ class Escena
     bool modoLinea = false;
     bool modoSolido = true;
 
+
+    /* LUCES */ 
+    Tupla2f direccion={(float)M_PI/2,(float)M_PI/2};
+    LuzDireccional * LuzDir = nullptr;
+    LuzPosicional * LuzPos = nullptr;  
+    // Iluminacion activa
+    bool iluminacionActiva = false;
+
    public:
 
     Escena();
@@ -73,6 +83,7 @@ class Escena
 	// Dibujar
     void dibujarObjetos();
 	void dibujar() ;
+    void activar_luces();
 
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;

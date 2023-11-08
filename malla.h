@@ -32,7 +32,7 @@ class Malla3D
    protected:
 
    // Material
-   Material m;
+   // Material m; // definir un constructor por defecto
 
    GLuint CrearVBO (GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);
 
@@ -61,8 +61,8 @@ class Malla3D
    GLuint id_vbo_cd = 0; // vbo colores de los puntos
    GLuint id_vbo_cl = 0; // vbo colores de las lineas
    GLuint id_vbo_cs = 0; // vbo colores del solido
-   
-
+   GLuint id_vbo_nc = 0; // vbo normales de las caras
+   GLuint id_vbo_nv = 0; // vbo normales de los vértices
 
 
 } ;
