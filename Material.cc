@@ -27,3 +27,11 @@ void Material::aplicar(){
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
 }
+
+void Material::operator = (const Material & otro){
+   ambiente  = otro.ambiente;
+   difuso    = otro.difuso;
+   especular = otro.especular;
+   brillo    = otro.brillo;
+//    emision   = otro.emision;
+}

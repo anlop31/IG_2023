@@ -13,6 +13,20 @@ LuzDireccional::LuzDireccional(Tupla2f direccion, GLenum idLuzOpenGL,
     beta = direccion(1);
 
     this->posicion={sin(alpha)*cos(beta), sin(beta), cos(alpha)*cos(beta), 0};
+
+    // this->posicion = {direccion(0), direccion(1), direccion(2), 0};
+
+    // posicion_original = posicion;
+
+    // alpha = abs(atan2f( direccion(0), direccion(2) ));
+
+    // beta = asin( direccion(1)/ sqrt(direccion.lengthSq()) );
+
+
+    // if (direccion(0) < 0){
+    //     alpha += M_PI ;
+    // }
+
 }
 
 
@@ -43,6 +57,15 @@ void LuzDireccional::variarAnguloAlpha(float incremento){
     posicion(1) = sin(beta);
     posicion(2) = cos(alpha) * cos(beta);
 
+
+//    posicion(0) = sin(alpha) * cos(beta) * sqrt(posicion_original.lengthSq());
+
+//    posicion(1) = sin(beta) * sqrt(posicion_original.lengthSq());
+
+//    posicion(2) = cos(alpha) * cos(beta) * sqrt(posicion_original.lengthSq());
+
+
+
 }
 
 void LuzDireccional::variarAnguloBeta(float incremento){
@@ -58,4 +81,12 @@ void LuzDireccional::variarAnguloBeta(float incremento){
     posicion(0) = sin(alpha) * cos(beta);
     posicion(1) = sin(beta);
     posicion(2) = cos(alpha) * cos(beta);
+
+    // posicion(0) = sin(alpha) * cos(beta) * sqrt(posicion_original.lengthSq());
+
+    // posicion(1) = sin(beta) * sqrt(posicion_original.lengthSq());
+
+    // posicion(2) = cos(beta) * cos(alpha) * sqrt(posicion_original.lengthSq());
+
+
 }

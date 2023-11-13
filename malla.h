@@ -32,7 +32,7 @@ class Malla3D
    protected:
 
    // Material
-   // Material m; // definir un constructor por defecto
+   Material m; // definir un constructor por defecto
 
    GLuint CrearVBO (GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);
 

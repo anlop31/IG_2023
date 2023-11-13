@@ -90,16 +90,16 @@ void Malla3D::draw()
    glPointSize(5.0);
 
    //// revisar. si hay luces hay materiales.
-   // if(glIsEnabled(GL_LIGHTING)){
-   //    glEnableClientState(GL_NORMAL_ARRAY);
-   //    glBindBuffer(GL_ARRAY_BUFFER, id_vbo_nv);
-   //    glNormalPointer(GL_FLOAT,0, 0 );
-   //    glBindBuffer(GL_ARRAY_BUFFER, 0);
+   if(glIsEnabled(GL_LIGHTING)){
+      glEnableClientState(GL_NORMAL_ARRAY);
+      glBindBuffer(GL_ARRAY_BUFFER, id_vbo_nv);
+      glNormalPointer(GL_FLOAT,0, 0 );
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-   //    m.aplicar();
+      m.aplicar();
 
-   // } 
-   ////
+   } 
+   //
    
    // Segun el modo de dibujo, activar un color u otro
    if (id_vbo_cd != 0 && id_vbo_cl != 0 && id_vbo_cs != 0) {
@@ -147,6 +147,16 @@ void Malla3D::draw()
    // desactivar uso de array de vértices
    glDisableClientState ( GL_VERTEX_ARRAY );
 
+   // esto??
+   glDisableClientState ( GL_COLOR_ARRAY );
+
+//añadido
+   if (glIsEnabled(GL_LIGHTING)){
+      glDisableClientState( GL_LIGHTING );
+   }
+
+
+
 }
 
 GLuint Malla3D::CrearVBO ( GLuint tipo_vbo , GLuint tam , GLvoid * puntero_ram )
@@ -175,4 +185,8 @@ void Malla3D::setColor(Tupla4f colorVertices, Tupla4f colorLineas, Tupla4f color
       cLineas[i] = colorLineas;
       cSolido[i] = colorSolido;
    }
+}
+
+void Malla3D::setMaterial(Material mat){
+   m = mat; // asignamos material
 }

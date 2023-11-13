@@ -40,6 +40,14 @@ Escena::Escena()
    LuzPos = new LuzPosicional({200, 100, 200}, 1, {0.2, 0.2, 0.2, 1}, {0.6, 0.6, 0.6, 1.0}, {1.0, 1.0, 1.0, 1.0});   
    LuzDir = new LuzDireccional({20, 20}, 1, {0.2, 0.2, 0.2, 1}, {0.6, 0.6, 0.6, 1.0}, {1.0, 1.0, 1.0, 1.0});
     
+   asignar_materiales();
+
+
+   //  luz0  = new LuzPosicional (posicion_luz_0, GL_LIGHT0,  {0, 0, 0, 1}, {1,1,1,1}, {1,1,1,1});
+   //  luz1 = new LuzDireccional ( posicion_luz_1, GL_LIGHT1, {0, 0, 0, 1}, {1,1,1,1}, {1,1,1,1});
+
+
+
 }
 
 //**************************************************************************
@@ -69,6 +77,29 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
    change_projection( float(UI_window_width)/float(UI_window_height) );
 	glViewport( 0, 0, UI_window_width, UI_window_height );
+}
+
+
+void Escena::asignar_materiales(){
+   Material oro ({0.24725, 0.1995, 0.0745, 1}, {0.75164, 0.60648, 0.22648, 1}, {0.628281, 0.555802, 0.366065, 1}, 0.4*128.0f);
+   Material ruby({0.1745, 0.01175, 0.01175, 1}, {0.61424, 0.04136, 0.04136, 1}, {0.727811, 0.626959, 0.626959, 1}, 128.0f * 0.6f );
+   Material perla({0.25, 0.20725, 0.20725, 1}, {1, 0.829, 0.829, 1}, {0.296648, 0.296648, 0.296648, 1}, 128.0f * 0.088);
+   Material esmeralda({0.0215, 0.1745, 0.0215, 1}, {0.07568, 0.61424, 0.07568, 1}, {0.633, 0.727811,0.633, 1}, 0.6 * 128.0f);
+   Material plata({0.19225, 0.19225, 0.19225, 1}, {0.50754, 0.50754, 0.50754, 1}, {0.508273,0.508273, 0.508273, 1}, 0.4*128.0f);
+   Material turquesa({0.1, 0.18725, 0.1745, 1}, {0.396, 0.74151, 0.69102, 1}, {0.297254, 0.30829, 0.306678, 1} ,0.1 * 128.0f);
+
+   cubo->setMaterial(ruby);
+   piramide->setMaterial(esmeralda);
+   esfera->setMaterial(plata);
+   cilindro->setMaterial(esmeralda);
+   cono->setMaterial(plata);
+
+   oro.aplicar();
+   ruby.aplicar();
+   perla.aplicar();
+   esmeralda.aplicar();
+   plata.aplicar();
+   turquesa.aplicar();
 }
 
 
@@ -188,6 +219,7 @@ void Escena::dibujar()
 
 
    // asignar materiales
+   // asignar_materiales();
    if (iluminacionActiva)
       activar_luces();
 
@@ -251,6 +283,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          break;
       case '3':
          hayPLY_3 = !hayPLY_3;
+         break;
+      case 'I':
+         iluminacionActiva = !iluminacionActiva;
          break;
    }
 

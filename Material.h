@@ -18,6 +18,7 @@ class Material {
                     float brillo );
 
         void aplicar();
+        void operator = (const Material & otro);
 };
 
 #endif
