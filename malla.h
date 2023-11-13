@@ -35,6 +35,7 @@ class Malla3D
    Material m; // definir un constructor por defecto
 
    GLuint CrearVBO (GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);
+   void crearVBOS();
 
 
 

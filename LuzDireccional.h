@@ -10,6 +10,7 @@ class LuzDireccional : public Luz
     protected :
         float alpha ;
         float beta ;
+        Tupla4f posicion_original;
     public :
     // inicializar la fuente de luz
     LuzDireccional(     Tupla2f direccion,

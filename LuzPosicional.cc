@@ -12,7 +12,7 @@ LuzPosicional::LuzPosicional(
     this->colorDifuso = colorDifuso;
     this->colorEspecular = colorEspecular;
 
-    this->posicion = {posicion(0), posicion(1), posicion(2), 0};
+    this->posicion = {posicion(0), posicion(1), posicion(2), 1}; // antes 0 mío, 1 git
 
     // posicion = {p(0), p(1), p(2), 1};
 }

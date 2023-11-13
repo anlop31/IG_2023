@@ -37,9 +37,12 @@ Escena::Escena()
    ObjPLY_3 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
    ObjPLY_3->setColor(Tupla4f(1.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(0.1f, 0.6f, 0.1f, 1.0f));
 
-   LuzPos = new LuzPosicional({200, 100, 200}, 1, {0.2, 0.2, 0.2, 1}, {0.6, 0.6, 0.6, 1.0}, {1.0, 1.0, 1.0, 1.0});   
-   LuzDir = new LuzDireccional({20, 20}, 1, {0.2, 0.2, 0.2, 1}, {0.6, 0.6, 0.6, 1.0}, {1.0, 1.0, 1.0, 1.0});
+   // Luz posicional: luz0
+   luz0 = new LuzPosicional({200, 100, 200}, GL_LIGHT0, {1.0, 0.0, 1.0, 1}, {1.0, 0.0, 0.0, 1.0}, {1.0, 0.0, 0.0, 1.0});   
+   // Luz direccional: luz1
+   luz1 = new LuzDireccional({20, 20}, GL_LIGHT1, {1.0, 0.0, 0.0, 1.0}, {1.0, 0.0, 0.0, 1.0}, {1.0, 0.0, 0.0, 1.0});
     
+
    asignar_materiales();
 
 
@@ -87,19 +90,21 @@ void Escena::asignar_materiales(){
    Material esmeralda({0.0215, 0.1745, 0.0215, 1}, {0.07568, 0.61424, 0.07568, 1}, {0.633, 0.727811,0.633, 1}, 0.6 * 128.0f);
    Material plata({0.19225, 0.19225, 0.19225, 1}, {0.50754, 0.50754, 0.50754, 1}, {0.508273,0.508273, 0.508273, 1}, 0.4*128.0f);
    Material turquesa({0.1, 0.18725, 0.1745, 1}, {0.396, 0.74151, 0.69102, 1}, {0.297254, 0.30829, 0.306678, 1} ,0.1 * 128.0f);
+   Material blanco({1.0, 1.0, 1.0, 1}, {1.0, 1.0, 1.0, 1}, {1.0, 1.0, 1.0, 1} , /*brillo*/0.1 * 128.0f);
 
    cubo->setMaterial(ruby);
    piramide->setMaterial(esmeralda);
-   esfera->setMaterial(plata);
-   cilindro->setMaterial(esmeralda);
-   cono->setMaterial(plata);
 
-   oro.aplicar();
-   ruby.aplicar();
-   perla.aplicar();
-   esmeralda.aplicar();
-   plata.aplicar();
-   turquesa.aplicar();
+   esfera->setMaterial(turquesa);
+   cilindro->setMaterial(blanco);
+   cono->setMaterial(oro);
+
+   // oro.aplicar();
+   // ruby.aplicar();
+   // perla.aplicar();
+   // esmeralda.aplicar();
+   // plata.aplicar();
+   // turquesa.aplicar();
 }
 
 
@@ -107,18 +112,33 @@ void Escena::activar_luces(){
    glEnable(GL_LIGHTING); // activamos luces
    glShadeModel(GL_SMOOTH); // sombreado suave
 
-   if(LuzPos != nullptr){
+   if(luz0 != nullptr){
       glPushMatrix();
-         LuzPos->activar();
+         luz0->activar();
       glPopMatrix();
    }
 
 
-   if(LuzDir != nullptr){
+   if(luz1 != nullptr){
       glPushMatrix();
-         LuzDir->activar();
+         luz1->activar();
       glPopMatrix();
    }
+
+////
+   if(luz0 != nullptr){
+      glPushMatrix();
+         luz0->activar();
+      glPopMatrix();
+   }
+
+
+   if(luz1 != nullptr){
+      glPushMatrix();
+         luz1->activar();
+      glPopMatrix();
+   }
+////
 }
 
 
@@ -275,18 +295,18 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
          modoMenu=SELVISUALIZACION;
          break ;
-      case '1':
-         hayPLY_1 = !hayPLY_1;
-         break;
-      case '2':
-         hayPLY_2 = !hayPLY_2;
-         break;
-      case '3':
-         hayPLY_3 = !hayPLY_3;
-         break;
-      case 'I':
-         iluminacionActiva = !iluminacionActiva;
-         break;
+      // case '1':
+      //    hayPLY_1 = !hayPLY_1;
+      //    break;
+      // case '2':
+      //    hayPLY_2 = !hayPLY_2;
+      //    break;
+      // case '3':
+      //    hayPLY_3 = !hayPLY_3;
+      //    break;
+      // case 'I':
+      //    iluminacionActiva = !iluminacionActiva;
+      //    break;
    }
 
    // SELECCION OBJETO
@@ -311,6 +331,53 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             break;
          case 'S': 
             modoSolido = !modoSolido; // modo solido
+            break;
+         case 'T':
+            iluminacionActiva = !iluminacionActiva;
+            break;
+         case '0':
+            if (luz0 != nullptr)
+               luz0->setActivada(!luz0->estadoActivada());
+            break;
+         case '1':
+            if (luz1 != nullptr)
+                  luz1->setActivada(!luz1->estadoActivada());
+            break;
+         // case '2':
+         //    break;
+         // case '3':
+         //    break;
+         // case '4':
+         //    break;
+         // case '5':
+         //    break;
+         // case '6':
+         //    break;
+         // case '7':
+         //    break;
+         case 'A': // variar angulo alfa
+
+            ultimaPulsada = 'A';
+            break;
+         case 'B':
+
+            ultimaPulsada = 'B';
+            break;
+         case '>':
+            if(ultimaPulsada == 'A'){
+               // incrementa el angulo
+            }
+            else if(ultimaPulsada == 'B'){ // la B
+
+            }
+            break;
+         case '<':
+            if(ultimaPulsada == 'A'){
+               // decrementa el angulo
+            }
+            else if(ultimaPulsada == 'B'){ // la B
+
+            }
             break;
       }
 

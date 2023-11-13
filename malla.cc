@@ -14,6 +14,7 @@ using namespace std;
 
 // Cálculo de las normales
 void Malla3D::calcularNormales(){
+   /*
    nc.resize(f.size());
    nv.resize(v.size());
 
@@ -54,15 +55,53 @@ void Malla3D::calcularNormales(){
    for(int i=0; i<nv.size(); ++i){
       nv[i] = nv[i].normalized();
    }
+   */
+
+
+   Tupla3f vectorA;
+   Tupla3f vectorB;
+
+   Tupla3f perpendicular;
+   Tupla3f normal;
+
+   // para cada cara calculamos los vectores, si por ejemplo la cara esta formada
+   // por los puntos p, q y r, A = q - p y B = r - p
+   // tendremos una normal por cada vertice
+   nv.resize(v.size());
+
+   for (auto it = nv.begin(); it != nv.end(); ++it){
+      (*it) = {0, 0, 0};
+   }
+
+   for (auto it = f.begin(); it != f.end(); ++it){
+      vectorA = v.at((*it)(1)) - v.at((*it)(0)) ;
+      vectorB = v.at((*it)(2)) - v.at((*it)(0)) ;
+
+
+      // calculamos la permendicular haciendo el producto vectorial
+      perpendicular = vectorA.cross(vectorB);
+
+      // lo normalizamos
+		// si podemos, esto esta hecho asi para caso de la esfera
+		// que repetimos lospuntos de los polos
+		if (perpendicular.lengthSq() > 0)
+      	normal = perpendicular.normalized();
+
+      nv[(*it)(0)] = nv[(*it)(0)] + normal;
+      nv[(*it)(1)] = nv[(*it)(1)] + normal;
+      nv[(*it)(2)] = nv[(*it)(2)] + normal;
+
+   }
+
+
+   for (auto it = nv.begin(); it != nv.end(); ++it){
+      if ((*it).lengthSq() > 0)
+         (*it) = (*it).normalized();
+   }
+
 }
 
-// Dibujar malla
-void Malla3D::draw()
-{
-   // (la primera vez, se deben crear los VBOs y guardar sus identificadores en el objeto)
-   // completar (práctica 1)
-   // .....
-
+void Malla3D::crearVBOS(){
    // Crear VBO (si no creado (=0) se crea)
    if(id_vbo_ver == 0) // si no está creado el vbo de vértices
       id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, 3*v.size()*sizeof(float), v.data());
@@ -84,16 +123,29 @@ void Malla3D::draw()
    if(id_vbo_nv == 0)
       id_vbo_nv = CrearVBO(GL_ARRAY_BUFFER, 3*nv.size()*sizeof(float), nv.data());
 
+}
+
+
+
+// Dibujar malla
+void Malla3D::draw()
+{
+   // (la primera vez, se deben crear los VBOs y guardar sus identificadores en el objeto)
+   // completar (práctica 1)
+   // .....
+
+   crearVBOS();
 
 
    // Tamaño de los puntos
    glPointSize(5.0);
+   
 
    //// revisar. si hay luces hay materiales.
    if(glIsEnabled(GL_LIGHTING)){
       glEnableClientState(GL_NORMAL_ARRAY);
       glBindBuffer(GL_ARRAY_BUFFER, id_vbo_nv);
-      glNormalPointer(GL_FLOAT,0, 0 );
+      glNormalPointer(GL_FLOAT, 0, 0 );
       glBindBuffer(GL_ARRAY_BUFFER, 0);
 
       m.aplicar();
@@ -127,7 +179,9 @@ void Malla3D::draw()
    }
 
 
-   /// Para activar los VBOs 
+
+
+   /* Para activar los VBOs */
    // activar buffer: VBO de vértices
    glBindBuffer ( GL_ARRAY_BUFFER , id_vbo_ver );
    // usar como buffer de vertices el actualmente activo
@@ -136,7 +190,8 @@ void Malla3D::draw()
    glBindBuffer ( GL_ARRAY_BUFFER , 0 );
    // habilitar el uso de tabla de vértices
    glEnableClientState ( GL_VERTEX_ARRAY );
-   //
+   
+
    // activar buffer: VBO de triángulos
    glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER , id_vbo_tri );
    // dibujar con el buffer de índices activo
@@ -144,13 +199,14 @@ void Malla3D::draw()
    // desactivar buffer: VBO de triángulos
    glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER , 0 );
    
+
+
    // desactivar uso de array de vértices
    glDisableClientState ( GL_VERTEX_ARRAY );
-
-   // esto??
    glDisableClientState ( GL_COLOR_ARRAY );
 
-//añadido
+
+   //añadido
    if (glIsEnabled(GL_LIGHTING)){
       glDisableClientState( GL_LIGHTING );
    }

@@ -12,8 +12,10 @@ LuzDireccional::LuzDireccional(Tupla2f direccion, GLenum idLuzOpenGL,
     alpha = direccion(0);
     beta = direccion(1);
 
+    // mío
     this->posicion={sin(alpha)*cos(beta), sin(beta), cos(alpha)*cos(beta), 0};
 
+    // git
     // this->posicion = {direccion(0), direccion(1), direccion(2), 0};
 
     // posicion_original = posicion;
@@ -52,18 +54,18 @@ void LuzDireccional::variarAnguloAlpha(float incremento){
     else if(alpha < 0)
         alpha += M_PI*2.0;
 
-    // actualizar posicion
+    // actualizar posicion - mío
     posicion(0) = sin(alpha) * cos(beta);
     posicion(1) = sin(beta);
     posicion(2) = cos(alpha) * cos(beta);
 
 
-//    posicion(0) = sin(alpha) * cos(beta) * sqrt(posicion_original.lengthSq());
+    // git
+    // posicion(0) = sin(alpha) * cos(beta) * sqrt(posicion_original.lengthSq());
 
-//    posicion(1) = sin(beta) * sqrt(posicion_original.lengthSq());
+    // posicion(1) = sin(beta) * sqrt(posicion_original.lengthSq());
 
-//    posicion(2) = cos(alpha) * cos(beta) * sqrt(posicion_original.lengthSq());
-
+    // posicion(2) = cos(alpha) * cos(beta) * sqrt(posicion_original.lengthSq());
 
 
 }
@@ -77,11 +79,13 @@ void LuzDireccional::variarAnguloBeta(float incremento){
     else if(beta < 0)
         beta += M_PI*2.0;
     
-    // actualizar posicion
+    // actualizar posicion - mío
     posicion(0) = sin(alpha) * cos(beta);
     posicion(1) = sin(beta);
     posicion(2) = cos(alpha) * cos(beta);
 
+
+    // git
     // posicion(0) = sin(alpha) * cos(beta) * sqrt(posicion_original.lengthSq());
 
     // posicion(1) = sin(beta) * sqrt(posicion_original.lengthSq());

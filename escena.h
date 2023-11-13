@@ -71,8 +71,14 @@ class Escena
     Tupla2f direccion={(float)M_PI/2,(float)M_PI/2};
     LuzDireccional * LuzDir = nullptr;
     LuzPosicional * LuzPos = nullptr;  
+
+    LuzDireccional * luz1 = nullptr;
+    LuzPosicional * luz0 = nullptr;  
+
     // Iluminacion activa
     bool iluminacionActiva = false;
+
+    unsigned char ultimaPulsada = 'N';
 
    public:
 
