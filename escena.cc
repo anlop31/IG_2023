@@ -338,12 +338,21 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    if(modoMenu == SELVISUALIZACION)
       switch (toupper(tecla)){
          case 'P': // modo puntos
+            if(iluminacionActiva){
+               iluminacionActiva = false;
+            }
             modoPunto = !modoPunto; 
             break;
          case 'L': // modo líneas
+            if(iluminacionActiva){
+               iluminacionActiva = false;
+            }
             modoLinea = !modoLinea; 
             break;
          case 'S': // modo sólido
+            if(iluminacionActiva){
+               iluminacionActiva = false;
+            }
             modoSolido = !modoSolido; 
             break;
          case 'T': // activar iluminación
