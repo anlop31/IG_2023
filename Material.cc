@@ -33,5 +33,4 @@ void Material::operator = (const Material & otro){
    difuso    = otro.difuso;
    especular = otro.especular;
    brillo    = otro.brillo;
-//    emision   = otro.emision;
 }

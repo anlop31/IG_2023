@@ -6,6 +6,8 @@
 #include "objply.h"
 #include "ply_reader.h"
 
+using namespace std;
+
 //**************************************************************************
 // constructor de la escena (no puede usar ordenes de OpenGL)
 //**************************************************************************
@@ -20,35 +22,60 @@ Escena::Escena()
 
    ejes.changeAxisSize( 5000 );
 
-   // crear los objetos de la escena....
-   // .......completar: ...
-   // .....
+   /* OBJETOS */
 
+   // Objetos iniciales
    cubo = new Cubo(60.0); // cubo creado
    piramide = new PiramideHexagonal(80.0, 80.0, 40.0); // piramide creada
 
+   // Objetos de revolución
    esfera = new Esfera(30, 30, 40);
    cilindro = new Cilindro(4, 10, 50.0, 50.0); 
    cono = new Cono(3, 10, 70, 25);
 
+   // Objetos PLY
    ObjPLY_1 = new ObjPLY("./plys/ant.ply");
    ObjPLY_2 = new ObjPLY("./plys/beethoven.ply");
    ObjPLY_2->setColor(Tupla4f(0.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(1.0f, 0.0f, 0.0f, 1.0f));
    ObjPLY_3 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
    ObjPLY_3->setColor(Tupla4f(1.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(0.1f, 0.6f, 0.1f, 1.0f));
 
-   // Luz posicional: luz0
-   luz0 = new LuzPosicional({200, 100, 200}, GL_LIGHT0, {1.0, 0.0, 1.0, 1}, {1.0, 0.0, 0.0, 1.0}, {1.0, 0.0, 0.0, 1.0});   
-   // Luz direccional: luz1
-   luz1 = new LuzDireccional({20, 20}, GL_LIGHT1, {1.0, 0.0, 0.0, 1.0}, {1.0, 0.0, 0.0, 1.0}, {1.0, 0.0, 0.0, 1.0});
-    
+
+   peon1 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
+   peon2 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
+
+
+
+   /* LUCES */
+   //// ambiente, especular y difuso
+   // ambiente: color cuando no le incide directamente ninguna fuente de luz
+   // especular: color de los brillos
+   // difuso: color "base" del material
 
    asignar_materiales();
 
+   // Luz posicional: luz0
+   luz0 = new LuzPosicional(
+      {-200, 120, 200}, // posición en coordenadas
+      GL_LIGHT0, // id
+      {0.0, 0.0, 0.0, 1}, // color ambiente (negro)
+      {1.0, 1.0, 1.0, 1.0}, // color especular (blanco)
+      {1.0, 1.0, 1.0, 1.0}); // color difuso (blanco) [R-G-B]
 
-   //  luz0  = new LuzPosicional (posicion_luz_0, GL_LIGHT0,  {0, 0, 0, 1}, {1,1,1,1}, {1,1,1,1});
-   //  luz1 = new LuzDireccional ( posicion_luz_1, GL_LIGHT1, {0, 0, 0, 1}, {1,1,1,1}, {1,1,1,1});
+   // Luz direccional: luz1
+   luz1 = new LuzDireccional(
+      {0, 0}, // posicion (alfa, beta)
+      GL_LIGHT1, // id
+      {0.0, 0.0, 0.0, 1.0}, // color ambiente (negro)
+      {1.0, 1.0, 1.0, 1.0}, // color especular (blanco)
+      {1.0, 1.0, 1.0, 1.0}); // color difuso (verde) [R-G-B]
 
+   luz2 = new LuzPosicional(
+      {200, 120, 200}, // posición en coordenadas
+      GL_LIGHT2, // id
+      {0.0, 0.0, 0.0, 1}, // color ambiente (negro)
+      {1.0, 1.0, 1.0, 1.0}, // color especular (blanco)
+      {1.0, 1.0, 1.0, 1.0}); // color difuso (blanco) [R-G-B]
 
 
 }
@@ -84,27 +111,38 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 
 void Escena::asignar_materiales(){
-   Material oro ({0.24725, 0.1995, 0.0745, 1}, {0.75164, 0.60648, 0.22648, 1}, {0.628281, 0.555802, 0.366065, 1}, 0.4*128.0f);
+   // Constructor material: (difuso, especular, ambiente, brillo)
+
+   // Lista de materiales:
+   Material oro ({0.24725, 0.1995, 0.0745, 1}, {0.75164, 0.60648, 0.22648, 1}, {0.628281, 0.555802, 0.366065, 1}, 0.8*128.0f);
    Material ruby({0.1745, 0.01175, 0.01175, 1}, {0.61424, 0.04136, 0.04136, 1}, {0.727811, 0.626959, 0.626959, 1}, 128.0f * 0.6f );
    Material perla({0.25, 0.20725, 0.20725, 1}, {1, 0.829, 0.829, 1}, {0.296648, 0.296648, 0.296648, 1}, 128.0f * 0.088);
    Material esmeralda({0.0215, 0.1745, 0.0215, 1}, {0.07568, 0.61424, 0.07568, 1}, {0.633, 0.727811,0.633, 1}, 0.6 * 128.0f);
    Material plata({0.19225, 0.19225, 0.19225, 1}, {0.50754, 0.50754, 0.50754, 1}, {0.508273,0.508273, 0.508273, 1}, 0.4*128.0f);
    Material turquesa({0.1, 0.18725, 0.1745, 1}, {0.396, 0.74151, 0.69102, 1}, {0.297254, 0.30829, 0.306678, 1} ,0.1 * 128.0f);
-   Material blanco({1.0, 1.0, 1.0, 1}, {1.0, 1.0, 1.0, 1}, {1.0, 1.0, 1.0, 1} , /*brillo*/0.1 * 128.0f);
+   Material blanco({1.0, 1.0, 1.0, 1}, {1.0, 1.0, 1.0, 1}, {1.0, 1.0, 1.0, 1} , 0.1 * 128.0f);
 
+
+   // blanco puramente difuso sin brillos especulares
+   Material mat_peon_blanco({1.0, 1.0, 1.0, 1}, {0.0, 0.0, 0.0, 1}, {1.0, 1.0, 1.0, 1} , 0);
+   
+   // negro con material especular de alto brillo
+   Material mat_peon_negro({0.0, 0.0, 0.0, 1}, {1.0, 1.0, 1.0, 1}, {0.2, 0.2, 0.2, 1} , 128.0f);
+
+
+   // Asociamos materiales a los objetos
    cubo->setMaterial(ruby);
    piramide->setMaterial(esmeralda);
 
-   esfera->setMaterial(turquesa);
-   cilindro->setMaterial(blanco);
+   esfera->setMaterial(plata);
+   cilindro->setMaterial(turquesa);
    cono->setMaterial(oro);
 
-   // oro.aplicar();
-   // ruby.aplicar();
-   // perla.aplicar();
-   // esmeralda.aplicar();
-   // plata.aplicar();
-   // turquesa.aplicar();
+   peon1->setMaterial(mat_peon_blanco);
+   peon2->setMaterial(mat_peon_negro);
+
+   ObjPLY_1->setMaterial(turquesa);
+   ObjPLY_2->setMaterial(turquesa);
 }
 
 
@@ -116,91 +154,82 @@ void Escena::activar_luces(){
       glPushMatrix();
          luz0->activar();
       glPopMatrix();
+
+      cout << " >>luz0 activada: " << luz0->estadoActivada() << endl;
    }
 
+   
 
    if(luz1 != nullptr){
       glPushMatrix();
          luz1->activar();
       glPopMatrix();
+
+      cout << " >>luz1 activada: " << luz1->estadoActivada() << endl;
    }
 
-////
-   if(luz0 != nullptr){
+   if(luz2 != nullptr){
       glPushMatrix();
-         luz0->activar();
+         luz2->activar();
       glPopMatrix();
-   }
 
-
-   if(luz1 != nullptr){
-      glPushMatrix();
-         luz1->activar();
-      glPopMatrix();
+      cout << " >>luz2 activada: " << luz2->estadoActivada() << endl;
    }
-////
 }
 
 
 void Escena::dibujarObjetos(){
    //// CUBO
-   if(hayCubo){
+   glPushMatrix();
+      glTranslatef(0, 0, 0); 
       cubo->draw();
-      std::cout << "---Cubo dibujado" << std::endl;
-   }
-   else{
-      std::cout << "---Cubo ocultado" << std::endl;
-   }
+   glPopMatrix();
 
 
    //// PIRAMIDE
-   if(hayPiramide){
+
+   glPushMatrix();
+      glTranslatef(100, 0, -150); 
       piramide->draw();
-      std::cout << "---Piramide dibujada" << std::endl;
-   }
-   else{
-      std::cout << "---Piramide ocultada" << std::endl;
-   }
+   glPopMatrix();
 
 
-   //// PLYs
-   if(hayPLY_1){
-      std::cout << "---OBJPLY1 dibujado" << std::endl;
-      glPushMatrix();
-         glScalef(2, 2, 2);
-         ObjPLY_1->draw();
-      glPopMatrix();
-   }
-   else{
-      std::cout << "---OBJPLY1 ocultado" << std::endl;
-   }
-
-   if(hayPLY_2){
-      std::cout << "---OBJPLY2 dibujado" << std::endl;
-      glPushMatrix();
-         glScalef(10, 10, 10);
-         ObjPLY_2->draw();
-      glPopMatrix();
-   }
-   else{
-      std::cout << "---OBJPLY2 ocultado" << std::endl;
-   }
-
-   if(hayPLY_3){
-      std::cout << "---OBJPLY3 dibujado" << std::endl;
-      glPushMatrix();
-         glScalef(15, 15, 15);
-         ObjPLY_3->draw();
-      glPopMatrix();
-   }
-   else{
-      std::cout << "---OBJPLY3 ocultado" << std::endl;
-   }
+   /*    PLYS   */
+   //// HORMIGA (ObjPLY_1)
+   glPushMatrix();
+      glTranslatef(100, 0, 100);
+      glScalef(2, 2, 2); 
+      ObjPLY_1->draw(); // hormiga
+   glPopMatrix();
 
 
+   //// BEETHOVEN (ObjPLY_2)
+   glPushMatrix();
+      glTranslatef(200, 0, 0);
+      glScalef(10, 10, 10);
+      ObjPLY_2->draw(); // Beethoven
+   glPopMatrix();
+
+
+   // PEÓN BLANCO (material puramente difuso, sin brillos especulares)
+   glPushMatrix();
+      glTranslatef(30, 0, 50);
+      glScalef(15, 15, 15);
+      peon1->draw(); // peón
+   glPopMatrix();
+
+   //// PEÓN NEGRO (material especular de alto brillo)
+   glPushMatrix();
+      glTranslatef(-30, 0, 50);
+      glScalef(15, 15, 15);
+      peon2->draw(); // peón
+   glPopMatrix();
+
+
+   /*    OBJETOS DE REVOLUCIÓN   */
    //// ESFERA
    glPushMatrix();
-      glTranslatef(0, 160, 0);
+      glTranslatef(0, 130, -80);
       esfera->draw();
    glPopMatrix();
 
@@ -214,7 +243,7 @@ void Escena::dibujarObjetos(){
 
    //// CONO
    glPushMatrix();
-      glTranslatef(100, 0, -100);
+      glTranslatef(100, 0, 0);
       cono->draw();
    glPopMatrix();
 }
@@ -238,29 +267,26 @@ void Escena::dibujar()
    ejes.draw();
 
 
-   // asignar materiales
-   // asignar_materiales();
-   if (iluminacionActiva)
+   if (iluminacionActiva){
       activar_luces();
+   }
 
-   // para estos modos, las luces deben estar desactivadas
-   // si hay luz, el color deja de tener efecto.
+
    if (modoPunto) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); // puntos (front)
-      std::cout << "MODO PUNTOS ACTIVO" << std::endl;
+      cout << "-MODO PUNTOS ACTIVO-" << endl;
       dibujarObjetos();
    }
    if (modoLinea) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // lineas
-      std::cout << "MODO LINEAS ACTIVO" << std::endl;
+      cout << "-MODO LINEAS ACTIVO-" << endl;
       dibujarObjetos();
    }
    if (modoSolido) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // solido (back)
-      std::cout << "MODO SOLIDO ACTIVO" << std::endl;
+      cout << "-MODO SOLIDO ACTIVO-" << endl;
       dibujarObjetos();
    }
-
 
     
 }
@@ -295,56 +321,51 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
          modoMenu=SELVISUALIZACION;
          break ;
-      // case '1':
-      //    hayPLY_1 = !hayPLY_1;
-      //    break;
-      // case '2':
-      //    hayPLY_2 = !hayPLY_2;
-      //    break;
-      // case '3':
-      //    hayPLY_3 = !hayPLY_3;
-      //    break;
-      // case 'I':
-      //    iluminacionActiva = !iluminacionActiva;
-      //    break;
    }
 
    // SELECCION OBJETO
-   if(modoMenu == SELOBJETO)
-      switch (toupper(tecla)){
-         case 'C': 
-            hayCubo = !hayCubo; // cubo
-            break;
-         case 'P': 
-            hayPiramide = !hayPiramide; // modo lineas
-            break;
-      }
+   // if(modoMenu == SELOBJETO)
+   //    switch (toupper(tecla)){
+   //       case 'C': 
+   //          hayCubo = !hayCubo; // cubo
+   //          break;
+   //       case 'P': 
+   //          hayPiramide = !hayPiramide; // modo lineas
+   //          break;
+   //    }
 
    // SELECCION VISUALIZACION
    if(modoMenu == SELVISUALIZACION)
       switch (toupper(tecla)){
-         case 'D': 
-            modoPunto = !modoPunto; // modo puntos
+         case 'P': // modo puntos
+            modoPunto = !modoPunto; 
             break;
-         case 'L': 
-            modoLinea = !modoLinea; // modo lineas
+         case 'L': // modo líneas
+            modoLinea = !modoLinea; 
             break;
-         case 'S': 
-            modoSolido = !modoSolido; // modo solido
+         case 'S': // modo sólido
+            modoSolido = !modoSolido; 
             break;
-         case 'T':
+         case 'T': // activar iluminación
             iluminacionActiva = !iluminacionActiva;
+            if(iluminacionActiva){
+               modoLinea = false;
+               modoPunto = false;
+               modoSolido = true;
+            }
             break;
-         case '0':
+         case '0': // GL_LIGHT0
             if (luz0 != nullptr)
                luz0->setActivada(!luz0->estadoActivada());
             break;
-         case '1':
+         case '1': // GL_LIGHT1
             if (luz1 != nullptr)
                   luz1->setActivada(!luz1->estadoActivada());
             break;
-         // case '2':
-         //    break;
+         case '2': // GL_LIGHT2
+            if (luz2 != nullptr)
+                  luz2->setActivada(!luz2->estadoActivada());
+            break;
          // case '3':
          //    break;
          // case '4':
@@ -356,27 +377,29 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          // case '7':
          //    break;
          case 'A': // variar angulo alfa
-
             ultimaPulsada = 'A';
             break;
-         case 'B':
-
+         case 'B': // variar angulo beta
             ultimaPulsada = 'B';
             break;
-         case '>':
+         case '>': // incrementa el angulo
             if(ultimaPulsada == 'A'){
-               // incrementa el angulo
+               cout << "incrementa A" << endl;
+               luz1->variarAnguloAlpha(-5*M_PI/180);
             }
             else if(ultimaPulsada == 'B'){ // la B
-
+               cout << "incrementa B" << endl;
+               luz1->variarAnguloBeta(-5*M_PI/180);
             }
             break;
-         case '<':
+         case '<': // decrementa el angulo
             if(ultimaPulsada == 'A'){
-               // decrementa el angulo
+               luz1->variarAnguloAlpha(-5*M_PI/180);
+               cout << "decrementa A" << endl;
             }
             else if(ultimaPulsada == 'B'){ // la B
-
+               luz1->variarAnguloBeta(-5*M_PI/180);
+               cout << "decrementa B" << endl;
             }
             break;
       }

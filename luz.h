@@ -13,6 +13,7 @@ class Luz{
 
         bool activada;
     public:
+        Luz();
         void activar();
         bool estadoActivada();
         void setActivada(const bool nuevo_valor);

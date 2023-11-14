@@ -12,10 +12,12 @@ Cono::Cono(const int num_vert_perfil = 2, const int num_instancias_perf = 20, co
    vertices[1] = Tupla3f({radio, 0, 0});
    vertices[2] = Tupla3f({0, 0, 0});
 
-   // añadir mas vertices en la hipotenusa
-
    crearMalla(vertices, num_instancias_perf);
 
-   setColor(Tupla4f(1.0f, 0.0f, 0.0f, 1.0), Tupla4f(1.0f, 1.0f, 0.0f, 1.0), Tupla4f(1.0f, 0.0f, 1.0f, 1.0));
+   setColor(
+      Tupla4f(1.0f, 0.0f, 0.0f, 1.0), // color vértices
+      Tupla4f(1.0f, 1.0f, 0.0f, 1.0), // color líneas
+      Tupla4f(1.0f, 0.0f, 1.0f, 1.0)  // color sólido
+   );
 
 }

@@ -4,9 +4,13 @@
 #include<LuzPosicional.h>
 
 
+Luz::Luz(){
+    activada = false;
+}
+
 void Luz::activar(){
 
-    glEnable(id);
+    // glEnable(id);
     if(activada){
         glLightfv(id, GL_DIFFUSE, colorDifuso);
         glLightfv(id, GL_AMBIENT, colorAmbiente);
@@ -24,7 +28,7 @@ bool Luz::estadoActivada(){
 void Luz::setActivada(const bool nuevo_valor){
     activada = nuevo_valor;
 
-    if(nuevo_valor)
+    if(activada)
         glEnable(id);
     else
         glDisable(id);

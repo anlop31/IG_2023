@@ -12,12 +12,26 @@ LuzPosicional::LuzPosicional(
     this->colorDifuso = colorDifuso;
     this->colorEspecular = colorEspecular;
 
-    this->posicion = {posicion(0), posicion(1), posicion(2), 1}; // antes 0 mío, 1 git
-
-    // posicion = {p(0), p(1), p(2), 1};
+    this->posicion = {
+        posicion(0), // x
+        posicion(1), // y
+        posicion(2), // z
+        1
+    };
 }
 
 
 LuzPosicional::LuzPosicional(const Tupla3f & posicion){
-        // a rellenar
+    // por defecto
+    id = 0;
+    colorAmbiente = {0.0, 0.0, 0.0, 1.0};
+    colorDifuso = {1.0, 0.0, 0.0, 1.0}; // rojo
+    colorEspecular = {1.0, 1.0, 1.0, 1.0};
+
+    this->posicion = {
+        posicion(0), // x
+        posicion(1), // y
+        posicion(2), // z
+        1
+    };
 }

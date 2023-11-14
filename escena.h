@@ -51,6 +51,8 @@ class Escena
    ObjPLY * ObjPLY_1 = nullptr;
    ObjPLY * ObjPLY_2 = nullptr;
    ObjRevolucion * ObjPLY_3 = nullptr;
+   ObjRevolucion * peon1 = nullptr;
+   ObjRevolucion * peon2 = nullptr;
 
     // variables para controlar la figura a visualizar
     bool hayCubo = false;
@@ -68,12 +70,9 @@ class Escena
 
 
     /* LUCES */ 
-    Tupla2f direccion={(float)M_PI/2,(float)M_PI/2};
-    LuzDireccional * LuzDir = nullptr;
-    LuzPosicional * LuzPos = nullptr;  
-
-    LuzDireccional * luz1 = nullptr;
     LuzPosicional * luz0 = nullptr;  
+    LuzDireccional * luz1 = nullptr;
+    LuzPosicional * luz2 = nullptr;  
 
     // Iluminacion activa
     bool iluminacionActiva = false;

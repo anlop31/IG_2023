@@ -12,91 +12,47 @@ using namespace std;
 // -----------------------------------------------------------------------------
 // Función de visualización de la malla,
 
+
 // Cálculo de las normales
 void Malla3D::calcularNormales(){
-   /*
-   nc.resize(f.size());
-   nv.resize(v.size());
-
-   Tupla3f p, q, r;
-   Tupla3f a, b;
-   Tupla3f normal_c;
-
-   // Inicializar a 0 el vector de normales de vértices.
-   for(int i=0; i<nv.size(); ++i){
-      nv[i] = {0.0, 0.0, 0.0};
-   }
-
-   for(int i=0; i<f.size(); ++i){
-
-      cout << "*****iteracion " << i << endl;
-
-      if(f[i][0] != 0){
-         if(f[i][1] != 0){
-            if(f[i][2] != 0){
-               q = v[f[i][0]]; 
-               
-               p = v[f[i][1]]; 
-               r = v[f[i][2]]; 
-               a = q - p; b = r - p;
-
-               normal_c = b.cross(a);
-               nc[i] = normal_c.normalized();
-
-               nv[f[i][0]] = nv[f[i][0]] + nc[i];
-               nv[f[i][1]] = nv[f[i][1]] + nc[i];
-               nv[f[i][2]] = nv[f[i][2]] + nc[i];
-           }
-         }
-      }
-   }
-
-   // una vez tengamos las normales de los vértices, normalizarlas
-   for(int i=0; i<nv.size(); ++i){
-      nv[i] = nv[i].normalized();
-   }
-   */
-
-
    Tupla3f vectorA;
    Tupla3f vectorB;
 
    Tupla3f perpendicular;
    Tupla3f normal;
 
-   // para cada cara calculamos los vectores, si por ejemplo la cara esta formada
-   // por los puntos p, q y r, A = q - p y B = r - p
-   // tendremos una normal por cada vertice
+   // La cara esta formada por los puntos p, q y r, A = q - p y B = r - p
+   // Una normal por vértice
    nv.resize(v.size());
 
-   for (auto it = nv.begin(); it != nv.end(); ++it){
-      (*it) = {0, 0, 0};
+
+   for(int i = 0; i < nv.size(); i++){
+      nv[i] = {0,0,0};
    }
 
-   for (auto it = f.begin(); it != f.end(); ++it){
-      vectorA = v.at((*it)(1)) - v.at((*it)(0)) ;
-      vectorB = v.at((*it)(2)) - v.at((*it)(0)) ;
+   for(int i = 0; i < f.size(); i++){
+      vectorA = v[f[i](1)] - v[f[i](0)];
+      vectorB = v[f[i](2)] - v[f[i](0)];
 
 
-      // calculamos la permendicular haciendo el producto vectorial
+      // calculamos la perpendicular haciendo el producto vectorial
       perpendicular = vectorA.cross(vectorB);
 
-      // lo normalizamos
-		// si podemos, esto esta hecho asi para caso de la esfera
-		// que repetimos lospuntos de los polos
+      // lo normalizamos si los vectores son nulos
+		// por si repetimos los puntos de los polos
 		if (perpendicular.lengthSq() > 0)
       	normal = perpendicular.normalized();
 
-      nv[(*it)(0)] = nv[(*it)(0)] + normal;
-      nv[(*it)(1)] = nv[(*it)(1)] + normal;
-      nv[(*it)(2)] = nv[(*it)(2)] + normal;
+
+      nv[f[i](0)] = nv[f[i](0)] + normal;
+      nv[f[i](1)] = nv[f[i](1)] + normal;
+      nv[f[i](2)] = nv[f[i](2)] + normal;
 
    }
 
-
-   for (auto it = nv.begin(); it != nv.end(); ++it){
-      if ((*it).lengthSq() > 0)
-         (*it) = (*it).normalized();
+   for(int i = 0; i < nv.size(); i++){
+      if(nv[i].lengthSq() > 0)
+         nv[i] = nv[i].normalized();
    }
 
 }
@@ -136,12 +92,11 @@ void Malla3D::draw()
 
    crearVBOS();
 
-
    // Tamaño de los puntos
    glPointSize(5.0);
    
 
-   //// revisar. si hay luces hay materiales.
+   // Aplicar materiales si se encienden las luces
    if(glIsEnabled(GL_LIGHTING)){
       glEnableClientState(GL_NORMAL_ARRAY);
       glBindBuffer(GL_ARRAY_BUFFER, id_vbo_nv);
@@ -206,13 +161,10 @@ void Malla3D::draw()
    glDisableClientState ( GL_COLOR_ARRAY );
 
 
-   //añadido
    if (glIsEnabled(GL_LIGHTING)){
       glDisableClientState( GL_LIGHTING );
    }
-
-
-
+   
 }
 
 GLuint Malla3D::CrearVBO ( GLuint tipo_vbo , GLuint tam , GLvoid * puntero_ram )

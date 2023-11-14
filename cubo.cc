@@ -8,7 +8,6 @@ Cubo::Cubo(float lado)
    // inicializar la tabla de vértices
    v.resize(8);
 
-   // cambiar
    v[0] = {-lado/2, 0, lado/2};
    v[1] = {lado/2, 0, lado/2};
    v[2] = {lado/2, lado, lado/2};
@@ -51,7 +50,14 @@ Cubo::Cubo(float lado)
    f[11] = {0, 6, 1};
 
 
-   setColor(Tupla4f(1.0f, 0.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(1.0f, 1.0f, 0.0f, 1.0f));
+   setColor(
+      Tupla4f(1.0f, 0.0f, 0.0f, 1.0f), // color vértices
+      Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), // color líneas
+      Tupla4f(1.0f, 0.0f, 0.0f, 1.0f)  // color sólido
+   );
+
+   calcularNormales();
+
 }
 
 

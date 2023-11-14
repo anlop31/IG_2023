@@ -137,5 +137,8 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
          cont++;
       }
    }
+   
+   calcularNormales();
+
 
 }

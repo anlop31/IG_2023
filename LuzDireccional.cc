@@ -12,23 +12,12 @@ LuzDireccional::LuzDireccional(Tupla2f direccion, GLenum idLuzOpenGL,
     alpha = direccion(0);
     beta = direccion(1);
 
-    // mío
-    this->posicion={sin(alpha)*cos(beta), sin(beta), cos(alpha)*cos(beta), 0};
-
-    // git
-    // this->posicion = {direccion(0), direccion(1), direccion(2), 0};
-
-    // posicion_original = posicion;
-
-    // alpha = abs(atan2f( direccion(0), direccion(2) ));
-
-    // beta = asin( direccion(1)/ sqrt(direccion.lengthSq()) );
-
-
-    // if (direccion(0) < 0){
-    //     alpha += M_PI ;
-    // }
-
+    this->posicion = {
+        sin(alpha) * cos(beta),
+        sin(beta),
+        cos(alpha) * cos(beta),
+        0
+    };
 }
 
 
@@ -39,8 +28,8 @@ LuzDireccional::LuzDireccional(const Tupla2f & orientacion){
 
     // por defecto
     id = 0;
-    colorAmbiente = {1.0, 1.0, 1.0, 1.0};
-    colorDifuso = {1.0, 1.0, 1.0, 1.0};
+    colorAmbiente = {0.0, 0.0, 0.0, 1.0};
+    colorDifuso = {1.0, 0.0, 0.0, 1.0}; // rojo
     colorEspecular = {1.0, 1.0, 1.0, 1.0};
 }
 
@@ -54,20 +43,10 @@ void LuzDireccional::variarAnguloAlpha(float incremento){
     else if(alpha < 0)
         alpha += M_PI*2.0;
 
-    // actualizar posicion - mío
+    // actualizar posicion
     posicion(0) = sin(alpha) * cos(beta);
     posicion(1) = sin(beta);
     posicion(2) = cos(alpha) * cos(beta);
-
-
-    // git
-    // posicion(0) = sin(alpha) * cos(beta) * sqrt(posicion_original.lengthSq());
-
-    // posicion(1) = sin(beta) * sqrt(posicion_original.lengthSq());
-
-    // posicion(2) = cos(alpha) * cos(beta) * sqrt(posicion_original.lengthSq());
-
-
 }
 
 void LuzDireccional::variarAnguloBeta(float incremento){
@@ -79,18 +58,8 @@ void LuzDireccional::variarAnguloBeta(float incremento){
     else if(beta < 0)
         beta += M_PI*2.0;
     
-    // actualizar posicion - mío
+    // actualizar posicion
     posicion(0) = sin(alpha) * cos(beta);
     posicion(1) = sin(beta);
     posicion(2) = cos(alpha) * cos(beta);
-
-
-    // git
-    // posicion(0) = sin(alpha) * cos(beta) * sqrt(posicion_original.lengthSq());
-
-    // posicion(1) = sin(beta) * sqrt(posicion_original.lengthSq());
-
-    // posicion(2) = cos(beta) * cos(alpha) * sqrt(posicion_original.lengthSq());
-
-
 }
