@@ -3,15 +3,22 @@
 
 #include "auxiliar.h"
 #include "objrevolucion.h"
+#include "cilindro.h"
 
 class Brazo : public ObjRevolucion
 {
+    float h_brazo, r_brazo;
+    float giro_brazo = 0;
 
-    // sera un cilindro
+    Cilindro * cilindro = nullptr;
 
    public:
-    Brazo();
+    Brazo(float h, float r);
     void draw();
+    float getAlturaBrazo();
+    float getRadioBrazo();
+
+    void modificaGiroBrazo(float valor);
 };
 
 #endif

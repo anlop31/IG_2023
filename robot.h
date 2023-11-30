@@ -3,13 +3,22 @@
 
 #include "auxiliar.h"
 #include "objrevolucion.h"
+#include "cuerpo1.h"
+#include "brazo.h"
 
 class Robot : public ObjRevolucion
 {
+    // Brazos y resto del cuerpo
+    Brazo * brazo_izq = nullptr;
+    Brazo * brazo_der = nullptr;
+    Cuerpo1 * cuerpo1 = nullptr;
 
-    float giroIngleDcha , giroIngleIzda ;
-    float giroHombroDcho , giroHombroIzdo ;
-    float alturaCuello ;
+    // variables de los brazos
+    float r_brazo_izq, r_brazo_der;
+    float h_brazo_izq, h_brazo_der;
+
+    // variables del tronco
+    float h_tronco, r_tronco;
 
    public:
     Robot();
@@ -17,9 +26,14 @@ class Robot : public ObjRevolucion
 
     // o mejor modifica giro brazos? en vez de brazo izq y der
 
-    void modificaGiroCabeza(float valor);
+    // void modificaGiroCabeza(float valor);
     void modificaGiroBrazoIzq(float valor);
     void modificaGiroBrazoDer(float valor); 
+
+    void modificaGiroPiernaIzq(float valor);
+    void modificaGiroPiernaDer(float valor);
+
+    void modificaGiroPiernas(float valor);
 
     // ejemplo de uso: robot.modificaGiroCabeza(0.05);
     // para incrementar en un 5% el valor del angulo de giro

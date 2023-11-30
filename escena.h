@@ -12,6 +12,11 @@
 #include "cono.h"
 #include <LuzDireccional.h>
 #include <LuzPosicional.h>
+#include "pierna.h"
+#include "brazo.h"
+#include "cuerpo1.h"
+#include "cuerpo2.h"
+#include "robot.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,ANIMACION,GRADOS} menu;
 class Escena
@@ -95,6 +100,16 @@ class Escena
     // animacion
     bool animacionAutomatica = false;
     int numGrado = 0; // grado de libertad seleccionado
+
+    // modelo jerárquico
+    Pierna * pierna = nullptr;
+    Brazo * brazo = nullptr;
+
+    Cuerpo1 * cuerpo1 = nullptr;
+    Cuerpo2 * cuerpo2 = nullptr;
+
+    Robot * robot = nullptr;
+
 
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;

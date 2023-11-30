@@ -45,6 +45,15 @@ Escena::Escena()
    peon2 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
 
 
+   /* MODELO JERÁRQUICO */
+   pierna = new Pierna(80, 10, 15);
+   brazo = new Brazo(80, 10);
+
+   cuerpo1 = new Cuerpo1();
+
+   robot = new Robot();
+
+
 
    /* LUCES */
    //// ambiente, especular y difuso
@@ -185,10 +194,10 @@ void Escena::activar_luces(){
 
 void Escena::dibujarObjetos(){
    //// CUBO
-   glPushMatrix();
-      glTranslatef(0, 0, 0); 
-      cubo->draw();
-   glPopMatrix();
+   // glPushMatrix();
+   //    glTranslatef(0, 0, 0); 
+   //    cubo->draw();
+   // glPopMatrix();
 
 
    //// PIRAMIDE
@@ -218,14 +227,14 @@ void Escena::dibujarObjetos(){
 
    // PEÓN BLANCO (material puramente difuso, sin brillos especulares)
    glPushMatrix();
-      glTranslatef(30, 0, 50);
+      glTranslatef(-80, 0, 80);
       glScalef(15, 15, 15);
       peon1->draw(); // peón
    glPopMatrix();
 
    //// PEÓN NEGRO (material especular de alto brillo)
    glPushMatrix();
-      glTranslatef(-30, 0, 50);
+      glTranslatef(-140, 0, 80);
       glScalef(15, 15, 15);
       peon2->draw(); // peón
    glPopMatrix();
@@ -250,6 +259,13 @@ void Escena::dibujarObjetos(){
    glPushMatrix();
       glTranslatef(100, 0, 0);
       cono->draw();
+   glPopMatrix();
+
+   glPushMatrix();
+      robot->draw();
+      // cuerpo1->draw();
+      // pierna->draw();
+      // brazo->draw();
    glPopMatrix();
 }
 
@@ -443,7 +459,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    if(modoMenu == GRADOS){
       switch(toupper(tecla)){
          case '0':
-            numGrado = 0;
+            numGrado = 0; // pierna izq
             break;
          case '1':
             numGrado = 1;
@@ -455,7 +471,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             switch (numGrado)
             {
                case 0:
-                  // grado 0 
+                  robot->modificaGiroPiernaIzq(5);
                   break;
                case 1:
                   // grado 1
@@ -470,7 +486,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             switch (numGrado)
             {
                case 0:
-                  // grado 0 
+                  robot->modificaGiroPiernaIzq(-5);
                   break;
                case 1:
                   // grado 1
