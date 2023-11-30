@@ -110,6 +110,11 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 }
 
 
+void Escena::animarModeloJerarquico() {
+   // if(animacionAutomatica)
+   //    modelo->animarModeloJerarquico();
+}
+
 void Escena::asignar_materiales(){
    // Constructor material: (difuso, especular, ambiente, brillo)
 
@@ -321,6 +326,12 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
          modoMenu=SELVISUALIZACION;
          break ;
+      case 'A':
+         animacionAutomatica = !animacionAutomatica;
+         modoMenu=ANIMACION;
+         break;
+      case 'M': // se desactiva animacion automatica
+         modoMenu=GRADOS;
    }
 
    // SELECCION OBJETO
@@ -413,6 +424,65 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             break;
       }
 
+
+   if(modoMenu == ANIMACION){
+      switch (toupper(tecla))
+      {
+      case '+':
+         /* aumenta velocidad */
+         break;
+      case '-':
+         /* disminuye velocidad */
+         break;
+      
+      default:
+         break;
+      }
+   }
+
+   if(modoMenu == GRADOS){
+      switch(toupper(tecla)){
+         case '0':
+            numGrado = 0;
+            break;
+         case '1':
+            numGrado = 1;
+            break;
+         case '2':
+            numGrado = 2;
+            break;
+         case '+':
+            switch (numGrado)
+            {
+               case 0:
+                  // grado 0 
+                  break;
+               case 1:
+                  // grado 1
+                  break;
+               case 2:
+                  // grado 2
+               default:
+                  break;
+            }
+            break;
+         case '-':
+            switch (numGrado)
+            {
+               case 0:
+                  // grado 0 
+                  break;
+               case 1:
+                  // grado 1
+                  break;
+               case 2:
+                  // grado 2
+               default:
+                  break;
+            }
+            break;
+      } 
+   }
 
    return salir;
 }

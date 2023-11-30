@@ -13,7 +13,7 @@
 #include <LuzDireccional.h>
 #include <LuzPosicional.h>
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION} menu;
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,ANIMACION,GRADOS} menu;
 class Escena
 {
 
@@ -83,6 +83,7 @@ class Escena
 
     Escena();
 	void inicializar( int UI_window_width, int UI_window_height );
+    void animarModeloJerarquico(); // animacion
 	void redimensionar( int newWidth, int newHeight ) ;
 
 	// Dibujar
@@ -91,9 +92,14 @@ class Escena
     void activar_luces();
     void asignar_materiales();
 
+    // animacion
+    bool animacionAutomatica = false;
+    int numGrado = 0; // grado de libertad seleccionado
+
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
 	void teclaEspecial( int Tecla1, int x, int y );
+
 
 };
 #endif
