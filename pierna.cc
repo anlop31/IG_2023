@@ -3,15 +3,14 @@
 Pierna::Pierna(float h = 1, float r = 1, float r_pie = 0.5){
 
     h_pierna = h;
-    r_pierna = r; // diamtro = r*2
+    r_pierna = r; 
     this->r_pie = r_pie;
 
     cilindro = new Cilindro(4, 20, h_pierna, r_pierna);
 
-    pie = new Esfera(15, 30, r_pie); // pie
+    pie = new Esfera(15, 30, r_pie); 
 
 }
-
 
 void Pierna::draw(){
     glPushMatrix();
@@ -25,20 +24,22 @@ void Pierna::draw(){
     glPopMatrix();
 }
 
+
+/* MODIFICADORES */
 void Pierna::modificaGiroPierna(float valor){
 
     if(sentido_positivo){
         if ( (giro_pierna + valor) > limite_giro ){ // ha llegado al tope positivo
             giro_pierna = limite_giro;
             sentido_positivo = false;
-        }else{
+        } else {
             giro_pierna += valor;
         }
-    }else{
+    } else {
         if ( (giro_pierna + valor) < -limite_giro ){ // ha llegado al tope negativo
             giro_pierna = -limite_giro;
             sentido_positivo = true;
-        }else{
+        } else {
             giro_pierna -= valor;
         }
     }
@@ -48,4 +49,8 @@ void Pierna::modificaGiroPierna(float valor){
 /* MÉTODOS SET Y GET */
 void Pierna::setSentidoPositivo(bool sentido){
     sentido_positivo = sentido;
+}
+
+bool Pierna::getSentidoPositivo(){
+    return sentido_positivo;
 }

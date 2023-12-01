@@ -26,11 +26,14 @@ class Cuerpo2 : public ObjRevolucion
     Cuerpo2(float h, float r);
     void draw();
 
+    /* Modificadores */
+    void modificaDesplazamientoCabeza(float valor);
+
+    /* Métodos SET y GET */
     float getAlturaTronco();
     float getRadioTronco();
 
     float getDesplazamientoCabeza();
-    void modificaDesplazamientoCabeza(float valor);
 };
 
 #endif

@@ -8,30 +8,30 @@
 
 class Cuerpo1 : public ObjRevolucion
 {
-
-    // contendra 2 brazos
+    /* OBJETOS*/
     Pierna * pierna_izq = nullptr;
     Pierna * pierna_der = nullptr;
+    Cuerpo2 * cuerpo2 = nullptr; // tronco y cabeza
 
+    /* Parámetros tronco */
     float r_tronco, h_tronco;
 
-    // tronco y cabeza (al que uniremos las piernas y formaran cuerpo1)
-    Cuerpo2 * cuerpo2 = nullptr;
 
    public:
     Cuerpo1();
     void draw();
+
+    /* Modificadores */
+    void modificaGiroPiernaIzq(float valor);
+    void modificaGiroPiernaDer(float valor);
+    void modificaDesplazamientoCabeza(float valor);
+
+    /* Métodos SET y GET */
     float getAlturaTronco();
     float getRadioTronco();
 
-    void modificaGiroPiernaIzq(float valor);
-    void modificaGiroPiernaDer(float valor);
-
     void setSentidoPositivoPiernaIzq(bool sentido);
     void setSentidoPositivoPiernaDer(bool sentido);
-
-    void modificaDesplazamientoCabeza(float valor);
-
 };
 
 #endif

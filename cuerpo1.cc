@@ -30,14 +30,7 @@ void Cuerpo1::draw(){
 }
 
 
-float Cuerpo1::getAlturaTronco(){
-    return h_tronco;
-}
-
-float Cuerpo1::getRadioTronco(){
-    return r_tronco;
-}
-
+/* MODIFICADORES */
 void Cuerpo1::modificaGiroPiernaIzq(float valor){
     pierna_izq->modificaGiroPierna(valor);
 }
@@ -46,17 +39,24 @@ void Cuerpo1::modificaGiroPiernaDer(float valor){
     pierna_der->modificaGiroPierna(valor);
 }
 
+void Cuerpo1::modificaDesplazamientoCabeza(float valor){
+    cuerpo2->modificaDesplazamientoCabeza(valor);
+}
+
 
 /* MÉTODOS SET Y GET */
+float Cuerpo1::getAlturaTronco(){
+    return h_tronco;
+}
+
+float Cuerpo1::getRadioTronco(){
+    return r_tronco;
+}
+
 void Cuerpo1::setSentidoPositivoPiernaIzq(bool sentido){
     pierna_izq->setSentidoPositivo(sentido);
 }
 
 void Cuerpo1::setSentidoPositivoPiernaDer(bool sentido){
     pierna_der->setSentidoPositivo(sentido);
-}
-
-
-void Cuerpo1::modificaDesplazamientoCabeza(float valor){
-    cuerpo2->modificaDesplazamientoCabeza(valor);
 }

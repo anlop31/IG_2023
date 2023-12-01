@@ -30,14 +30,8 @@ void Cuerpo2::draw(){
     glPopMatrix();
 }
 
-float Cuerpo2::getAlturaTronco(){
-    return h_tronco;
-}
 
-float Cuerpo2::getRadioTronco(){
-    return r_tronco;
-}
-
+/* MODIFICADORES */
 void Cuerpo2::modificaDesplazamientoCabeza(float valor){
     if(sentido_positivo){
         if ( (desplazamiento_cabeza + valor) > limite_desplazamiento ){ // ha llegado al tope positivo
@@ -54,4 +48,18 @@ void Cuerpo2::modificaDesplazamientoCabeza(float valor){
             desplazamiento_cabeza -= valor;
         }
     }
+}
+
+
+/* MÉTODOS SET Y GET */
+float Cuerpo2::getAlturaTronco(){
+    return h_tronco;
+}
+
+float Cuerpo2::getRadioTronco(){
+    return r_tronco;
+}
+
+float Cuerpo2::getDesplazamientoCabeza(){
+    return desplazamiento_cabeza;
 }

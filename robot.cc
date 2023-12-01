@@ -19,35 +19,37 @@ Robot::Robot(){
     r_tronco = cuerpo1->getRadioTronco();
 
     cuerpo1->setSentidoPositivoPiernaIzq(true);
-
 }
 
 void Robot::draw(){
-
-    // RESTO DEL CUERPO
     glPushMatrix();
-        cuerpo1->draw();
-    glPopMatrix();
+        glTranslatef(0, 0, desplazamiento);
 
-    // BRAZOS
-    glPushMatrix();
+        // RESTO DEL CUERPO
         glPushMatrix();
-            glTranslatef(r_tronco+r_brazo_der/2, 0, 0); // colocarlo a la izq
-            glTranslatef(0, h_brazo_der/2, 0);
-            brazo_der->draw();
+            cuerpo1->draw();
         glPopMatrix();
 
+        // BRAZOS
         glPushMatrix();
-            glTranslatef(-( r_tronco+r_brazo_izq/2 ), 0, 0); // colocarlo a la izq
-            glTranslatef(0, h_brazo_izq/2, 0);
-            brazo_izq->draw();
+            glPushMatrix(); // brazo derecho
+                glTranslatef(r_tronco+r_brazo_der/2, 0, 0); // colocarlo a la der
+                glTranslatef(0, h_brazo_der/2, 0);
+                brazo_der->draw();
+            glPopMatrix();
+
+            glPushMatrix(); // brazo izquierdo
+                glTranslatef(-( r_tronco+r_brazo_izq/2 ), 0, 0); // colocarlo a la izq
+                glTranslatef(0, h_brazo_izq/2, 0);
+                brazo_izq->draw();
+            glPopMatrix();
         glPopMatrix();
+
     glPopMatrix();
 }
 
 
-/* Métodos para los grados de libertad */
-
+/* GRADOS DE LIBERTAD INDIVIDUALES */
 void Robot::modificaGiroBrazoDer(float valor){
     brazo_der->modificaGiroBrazo(valor);
 }
@@ -65,11 +67,8 @@ void Robot::modificaGiroPiernaDer(float valor){
 }
 
 
-// Grados de libertad de ambas piernas y ambos brazos
+/* GRADOS DE LIBERTAD */ 
 void Robot::modificaGiroPiernas(float valor){
-    // PRUEBA. Hay que identificar cuál tiene que sumar y cuál restar
-    // Identificar cuál de las dos va hacia delante.
-
     cuerpo1->modificaGiroPiernaIzq(valor);
     cuerpo1->modificaGiroPiernaDer(valor);
 }
@@ -81,6 +80,57 @@ void Robot::modificaGiroBrazos(float valor){
 
 void Robot::modificaDesplazamientoCabeza(float valor){
     cuerpo1->modificaDesplazamientoCabeza(valor);
+}
+
+void Robot::modificaDesplazamiento(float valor){
+    
+    desplazamiento += valor;
+
+    // que se muevan los brazos y piernas cuando se mueve
+    modificaGiroBrazos(5);
+    modificaGiroPiernas(5);
+}
+
+void Robot::modificaDesplazamientoAislado(float valor){
+    desplazamiento += valor;
+}
+
+
+/* ANIMAR MODELO JERÁRQUICO */
+void Robot::animarModeloJerarquico(){
+    modificaDesplazamientoAislado(velDesplazamiento);
+
+    modificaGiroBrazos(velBrazos);
+    modificaGiroPiernas(velPiernas);
+}
+
+// Cambiar velocidades
+void Robot::cambiarVelocidad(float valor){
+    cambiarVelocidadDesplazamiento(valor);
+    cambiarVelocidadGiroBrazos(valor);
+    cambiarVelocidadGiroPiernas(valor);
+}
+
+void Robot::cambiarVelocidadDesplazamiento(float valor){
+    if( (velDesplazamiento + valor) <= 0 )
+        velDesplazamiento = 0;
+    else
+        velDesplazamiento += valor;
+}
+
+
+void Robot::cambiarVelocidadGiroBrazos(float valor){
+    if( (velBrazos + valor) <= 0 )
+        velBrazos = 0;
+    else
+        velBrazos += valor;
+}
+
+void Robot::cambiarVelocidadGiroPiernas(float valor){
+    if( (velPiernas + valor) <= 0 )
+        velPiernas = 0;
+    else
+        velPiernas += valor;
 }
 
 

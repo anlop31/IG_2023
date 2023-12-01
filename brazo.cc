@@ -17,7 +17,29 @@ void Brazo::draw(){
     glPopMatrix();
 }
 
+/* MODIFICADORES */
+void Brazo::modificaGiroBrazo(float valor){
 
+    if(sentido_positivo){
+        if ( (giro_brazo + valor) > limite_giro ){ // ha llegado al tope positivo
+            giro_brazo = limite_giro;
+            sentido_positivo = false;
+        } else {
+            giro_brazo += valor;
+        }
+    } else {
+        if ( (giro_brazo + valor) < -limite_giro ){ // ha llegado al tope negativo
+            giro_brazo = -limite_giro;
+            sentido_positivo = true;
+        } else {
+            giro_brazo -= valor;
+        }
+    }
+
+}
+
+
+/* MÉTODOS GET Y SET */
 float Brazo::getAlturaBrazo(){
     return h_brazo;
 }
@@ -25,27 +47,6 @@ float Brazo::getAlturaBrazo(){
 float Brazo::getRadioBrazo(){
     return r_brazo;
 }
-
-void Brazo::modificaGiroBrazo(float valor){
-
-    if(sentido_positivo){
-        if ( (giro_brazo + valor) > limite_giro ){ // ha llegado al tope positivo
-            giro_brazo = limite_giro;
-            sentido_positivo = false;
-        }else{
-            giro_brazo += valor;
-        }
-    }else{
-        if ( (giro_brazo + valor) < -limite_giro ){ // ha llegado al tope negativo
-            giro_brazo = -limite_giro;
-            sentido_positivo = true;
-        }else{
-            giro_brazo -= valor;
-        }
-    }
-
-}
-
 
 void Brazo::setSentidoPositivo(bool sentido){
     sentido_positivo = sentido;

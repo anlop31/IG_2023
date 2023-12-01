@@ -40,30 +40,19 @@ Escena::Escena()
    ObjPLY_3 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
    ObjPLY_3->setColor(Tupla4f(1.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(0.1f, 0.6f, 0.1f, 1.0f));
 
-
    peon1 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
    peon2 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
 
 
    /* MODELO JERÁRQUICO */
-   pierna = new Pierna(80, 10, 15);
-   brazo = new Brazo(80, 10);
-
-   cuerpo1 = new Cuerpo1();
-
    robot = new Robot();
 
 
-
-   /* LUCES */
-   //// ambiente, especular y difuso
-   // ambiente: color cuando no le incide directamente ninguna fuente de luz
-   // especular: color de los brillos
-   // difuso: color "base" del material
-
+   /* Asignar materiales a los objetos */
    asignar_materiales();
 
-   // Luz posicional: luz0
+
+   /* LUCES */
    luz0 = new LuzPosicional(
       {-200, 120, 200}, // posición en coordenadas
       GL_LIGHT0, // id
@@ -71,7 +60,6 @@ Escena::Escena()
       {1.0, 1.0, 1.0, 1.0}, // color especular (blanco)
       {1.0, 1.0, 1.0, 1.0}); // color difuso (blanco) [R-G-B]
 
-   // Luz direccional: luz1
    luz1 = new LuzDireccional(
       {0, 0}, // posicion (alfa, beta)
       GL_LIGHT1, // id
@@ -85,7 +73,6 @@ Escena::Escena()
       {0.0, 0.0, 0.0, 1}, // color ambiente (negro)
       {1.0, 1.0, 1.0, 1.0}, // color especular (blanco)
       {1.0, 1.0, 1.0, 1.0}); // color difuso (blanco) [R-G-B]
-
 
 }
 
@@ -120,8 +107,8 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 
 void Escena::animarModeloJerarquico() {
-   // if(animacionAutomatica)
-   //    modelo->animarModeloJerarquico();
+   if(animacionAutomatica)
+      robot->animarModeloJerarquico();
 }
 
 void Escena::asignar_materiales(){
@@ -157,6 +144,9 @@ void Escena::asignar_materiales(){
 
    ObjPLY_1->setMaterial(turquesa);
    ObjPLY_2->setMaterial(turquesa);
+
+
+   robot->setMaterial(turquesa);
 }
 
 
@@ -194,10 +184,10 @@ void Escena::activar_luces(){
 
 void Escena::dibujarObjetos(){
    //// CUBO
-   // glPushMatrix();
-   //    glTranslatef(0, 0, 0); 
-   //    cubo->draw();
-   // glPopMatrix();
+   glPushMatrix();
+      glTranslatef(-120, 0, -120); 
+      cubo->draw();
+   glPopMatrix();
 
 
    //// PIRAMIDE
@@ -227,14 +217,14 @@ void Escena::dibujarObjetos(){
 
    // PEÓN BLANCO (material puramente difuso, sin brillos especulares)
    glPushMatrix();
-      glTranslatef(-80, 0, 80);
+      glTranslatef(-120, 0, 80);
       glScalef(15, 15, 15);
       peon1->draw(); // peón
    glPopMatrix();
 
    //// PEÓN NEGRO (material especular de alto brillo)
    glPushMatrix();
-      glTranslatef(-140, 0, 80);
+      glTranslatef(-180, 0, 80);
       glScalef(15, 15, 15);
       peon2->draw(); // peón
    glPopMatrix();
@@ -455,9 +445,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       {
       case '+':
          /* aumenta velocidad */
+         robot->cambiarVelocidad(2);
          break;
       case '-':
          /* disminuye velocidad */
+         robot->cambiarVelocidad(-2);
          break;
       
       default:
@@ -486,7 +478,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                   robot->modificaGiroBrazos(5);
                   break;
                case 2:
-                  // grado 2
+                  robot->modificaDesplazamiento(5);
                default:
                   break;
             }
@@ -501,7 +493,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                   robot->modificaGiroBrazos(5);
                   break;
                case 2:
-                  robot->modificaDesplazamientoCabeza(5);
+                  robot->modificaDesplazamiento(-5);
                default:
                   break;
             }
