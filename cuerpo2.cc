@@ -11,6 +11,7 @@ Cuerpo2::Cuerpo2(float h=1, float r=0.5){
 
     r_cabeza = cabeza->getRadio();
 
+    limite_desplazamiento = h_tronco - h_tronco*0.7;
 
     cabeza->setColor(
       Tupla4f(1.0f, 0.0f, 0.0f, 1.0f), // color vértices
@@ -22,7 +23,6 @@ Cuerpo2::Cuerpo2(float h=1, float r=0.5){
 void Cuerpo2::draw(){
     glPushMatrix();
         glPushMatrix();
-            // glRotatef(anguloCabeza, 0, 1, 0);
             glTranslatef(0, h_tronco+r_cabeza, 0);
             cabeza->draw();
         glPopMatrix();
@@ -36,4 +36,22 @@ float Cuerpo2::getAlturaTronco(){
 
 float Cuerpo2::getRadioTronco(){
     return r_tronco;
+}
+
+void Cuerpo2::modificaDesplazamientoCabeza(float valor){
+    if(sentido_positivo){
+        if ( (desplazamiento_cabeza + valor) > limite_desplazamiento ){ // ha llegado al tope positivo
+            desplazamiento_cabeza = limite_desplazamiento;
+            sentido_positivo = false;
+        }else{
+            desplazamiento_cabeza += valor;
+        }
+    }else{
+        if ( (desplazamiento_cabeza + valor) < -limite_desplazamiento ){ // ha llegado al tope negativo
+            desplazamiento_cabeza = -limite_desplazamiento;
+            sentido_positivo = true;
+        }else{
+            desplazamiento_cabeza -= valor;
+        }
+    }
 }

@@ -261,12 +261,21 @@ void Escena::dibujarObjetos(){
       cono->draw();
    glPopMatrix();
 
+   //// ROBOT
    glPushMatrix();
       robot->draw();
       // cuerpo1->draw();
       // pierna->draw();
       // brazo->draw();
    glPopMatrix();
+
+   /* Debug */
+   std::cout << "sentidoPos de brazo derecho: " << robot->getSentidoPositivoBrazoDer() << std::endl;
+   std::cout << "sentidoPos de brazo izquierdo: " << robot->getSentidoPositivoBrazoIzq() << std::endl;
+   std::cout << "angulo brazo der: " << robot->getAnguloBrazoDer() << "\n";
+   std::cout << "angulo brazo izq: " << robot->getAnguloBrazoIzq() << "\n";
+   
+
 }
 
 
@@ -295,17 +304,17 @@ void Escena::dibujar()
 
    if (modoPunto) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); // puntos (front)
-      cout << "-MODO PUNTOS ACTIVO-" << endl;
+      // cout << "-MODO PUNTOS ACTIVO-" << endl;
       dibujarObjetos();
    }
    if (modoLinea) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // lineas
-      cout << "-MODO LINEAS ACTIVO-" << endl;
+      // cout << "-MODO LINEAS ACTIVO-" << endl;
       dibujarObjetos();
    }
    if (modoSolido) {
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // solido (back)
-      cout << "-MODO SOLIDO ACTIVO-" << endl;
+      // cout << "-MODO SOLIDO ACTIVO-" << endl;
       dibujarObjetos();
    }
 
@@ -471,10 +480,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             switch (numGrado)
             {
                case 0:
-                  robot->modificaGiroPiernaIzq(5);
+                  robot->modificaGiroPiernas(5);
                   break;
                case 1:
-                  // grado 1
+                  robot->modificaGiroBrazos(5);
                   break;
                case 2:
                   // grado 2
@@ -486,13 +495,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             switch (numGrado)
             {
                case 0:
-                  robot->modificaGiroPiernaIzq(-5);
+                  robot->modificaGiroPiernas(5);
                   break;
                case 1:
-                  // grado 1
+                  robot->modificaGiroBrazos(5);
                   break;
                case 2:
-                  // grado 2
+                  robot->modificaDesplazamientoCabeza(5);
                default:
                   break;
             }

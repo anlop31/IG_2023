@@ -27,6 +27,11 @@ class Cuerpo1 : public ObjRevolucion
     void modificaGiroPiernaIzq(float valor);
     void modificaGiroPiernaDer(float valor);
 
+    void setSentidoPositivoPiernaIzq(bool sentido);
+    void setSentidoPositivoPiernaDer(bool sentido);
+
+    void modificaDesplazamientoCabeza(float valor);
+
 };
 
 #endif

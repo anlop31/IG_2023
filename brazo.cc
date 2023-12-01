@@ -27,7 +27,34 @@ float Brazo::getRadioBrazo(){
 }
 
 void Brazo::modificaGiroBrazo(float valor){
-    giro_brazo += valor; // hacer comprobaciones
+
+    if(sentido_positivo){
+        if ( (giro_brazo + valor) > limite_giro ){ // ha llegado al tope positivo
+            giro_brazo = limite_giro;
+            sentido_positivo = false;
+        }else{
+            giro_brazo += valor;
+        }
+    }else{
+        if ( (giro_brazo + valor) < -limite_giro ){ // ha llegado al tope negativo
+            giro_brazo = -limite_giro;
+            sentido_positivo = true;
+        }else{
+            giro_brazo -= valor;
+        }
+    }
+
 }
 
-// metodos para cambiar angulos y demás.....
+
+void Brazo::setSentidoPositivo(bool sentido){
+    sentido_positivo = sentido;
+}
+
+bool Brazo::getSentidoPositivo(){
+    return sentido_positivo;
+}
+
+float Brazo::getGiroBrazo(){
+    return giro_brazo;
+}

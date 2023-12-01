@@ -45,3 +45,18 @@ void Cuerpo1::modificaGiroPiernaIzq(float valor){
 void Cuerpo1::modificaGiroPiernaDer(float valor){
     pierna_der->modificaGiroPierna(valor);
 }
+
+
+/* MÉTODOS SET Y GET */
+void Cuerpo1::setSentidoPositivoPiernaIzq(bool sentido){
+    pierna_izq->setSentidoPositivo(sentido);
+}
+
+void Cuerpo1::setSentidoPositivoPiernaDer(bool sentido){
+    pierna_der->setSentidoPositivo(sentido);
+}
+
+
+void Cuerpo1::modificaDesplazamientoCabeza(float valor){
+    cuerpo2->modificaDesplazamientoCabeza(valor);
+}

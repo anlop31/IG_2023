@@ -34,6 +34,14 @@ class Robot : public ObjRevolucion
     void modificaGiroPiernaDer(float valor);
 
     void modificaGiroPiernas(float valor);
+    void modificaGiroBrazos(float valor);
+    void modificaDesplazamientoCabeza(float valor);
+
+    bool getSentidoPositivoBrazoDer();
+    bool getSentidoPositivoBrazoIzq();
+
+    float getAnguloBrazoDer();
+    float getAnguloBrazoIzq();
 
     // ejemplo de uso: robot.modificaGiroCabeza(0.05);
     // para incrementar en un 5% el valor del angulo de giro

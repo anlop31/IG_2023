@@ -14,13 +14,15 @@ class Pierna : public ObjRevolucion
     Cilindro * cilindro = nullptr;
     Esfera * pie = nullptr;
 
-    // sera un cilindro
+    bool sentido_positivo = false;
+    float limite_giro = 80;
 
    public:
     Pierna(float h, float r, float r_pie);
     void draw();
 
     void modificaGiroPierna(float valor);
+    void setSentidoPositivo(bool sentido);
 };
 
 #endif

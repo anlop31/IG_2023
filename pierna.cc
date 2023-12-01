@@ -26,5 +26,26 @@ void Pierna::draw(){
 }
 
 void Pierna::modificaGiroPierna(float valor){
-    giro_pierna += valor;
+
+    if(sentido_positivo){
+        if ( (giro_pierna + valor) > limite_giro ){ // ha llegado al tope positivo
+            giro_pierna = limite_giro;
+            sentido_positivo = false;
+        }else{
+            giro_pierna += valor;
+        }
+    }else{
+        if ( (giro_pierna + valor) < -limite_giro ){ // ha llegado al tope negativo
+            giro_pierna = -limite_giro;
+            sentido_positivo = true;
+        }else{
+            giro_pierna -= valor;
+        }
+    }
+}
+
+
+/* MÉTODOS SET Y GET */
+void Pierna::setSentidoPositivo(bool sentido){
+    sentido_positivo = sentido;
 }

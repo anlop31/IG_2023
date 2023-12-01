@@ -17,6 +17,9 @@ class Cuerpo2 : public ObjRevolucion
     Cilindro * tronco = nullptr;
     Esfera * cabeza = nullptr;
 
+    bool sentido_positivo = false;
+    float desplazamiento_cabeza = 0;
+    float limite_desplazamiento;
 
 
    public:
@@ -25,6 +28,9 @@ class Cuerpo2 : public ObjRevolucion
 
     float getAlturaTronco();
     float getRadioTronco();
+
+    float getDesplazamientoCabeza();
+    void modificaDesplazamientoCabeza(float valor);
 };
 
 #endif

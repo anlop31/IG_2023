@@ -12,11 +12,18 @@ class Brazo : public ObjRevolucion
 
     Cilindro * cilindro = nullptr;
 
+    bool sentido_positivo = false;
+    float limite_giro = 80;
+
    public:
     Brazo(float h, float r);
     void draw();
     float getAlturaBrazo();
     float getRadioBrazo();
+    void setSentidoPositivo(bool sentido);
+    bool getSentidoPositivo();
+    float getGiroBrazo();
+
 
     void modificaGiroBrazo(float valor);
 };
