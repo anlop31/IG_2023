@@ -59,3 +59,8 @@ bool Brazo::getSentidoPositivo(){
 float Brazo::getGiroBrazo(){
     return giro_brazo;
 }
+
+
+void Brazo::setMaterialBrazo(Material m){
+    cilindro->setMaterial(m);
+}

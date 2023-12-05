@@ -1,5 +1,5 @@
-#ifndef CUERPO2_H_INCLUDED
-#define CUERPO2_H_INCLUDED
+#ifndef TRONCOCABEZA_H_INCLUDED
+#define TRONCOCABEZA_H_INCLUDED
 
 #include "auxiliar.h"
 #include "objrevolucion.h"
@@ -7,7 +7,7 @@
 #include "cilindro.h"
 
 // tronco y cabeza
-class Cuerpo2 : public ObjRevolucion
+class TroncoCabeza : public ObjRevolucion
 {
 
     float h_tronco, r_tronco;
@@ -23,7 +23,7 @@ class Cuerpo2 : public ObjRevolucion
 
 
    public:
-    Cuerpo2(float h, float r);
+    TroncoCabeza(float h, float r);
     void draw();
 
     /* Modificadores */
@@ -34,6 +34,11 @@ class Cuerpo2 : public ObjRevolucion
     float getRadioTronco();
 
     float getDesplazamientoCabeza();
+
+    /* Materiales */
+    void setMaterialCuerpo(Material m);
+    void setMaterialTronco(Material m);
+    void setMaterialCabeza(Material m);
 };
 
 #endif

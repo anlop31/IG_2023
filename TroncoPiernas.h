@@ -1,24 +1,25 @@
-#ifndef CUERPO1_H_INCLUDED
-#define CUERPO1_H_INCLUDED
+#ifndef TRONCOPIERNAS_H_INCLUDED
+#define TRONCOPIERNAS_H_INCLUDED
 
 #include "auxiliar.h"
 #include "objrevolucion.h"
 #include "pierna.h"
-#include "cuerpo2.h"
+#include "TroncoCabeza.h"
 
-class Cuerpo1 : public ObjRevolucion
-{
+class TroncoPiernas : public ObjRevolucion
+{ // cuerpo1
     /* OBJETOS*/
     Pierna * pierna_izq = nullptr;
     Pierna * pierna_der = nullptr;
-    Cuerpo2 * cuerpo2 = nullptr; // tronco y cabeza
+    TroncoCabeza * troncoCabeza = nullptr; // tronco y cabeza
 
     /* Parámetros tronco */
     float r_tronco, h_tronco;
 
 
    public:
-    Cuerpo1();
+    TroncoPiernas();
+
     void draw();
 
     /* Modificadores */
@@ -32,6 +33,12 @@ class Cuerpo1 : public ObjRevolucion
 
     void setSentidoPositivoPiernaIzq(bool sentido);
     void setSentidoPositivoPiernaDer(bool sentido);
+
+    /* Materiales */
+    void setMaterialCuerpo(Material m);
+    void setMaterialPiernas(Material m);
+    void setMaterialTronco(Material m);
+    void setMaterialCabeza(Material m);
 };
 
 #endif

@@ -146,7 +146,7 @@ void Escena::asignar_materiales(){
    ObjPLY_2->setMaterial(turquesa);
 
 
-   robot->setMaterial(turquesa);
+   robot->setMaterialRobot(oro);
 }
 
 
@@ -158,26 +158,18 @@ void Escena::activar_luces(){
       glPushMatrix();
          luz0->activar();
       glPopMatrix();
-
-      cout << " >>luz0 activada: " << luz0->estadoActivada() << endl;
    }
-
-   
 
    if(luz1 != nullptr){
       glPushMatrix();
          luz1->activar();
       glPopMatrix();
-
-      cout << " >>luz1 activada: " << luz1->estadoActivada() << endl;
    }
 
    if(luz2 != nullptr){
       glPushMatrix();
          luz2->activar();
       glPopMatrix();
-
-      cout << " >>luz2 activada: " << luz2->estadoActivada() << endl;
    }
 }
 
@@ -185,7 +177,7 @@ void Escena::activar_luces(){
 void Escena::dibujarObjetos(){
    //// CUBO
    glPushMatrix();
-      glTranslatef(-120, 0, -120); 
+      glTranslatef(-180, 0, -120); 
       cubo->draw();
    glPopMatrix();
 
@@ -193,7 +185,7 @@ void Escena::dibujarObjetos(){
    //// PIRAMIDE
 
    glPushMatrix();
-      glTranslatef(100, 0, -150); 
+      glTranslatef(200, 0, -150); 
       piramide->draw();
    glPopMatrix();
 
@@ -233,7 +225,7 @@ void Escena::dibujarObjetos(){
    /*    OBJETOS DE REVOLUCIÓN   */
    //// ESFERA
    glPushMatrix();
-      glTranslatef(0, 130, -80);
+      glTranslatef(-200, 130, -100);
       esfera->draw();
    glPopMatrix();
 
@@ -253,18 +245,9 @@ void Escena::dibujarObjetos(){
 
    //// ROBOT
    glPushMatrix();
+      glTranslatef(0, 0, -200);
       robot->draw();
-      // cuerpo1->draw();
-      // pierna->draw();
-      // brazo->draw();
    glPopMatrix();
-
-   /* Debug */
-   std::cout << "sentidoPos de brazo derecho: " << robot->getSentidoPositivoBrazoDer() << std::endl;
-   std::cout << "sentidoPos de brazo izquierdo: " << robot->getSentidoPositivoBrazoIzq() << std::endl;
-   std::cout << "angulo brazo der: " << robot->getAnguloBrazoDer() << "\n";
-   std::cout << "angulo brazo izq: " << robot->getAnguloBrazoIzq() << "\n";
-   
 
 }
 
@@ -327,25 +310,33 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    switch( toupper(tecla) )
    {
       case 'Q' :
-         if (modoMenu!=NADA)
+         if (modoMenu!=NADA){
             modoMenu=NADA;            
+            cout << "-->VOLVIENDO A MENÚ PRINCIPAL" << endl;
+         }
          else {
             salir=true ;
          }
          break ;
       case 'O' :
          // ESTAMOS EN MODO SELECCION DE OBJETO
+         cout << "-->ENTRANDO A MENÚ DE SELECCIÓN DE OBJETO" << endl;
          modoMenu=SELOBJETO; 
          break ;
       case 'V' :
          // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
+         cout << "-->ENTRANDO A MENÚ DE VISUALIZACIÓN" << endl;
          modoMenu=SELVISUALIZACION;
          break ;
       case 'A':
-         animacionAutomatica = !animacionAutomatica;
-         modoMenu=ANIMACION;
+         if(modoMenu==NADA){ // si no está en ningun submenú
+            animacionAutomatica = !animacionAutomatica;
+            cout << "-->ANIMACIÓN AUTOMÁTICA " << (animacionAutomatica ? "ACTIVADA" : "DESACTIVADA") << endl;
+            modoMenu=ANIMACION;
+         }
          break;
       case 'M': // se desactiva animacion automatica
+         cout << "-->ENTRANDO A SELECCIÓN DE GRADOS DE LIBERTAD" << endl;
          modoMenu=GRADOS;
    }
 
@@ -368,18 +359,21 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                iluminacionActiva = false;
             }
             modoPunto = !modoPunto; 
+            cout << "--MODO PUNTOS " << (modoPunto ? "ACTIVADO" : "DESACTIVADO") << endl;
             break;
          case 'L': // modo líneas
             if(iluminacionActiva){
                iluminacionActiva = false;
             }
             modoLinea = !modoLinea; 
+            cout << "--MODO LÍNEAS " << (modoLinea ? "ACTIVADO" : "DESACTIVADO") << endl;
             break;
          case 'S': // modo sólido
             if(iluminacionActiva){
                iluminacionActiva = false;
             }
             modoSolido = !modoSolido; 
+            cout << "--MODO SÓLIDO " << (modoSolido ? "ACTIVADO" : "DESACTIVADO") << endl;
             break;
          case 'T': // activar iluminación
             iluminacionActiva = !iluminacionActiva;
@@ -388,53 +382,51 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                modoPunto = false;
                modoSolido = true;
             }
+            cout << "--ILUMINACIÓN " << (iluminacionActiva ? "ACTIVADA" : "DESACTIVADA") << endl;
+
             break;
          case '0': // GL_LIGHT0
             if (luz0 != nullptr)
                luz0->setActivada(!luz0->estadoActivada());
+            cout << "--LUZ 0 " << (luz0->estadoActivada() ? "ACTIVADA" : "DESACTIVADA") << endl;
             break;
          case '1': // GL_LIGHT1
             if (luz1 != nullptr)
                   luz1->setActivada(!luz1->estadoActivada());
+            cout << "--LUZ 1 " << (luz1->estadoActivada() ? "ACTIVADA" : "DESACTIVADA") << endl;
+
             break;
          case '2': // GL_LIGHT2
             if (luz2 != nullptr)
                   luz2->setActivada(!luz2->estadoActivada());
+            cout << "--LUZ 2 " << (luz2->estadoActivada() ? "ACTIVADA" : "DESACTIVADA") << endl;
             break;
-         // case '3':
-         //    break;
-         // case '4':
-         //    break;
-         // case '5':
-         //    break;
-         // case '6':
-         //    break;
-         // case '7':
-         //    break;
          case 'A': // variar angulo alfa
             ultimaPulsada = 'A';
+            cout << "--CAMBIAR ÁNGULO ALFA..." << endl;
             break;
          case 'B': // variar angulo beta
             ultimaPulsada = 'B';
+            cout << "--CAMBIAR ÁNGULO BETA..." << endl;
             break;
          case '>': // incrementa el angulo
             if(ultimaPulsada == 'A'){
-               cout << "incrementa A" << endl;
+               cout << "--INCREMENTA ALFA" << endl;
                luz1->variarAnguloAlpha(-5*M_PI/180);
             }
             else if(ultimaPulsada == 'B'){ // la B
-               cout << "incrementa B" << endl;
+               cout << "--INCREMENTA BETA" << endl;
                luz1->variarAnguloBeta(-5*M_PI/180);
             }
             break;
          case '<': // decrementa el angulo
             if(ultimaPulsada == 'A'){
                luz1->variarAnguloAlpha(-5*M_PI/180);
-               cout << "decrementa A" << endl;
+               cout << "--DECREMENTA ALFA" << endl;
             }
             else if(ultimaPulsada == 'B'){ // la B
                luz1->variarAnguloBeta(-5*M_PI/180);
-               cout << "decrementa B" << endl;
+               cout << "--DECREMENTA BETA" << endl;
             }
             break;
       }
@@ -460,13 +452,16 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    if(modoMenu == GRADOS){
       switch(toupper(tecla)){
          case '0':
-            numGrado = 0; // pierna izq
+            numGrado = 0; 
+            cout << "--GRADO 0 SELECCIONADO (PIERNAS)" << endl;
             break;
          case '1':
             numGrado = 1;
+            cout << "--GRADO 1 SELECCIONADO (BRAZOS)" << endl;
             break;
          case '2':
             numGrado = 2;
+            cout << "--GRADO 2 SELECCIONADO (MOVIMIENTO)" << endl;
             break;
          case '+':
             switch (numGrado)
@@ -487,10 +482,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             switch (numGrado)
             {
                case 0:
-                  robot->modificaGiroPiernas(5);
+                  robot->modificaGiroPiernas(-5);
                   break;
                case 1:
-                  robot->modificaGiroBrazos(5);
+                  robot->modificaGiroBrazos(-5);
                   break;
                case 2:
                   robot->modificaDesplazamiento(-5);

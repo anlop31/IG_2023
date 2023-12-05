@@ -12,13 +12,13 @@ Robot::Robot(){
     h_brazo_izq = brazo_izq->getAlturaBrazo();
     h_brazo_der = brazo_der->getAlturaBrazo();
 
-    /* Cuerpo1 */
-    cuerpo1 = new Cuerpo1();
+    /* troncoPiernas */
+    troncoPiernas = new TroncoPiernas();
 
-    h_tronco = cuerpo1->getAlturaTronco();
-    r_tronco = cuerpo1->getRadioTronco();
+    h_tronco = troncoPiernas->getAlturaTronco();
+    r_tronco = troncoPiernas->getRadioTronco();
 
-    cuerpo1->setSentidoPositivoPiernaIzq(true);
+    troncoPiernas->setSentidoPositivoPiernaIzq(true);
 }
 
 void Robot::draw(){
@@ -27,7 +27,7 @@ void Robot::draw(){
 
         // RESTO DEL CUERPO
         glPushMatrix();
-            cuerpo1->draw();
+            troncoPiernas->draw();
         glPopMatrix();
 
         // BRAZOS
@@ -59,18 +59,18 @@ void Robot::modificaGiroBrazoIzq(float valor){
 }
 
 void Robot::modificaGiroPiernaIzq(float valor){
-    cuerpo1->modificaGiroPiernaIzq(valor);
+    troncoPiernas->modificaGiroPiernaIzq(valor);
 }
 
 void Robot::modificaGiroPiernaDer(float valor){
-    cuerpo1->modificaGiroPiernaDer(valor);
+    troncoPiernas->modificaGiroPiernaDer(valor);
 }
 
 
 /* GRADOS DE LIBERTAD */ 
 void Robot::modificaGiroPiernas(float valor){
-    cuerpo1->modificaGiroPiernaIzq(valor);
-    cuerpo1->modificaGiroPiernaDer(valor);
+    troncoPiernas->modificaGiroPiernaIzq(valor);
+    troncoPiernas->modificaGiroPiernaDer(valor);
 }
 
 void Robot::modificaGiroBrazos(float valor){
@@ -79,7 +79,7 @@ void Robot::modificaGiroBrazos(float valor){
 }
 
 void Robot::modificaDesplazamientoCabeza(float valor){
-    cuerpo1->modificaDesplazamientoCabeza(valor);
+    troncoPiernas->modificaDesplazamientoCabeza(valor);
 }
 
 void Robot::modificaDesplazamiento(float valor){
@@ -87,8 +87,8 @@ void Robot::modificaDesplazamiento(float valor){
     desplazamiento += valor;
 
     // que se muevan los brazos y piernas cuando se mueve
-    modificaGiroBrazos(5);
-    modificaGiroPiernas(5);
+    // modificaGiroBrazos(5);
+    // modificaGiroPiernas(5);
 }
 
 void Robot::modificaDesplazamientoAislado(float valor){
@@ -151,4 +151,30 @@ float Robot::getAnguloBrazoIzq(){
 
 float Robot::getAnguloBrazoDer(){
     return brazo_der->getGiroBrazo();
+}
+
+
+/* MATERIALES */
+void Robot::setMaterialRobot(Material m){
+    troncoPiernas->setMaterialCuerpo(m);
+    brazo_izq->setMaterialBrazo(m);
+    brazo_der->setMaterialBrazo(m);
+}
+
+void Robot::setMaterialPiernas(Material m){
+    troncoPiernas->setMaterialPiernas(m);
+}
+
+
+void Robot::setMaterialBrazos(Material m){
+    brazo_izq->setMaterialBrazo(m);
+    brazo_der->setMaterialBrazo(m);
+}
+
+void Robot::setMaterialTronco(Material m){
+    troncoPiernas->setMaterialTronco(m);
+}
+
+void Robot::setMaterialCabeza(Material m){
+    troncoPiernas->setMaterialCabeza(m);
 }

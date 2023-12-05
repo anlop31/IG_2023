@@ -31,6 +31,9 @@ class Brazo : public ObjRevolucion
     void setSentidoPositivo(bool sentido);
     bool getSentidoPositivo();
     float getGiroBrazo();
+
+    /* Material */
+    void setMaterialBrazo(Material m);
 };
 
 #endif

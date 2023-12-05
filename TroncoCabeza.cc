@@ -1,7 +1,7 @@
-#include "cuerpo2.h"
+#include "TroncoCabeza.h"
 
 
-Cuerpo2::Cuerpo2(float h=1, float r=0.5){
+TroncoCabeza::TroncoCabeza(float h=1, float r=0.5){
     h_tronco = h;
     r_tronco = r;
 
@@ -20,7 +20,7 @@ Cuerpo2::Cuerpo2(float h=1, float r=0.5){
    );
 }
 
-void Cuerpo2::draw(){
+void TroncoCabeza::draw(){
     glPushMatrix();
         glPushMatrix();
             glTranslatef(0, h_tronco+r_cabeza, 0);
@@ -32,7 +32,7 @@ void Cuerpo2::draw(){
 
 
 /* MODIFICADORES */
-void Cuerpo2::modificaDesplazamientoCabeza(float valor){
+void TroncoCabeza::modificaDesplazamientoCabeza(float valor){
     if(sentido_positivo){
         if ( (desplazamiento_cabeza + valor) > limite_desplazamiento ){ // ha llegado al tope positivo
             desplazamiento_cabeza = limite_desplazamiento;
@@ -52,14 +52,29 @@ void Cuerpo2::modificaDesplazamientoCabeza(float valor){
 
 
 /* MÉTODOS SET Y GET */
-float Cuerpo2::getAlturaTronco(){
+float TroncoCabeza::getAlturaTronco(){
     return h_tronco;
 }
 
-float Cuerpo2::getRadioTronco(){
+float TroncoCabeza::getRadioTronco(){
     return r_tronco;
 }
 
-float Cuerpo2::getDesplazamientoCabeza(){
+float TroncoCabeza::getDesplazamientoCabeza(){
     return desplazamiento_cabeza;
+}
+
+
+/* MATERIALES */
+void TroncoCabeza::setMaterialCuerpo(Material m){
+    cabeza->setMaterial(m);
+    tronco->setMaterial(m);
+}
+
+void TroncoCabeza::setMaterialTronco(Material m){
+    tronco->setMaterial(m);
+}
+
+void TroncoCabeza::setMaterialCabeza(Material m){
+    cabeza->setMaterial(m);
 }

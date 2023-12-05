@@ -54,3 +54,10 @@ void Pierna::setSentidoPositivo(bool sentido){
 bool Pierna::getSentidoPositivo(){
     return sentido_positivo;
 }
+
+
+/* MATERIALES */
+void Pierna::setMaterialPierna(Material m){
+    cilindro->setMaterial(m);
+    pie->setMaterial(m);
+}

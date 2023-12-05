@@ -18,7 +18,7 @@ class Pierna : public ObjRevolucion
 
     /* Parámetros para el giro */
     bool sentido_positivo = false;
-    float limite_giro = 80;
+    float limite_giro = 70;
 
    public:
     Pierna(float h, float r, float r_pie);
@@ -30,6 +30,9 @@ class Pierna : public ObjRevolucion
     /* Métodos SET y GET */
     void setSentidoPositivo(bool sentido);
     bool getSentidoPositivo();
+
+    /* Materiales */
+    void setMaterialPierna(Material m);
 };
 
 #endif

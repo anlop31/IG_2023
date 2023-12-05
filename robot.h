@@ -3,7 +3,7 @@
 
 #include "auxiliar.h"
 #include "objrevolucion.h"
-#include "cuerpo1.h"
+#include "TroncoPiernas.h"
 #include "brazo.h"
 
 class Robot : public ObjRevolucion
@@ -11,7 +11,7 @@ class Robot : public ObjRevolucion
     /* OBJETOS */
     Brazo * brazo_izq = nullptr;
     Brazo * brazo_der = nullptr;
-    Cuerpo1 * cuerpo1 = nullptr;
+    TroncoPiernas * troncoPiernas = nullptr;
 
     /* Parámetros brazos */
     float r_brazo_izq, r_brazo_der;
@@ -59,6 +59,13 @@ class Robot : public ObjRevolucion
 
     float getAnguloBrazoDer();
     float getAnguloBrazoIzq();
+
+    /* Material robot */
+    void setMaterialRobot(Material mat);
+    void setMaterialPiernas(Material mat);
+    void setMaterialBrazos(Material mat);
+    void setMaterialTronco(Material mat);
+    void setMaterialCabeza(Material mat);
 
 
     // ejemplo de uso: robot.modificaGiroCabeza(0.05);
