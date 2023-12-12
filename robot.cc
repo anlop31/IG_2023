@@ -33,14 +33,12 @@ void Robot::draw(){
         // BRAZOS
         glPushMatrix();
             glPushMatrix(); // brazo derecho
-                glTranslatef(r_tronco+r_brazo_der/2, 0, 0); // colocarlo a la der
-                glTranslatef(0, h_brazo_der/2, 0);
+                glTranslatef(r_tronco+r_brazo_der/2, h_brazo_der/2, 0); // colocarlo a la der y arriba 
                 brazo_der->draw();
             glPopMatrix();
 
             glPushMatrix(); // brazo izquierdo
-                glTranslatef(-( r_tronco+r_brazo_izq/2 ), 0, 0); // colocarlo a la izq
-                glTranslatef(0, h_brazo_izq/2, 0);
+                glTranslatef(-( r_tronco+r_brazo_izq/2 ), h_brazo_izq/2, 0); // colocarlo a la izq y arriba
                 brazo_izq->draw();
             glPopMatrix();
         glPopMatrix();
@@ -78,10 +76,6 @@ void Robot::modificaGiroBrazos(float valor){
     brazo_der->modificaGiroBrazo(valor);
 }
 
-void Robot::modificaDesplazamientoCabeza(float valor){
-    troncoPiernas->modificaDesplazamientoCabeza(valor);
-}
-
 void Robot::modificaDesplazamiento(float valor){
     
     desplazamiento += valor;
@@ -95,6 +89,16 @@ void Robot::modificaDesplazamientoAislado(float valor){
     desplazamiento += valor;
 }
 
+
+void Robot::cambiarSentidosBrazos(){
+    brazo_izq->setSentidoPositivo(!brazo_izq->getSentidoPositivo());
+    brazo_der->setSentidoPositivo(!brazo_der->getSentidoPositivo());
+}
+
+void Robot::cambiarSentidosPiernas(){
+    troncoPiernas->setSentidoPositivoPiernaIzq(!troncoPiernas->getSentidoPositivoPiernaIzq());
+    troncoPiernas->setSentidoPositivoPiernaDer(!troncoPiernas->getSentidoPositivoPiernaDer());
+}
 
 /* ANIMAR MODELO JERÁRQUICO */
 void Robot::animarModeloJerarquico(){
@@ -143,7 +147,6 @@ bool Robot::getSentidoPositivoBrazoIzq(){
 bool Robot::getSentidoPositivoBrazoDer(){
     return brazo_der->getSentidoPositivo();
 }
-
 
 float Robot::getAnguloBrazoIzq(){
     return brazo_izq->getGiroBrazo();

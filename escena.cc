@@ -467,13 +467,22 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             switch (numGrado)
             {
                case 0:
+                  if(!primeraVezPulsado0){
+                     robot->cambiarSentidosPiernas();
+                     primeraVezPulsado0 = true;
+                  }
                   robot->modificaGiroPiernas(5);
                   break;
                case 1:
+                  if(!primeraVezPulsado1){
+                     robot->cambiarSentidosBrazos();
+                     primeraVezPulsado1 = true;
+                  }
                   robot->modificaGiroBrazos(5);
                   break;
                case 2:
                   robot->modificaDesplazamiento(5);
+                  break;
                default:
                   break;
             }
@@ -482,10 +491,18 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             switch (numGrado)
             {
                case 0:
-                  robot->modificaGiroPiernas(-5);
+                  if(primeraVezPulsado0){
+                     robot->cambiarSentidosPiernas();
+                     primeraVezPulsado0 = false;
+                  }
+                  robot->modificaGiroPiernas(5);
                   break;
                case 1:
-                  robot->modificaGiroBrazos(-5);
+                  if(primeraVezPulsado1){
+                     robot->cambiarSentidosBrazos();
+                     primeraVezPulsado1 = false;
+                  }
+                  robot->modificaGiroBrazos(5);
                   break;
                case 2:
                   robot->modificaDesplazamiento(-5);

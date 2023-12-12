@@ -17,14 +17,12 @@ void TroncoPiernas::draw(){
     glPopMatrix();
 
     glPushMatrix();
-        glTranslatef(r_tronco-30, 0, 0);
-        glTranslatef(0, h_tronco/2, 0);
+        glTranslatef(r_tronco-30, h_tronco/2, 0);
         pierna_der->draw();
     glPopMatrix();
 
     glPushMatrix();
-        glTranslatef(-(r_tronco-30), 0, 0);
-        glTranslatef(0, h_tronco/2, 0);
+        glTranslatef(-(r_tronco-30), h_tronco/2, 0);
         pierna_izq->draw();
     glPopMatrix();
 }
@@ -39,11 +37,6 @@ void TroncoPiernas::modificaGiroPiernaDer(float valor){
     pierna_der->modificaGiroPierna(valor);
 }
 
-void TroncoPiernas::modificaDesplazamientoCabeza(float valor){
-    troncoCabeza->modificaDesplazamientoCabeza(valor);
-}
-
-
 /* MÉTODOS SET Y GET */
 float TroncoPiernas::getAlturaTronco(){
     return h_tronco;
@@ -53,6 +46,14 @@ float TroncoPiernas::getRadioTronco(){
     return r_tronco;
 }
 
+bool TroncoPiernas::getSentidoPositivoPiernaIzq(){
+    return pierna_izq->getSentidoPositivo();
+}
+
+bool TroncoPiernas::getSentidoPositivoPiernaDer(){
+    return pierna_der->getSentidoPositivo();
+}
+
 void TroncoPiernas::setSentidoPositivoPiernaIzq(bool sentido){
     pierna_izq->setSentidoPositivo(sentido);
 }
@@ -60,6 +61,7 @@ void TroncoPiernas::setSentidoPositivoPiernaIzq(bool sentido){
 void TroncoPiernas::setSentidoPositivoPiernaDer(bool sentido){
     pierna_der->setSentidoPositivo(sentido);
 }
+
 
 
 /* MATERIALES */

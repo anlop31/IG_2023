@@ -25,12 +25,13 @@ class TroncoPiernas : public ObjRevolucion
     /* Modificadores */
     void modificaGiroPiernaIzq(float valor);
     void modificaGiroPiernaDer(float valor);
-    void modificaDesplazamientoCabeza(float valor);
 
     /* Métodos SET y GET */
     float getAlturaTronco();
     float getRadioTronco();
 
+    bool getSentidoPositivoPiernaIzq();
+    bool getSentidoPositivoPiernaDer();
     void setSentidoPositivoPiernaIzq(bool sentido);
     void setSentidoPositivoPiernaDer(bool sentido);
 

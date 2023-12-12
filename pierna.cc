@@ -1,5 +1,7 @@
 #include "pierna.h"
 
+using namespace std;
+
 Pierna::Pierna(float h = 1, float r = 1, float r_pie = 0.5){
 
     h_pierna = h;
@@ -27,7 +29,7 @@ void Pierna::draw(){
 
 /* MODIFICADORES */
 void Pierna::modificaGiroPierna(float valor){
-
+    
     if(sentido_positivo){
         if ( (giro_pierna + valor) > limite_giro ){ // ha llegado al tope positivo
             giro_pierna = limite_giro;
@@ -43,16 +45,35 @@ void Pierna::modificaGiroPierna(float valor){
             giro_pierna -= valor;
         }
     }
+
+    // debug
+    // std::cout << "angulo:" << giro_pierna << std::endl;
 }
 
 
 /* MÉTODOS SET Y GET */
-void Pierna::setSentidoPositivo(bool sentido){
-    sentido_positivo = sentido;
+float Pierna::getAlturaPierna(){
+    return h_pierna;
+}
+
+float Pierna::getRadioPierna(){
+    return r_pierna;
+}
+
+float Pierna::getRadioPie(){
+    return r_pie;
+}
+
+float Pierna::getGiroPierna(){
+    return giro_pierna;
 }
 
 bool Pierna::getSentidoPositivo(){
     return sentido_positivo;
+}
+
+void Pierna::setSentidoPositivo(bool sentido){
+    sentido_positivo = sentido;
 }
 
 

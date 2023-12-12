@@ -28,9 +28,11 @@ class Brazo : public ObjRevolucion
     /* Métodos SET y GET */
     float getAlturaBrazo();
     float getRadioBrazo();
-    void setSentidoPositivo(bool sentido);
-    bool getSentidoPositivo();
     float getGiroBrazo();
+
+    bool getSentidoPositivo();
+    void setSentidoPositivo(bool sentido);
+    
 
     /* Material */
     void setMaterialBrazo(Material m);

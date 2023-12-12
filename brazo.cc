@@ -17,6 +17,7 @@ void Brazo::draw(){
     glPopMatrix();
 }
 
+
 /* MODIFICADORES */
 void Brazo::modificaGiroBrazo(float valor){
 
@@ -48,19 +49,20 @@ float Brazo::getRadioBrazo(){
     return r_brazo;
 }
 
-void Brazo::setSentidoPositivo(bool sentido){
-    sentido_positivo = sentido;
+float Brazo::getGiroBrazo(){
+    return giro_brazo;
 }
 
 bool Brazo::getSentidoPositivo(){
     return sentido_positivo;
 }
 
-float Brazo::getGiroBrazo(){
-    return giro_brazo;
+void Brazo::setSentidoPositivo(bool sentido){
+    sentido_positivo = sentido;
 }
 
 
+/* MATERIALES */
 void Brazo::setMaterialBrazo(Material m){
     cilindro->setMaterial(m);
 }

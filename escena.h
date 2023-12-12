@@ -80,6 +80,9 @@ class Escena
 
     unsigned char ultimaPulsada = 'N';
 
+    bool primeraVezPulsado0 = true;
+    bool primeraVezPulsado1 = true;
+
    public:
 
     Escena();

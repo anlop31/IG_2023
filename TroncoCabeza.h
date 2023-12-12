@@ -17,23 +17,15 @@ class TroncoCabeza : public ObjRevolucion
     Cilindro * tronco = nullptr;
     Esfera * cabeza = nullptr;
 
-    bool sentido_positivo = false;
-    float desplazamiento_cabeza = 0;
-    float limite_desplazamiento;
-
 
    public:
     TroncoCabeza(float h, float r);
     void draw();
 
-    /* Modificadores */
-    void modificaDesplazamientoCabeza(float valor);
-
     /* Métodos SET y GET */
     float getAlturaTronco();
     float getRadioTronco();
-
-    float getDesplazamientoCabeza();
+    float getRadioCabeza();
 
     /* Materiales */
     void setMaterialCuerpo(Material m);

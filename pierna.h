@@ -28,8 +28,13 @@ class Pierna : public ObjRevolucion
     void modificaGiroPierna(float valor);
 
     /* Métodos SET y GET */
-    void setSentidoPositivo(bool sentido);
+    float getAlturaPierna();
+    float getRadioPierna();
+    float getRadioPie();
+    float getGiroPierna();
+
     bool getSentidoPositivo();
+    void setSentidoPositivo(bool sentido);
 
     /* Materiales */
     void setMaterialPierna(Material m);

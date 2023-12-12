@@ -42,9 +42,11 @@ class Robot : public ObjRevolucion
     /* Modificadores generales */
     void modificaGiroPiernas(float valor);
     void modificaGiroBrazos(float valor);
-    void modificaDesplazamientoCabeza(float valor);
     void modificaDesplazamiento(float valor);
     void modificaDesplazamientoAislado(float valor);
+    
+    void cambiarSentidosBrazos();
+    void cambiarSentidosPiernas();
 
     /* Animación automática */
     void animarModeloJerarquico();
