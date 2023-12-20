@@ -33,6 +33,7 @@ class ObjRevolucion : public Malla3D
    ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
 protected:
     void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias);
+    void asignarPuntosTextura(const modoTextura & modo);
 
 } ;
 

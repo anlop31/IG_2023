@@ -13,6 +13,13 @@ using namespace std;
 // Función de visualización de la malla,
 
 
+// Malla3D::~Malla3D(){
+// 	if (textura != nullptr){
+// 		delete textura;
+// 	}
+// }
+
+
 // Cálculo de las normales
 void Malla3D::calcularNormales(){
    Tupla3f vectorA;
@@ -79,6 +86,10 @@ void Malla3D::crearVBOS(){
    if(id_vbo_nv == 0)
       id_vbo_nv = CrearVBO(GL_ARRAY_BUFFER, 3*nv.size()*sizeof(float), nv.data());
 
+   // Crear VBO texturas
+   if(id_vbo_ct == 0)
+      id_vbo_ct = CrearVBO(GL_ARRAY_BUFFER, 3*ct.size()*sizeof(float), ct.data());
+
 }
 
 
@@ -107,6 +118,13 @@ void Malla3D::draw()
 
    } 
    //
+
+   // Texturas
+   if (textura != nullptr) {
+      textura->activar();
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+      glTexCoordPointer(2, GL_FLOAT, 0, ct.data());
+   }
    
    // Segun el modo de dibujo, activar un color u otro
    if (id_vbo_cd != 0 && id_vbo_cl != 0 && id_vbo_cs != 0) {
@@ -154,7 +172,11 @@ void Malla3D::draw()
    // desactivar buffer: VBO de triángulos
    glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER , 0 );
    
-
+   // Desactivar texturas
+   if (textura != nullptr) {
+	  glDisable( GL_TEXTURE_2D );
+	  glDisable(GL_TEXTURE_COORD_ARRAY);
+   }
 
    // desactivar uso de array de vértices
    glDisableClientState ( GL_VERTEX_ARRAY );
@@ -197,4 +219,29 @@ void Malla3D::setColor(Tupla4f colorVertices, Tupla4f colorLineas, Tupla4f color
 
 void Malla3D::setMaterial(Material mat){
    m = mat; // asignamos material
+}
+
+
+void Malla3D::setTextura(const std::string & archivo){
+
+	if (textura != nullptr)
+		delete textura;
+
+	textura = new Textura(archivo);
+
+	asignarPuntosTextura(modo_textura);
+
+}
+
+/// @brief Revisar
+/// @param modo 
+void Malla3D::asignarPuntosTextura(const modoTextura & modo){
+
+	ct.resize(v.size());
+
+
+	for (int i = 0; i < ct.size(); i++){
+		ct[i] = {v[i](0), (v[i](1) - v.front()(1) ) / (v.back()(1) - v.front()(1))} ;
+	}
+
 }

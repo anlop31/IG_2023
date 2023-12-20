@@ -43,6 +43,9 @@ Escena::Escena()
    peon1 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
    peon2 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
 
+   // para texturas
+   cuadro = new Cubo(60.0);
+
 
    /* MODELO JERÁRQUICO */
    robot = new Robot();
@@ -73,6 +76,10 @@ Escena::Escena()
       {0.0, 0.0, 0.0, 1}, // color ambiente (negro)
       {1.0, 1.0, 1.0, 1.0}, // color especular (blanco)
       {1.0, 1.0, 1.0, 1.0}); // color difuso (blanco) [R-G-B]
+
+
+      /* TEXTURAS */
+      cuadro->setTextura("./img/text-madera.jpg");
 //
 }
 
@@ -247,6 +254,10 @@ void Escena::dibujarObjetos(){
    glPushMatrix();
       glTranslatef(0, 0, -200);
       robot->draw();
+   glPopMatrix();
+
+   glPushMatrix();
+      cuadro->draw();
    glPopMatrix();
 
 }

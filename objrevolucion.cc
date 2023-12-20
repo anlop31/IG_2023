@@ -142,3 +142,21 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
 
 
 }
+
+
+void ObjRevolucion::asignarPuntosTextura(const modoTextura & modo){
+   ct.resize(v.size());
+
+	float alpha, beta, h;
+
+	float s, t;
+
+   switch (modo) {
+      case CILINDRICA:
+      break;
+      case ESFERICA:
+      break;
+      case PLANA:
+      break;
+   }
+}

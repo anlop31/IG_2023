@@ -83,6 +83,9 @@ class Escena
     bool primeraVezPulsado0 = true;
     bool primeraVezPulsado1 = true;
 
+    // texturas
+    Cubo * cuadro = nullptr;
+
    public:
 
     Escena();

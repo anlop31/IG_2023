@@ -12,12 +12,15 @@
 
 #include "auxiliar.h"
 #include "Material.h"
+#include "Textura.h"
 
 // *****************************************************************************
 //
 // clase para objetos 3D (mallas indexadas)
 //
 // *****************************************************************************
+
+typedef enum {CILINDRICA, ESFERICA, PLANA} modoTextura;
 
 class Malla3D
 {
@@ -28,11 +31,16 @@ class Malla3D
    void setColor(Tupla4f colorVertices, Tupla4f colorLineas, Tupla4f colorSolido);
    void setMaterial(Material mat);
    void calcularNormales();
+   void asignarPuntosTextura(const modoTextura & modo);
+   void setTextura(const std::string & n);
 
    protected:
 
    // Material
    Material m; // definir un constructor por defecto
+   
+   // Textura
+   Textura * textura = nullptr;
 
    GLuint CrearVBO (GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);
    void crearVBOS();
@@ -46,6 +54,9 @@ class Malla3D
    std::vector<Tupla3f> nc;
    // vector de normales de vértices
    std::vector<Tupla3f> nv;
+
+   // vector de coordenadas de textura
+   std::vector<Tupla2f> ct; // tiene nv de tamaño
 
    // completar P1: tabla de colores
    // Completar P1: vbo y método asociado
@@ -65,7 +76,10 @@ class Malla3D
    GLuint id_vbo_nc = 0; // vbo normales de las caras
    GLuint id_vbo_nv = 0; // vbo normales de los vértices
 
+   GLuint id_vbo_ct = 0; // vbo coordenadas de textura
 
+
+   modoTextura modo_textura = PLANA;
 } ;
 
 
