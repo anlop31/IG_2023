@@ -13,6 +13,7 @@
 #include <LuzDireccional.h>
 #include <LuzPosicional.h>
 #include "robot.h"
+#include "cuadro.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,ANIMACION,GRADOS} menu;
 class Escena
@@ -84,7 +85,7 @@ class Escena
     bool primeraVezPulsado1 = true;
 
     // texturas
-    Cubo * cuadro = nullptr;
+    Cuadro * cuadro = nullptr;
 
    public:
 

@@ -32,6 +32,7 @@ class Malla3D
    void setMaterial(Material mat);
    void calcularNormales();
    void asignarPuntosTextura(const modoTextura & modo);
+   void asignarPuntosTexturaCuadro(const modoTextura & modo);
    void setTextura(const std::string & n);
 
    protected:

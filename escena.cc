@@ -44,7 +44,7 @@ Escena::Escena()
    peon2 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
 
    // para texturas
-   cuadro = new Cubo(60.0);
+   cuadro = new Cuadro(60.0);
 
 
    /* MODELO JERÁRQUICO */
@@ -79,7 +79,7 @@ Escena::Escena()
 
 
       /* TEXTURAS */
-      cuadro->setTextura("./img/text-madera.jpg");
+      cuadro->setTextura("./img/cuadro.jpg");
 //
 }
 

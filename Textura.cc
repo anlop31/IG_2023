@@ -62,6 +62,7 @@ void Textura::activar(){
 	// sin esta linea no funcionan
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
+
 	if (textura_id == -1){
 		glGenTextures(1, &textura_id);
 		glBindTexture(GL_TEXTURE_2D, textura_id);
@@ -69,6 +70,7 @@ void Textura::activar(){
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data.data());
 
 	}
+
 
 	glBindTexture(GL_TEXTURE_2D, textura_id);
 }
