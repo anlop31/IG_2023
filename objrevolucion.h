@@ -37,6 +37,7 @@ protected:
 
     std::vector<Tupla3f> perfil;
     int num_instancias = 0;
+    int N, M;
 
 } ;
 

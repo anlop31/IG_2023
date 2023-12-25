@@ -45,8 +45,10 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
 
    // N = numero instancias
    int N = num_instancias;
+   this->N = N;
    // M = numero vertices del perfil
    int M = perfil_original.size();
+   this->M = M;
 
    std::vector<Tupla3f> perfil_modificado;
 
@@ -143,20 +145,21 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    perfil = perfil_modificado;
    this->num_instancias = num_instancias;
 
+   modo_textura = ESFERICA;
    asignarPuntosTextura(modo_textura);
 }
 
 
 void ObjRevolucion::asignarPuntosTextura(const modoTextura & modo){
+  
    ct.resize(v.size());
-
+/*
    std::cout << "asignarPuntosTextura objrevolucion" << std::endl;
 
 	float alpha, beta, h;
 
 	float s, t;
 
-   /****/
    int M = perfil.size(); // vértices
    int N = num_instancias; // copias del perfil
    // en cada copia hay M vértices
@@ -176,14 +179,87 @@ void ObjRevolucion::asignarPuntosTextura(const modoTextura & modo){
       }
    }
 
-   /****/
+   */
 
-   switch (modo) {
-      case CILINDRICA:
-      break;
-      case ESFERICA:
-      break;
-      case PLANA:
-      break;
-   }
+/**/
+   float alpha, beta, h;
+
+	float s, t;
+
+	switch (modo){
+		case CILINDRICA:
+			for (int i = 0; i < ct.size(); i++){
+				alpha = atan2( v[i](2), v[i](0) );
+				h = v[i](1);
+
+				s = 1 - ( 0.5 + (alpha/(M_PI*2)) );
+				s += 0.5;
+				s = fmod(s, 1.0);
+
+				//std::cout << s <<  " " << alpha << std::endl;
+				t = (h - perfil.front()(1) ) / (perfil.back()(1) - perfil.front()(1)) ;
+
+				ct[i] = {s, t};
+
+			}
+
+			for (int i = (perfil.size() * num_instancias); i < perfil.size() * (num_instancias + 1); i++){
+				alpha = atan2( v[i](2), v[i](0) );
+				h = v[i](1);
+
+				s = 1.0f;
+				t = (h - perfil.front()(1) ) / (perfil.back()(1) - perfil.front()(1)) ;
+
+				ct[i] = {s, t};
+			}
+
+			break;
+
+		case ESFERICA:
+			for (int i = 0; i < ct.size(); i++){
+				alpha = atan2( v[i](2), v[i](0) );
+				beta = atan2( v[i](1), sqrt( pow( v[i](0) ,2) + pow ( v[i](2) ,2) ) );
+
+				s = 1 - ( 0.5 + (alpha/(M_PI*2)) );
+				s += 0.5;
+				s = fmod(s, 1.0);
+				t = 0.5 + beta/M_PI;
+
+				ct[i] = {s, t};
+			}
+
+			// asignamos las coordenadas de los extremos
+			for (int i = 0; i < v.size(); i = i + perfil.size()){
+				int a = i + perfil.size()/2;
+				alpha = atan2( v[a](2), v[a](0) );
+
+				s = 1 - ( 0.5 + (alpha/(M_PI*2)) );
+				s += 0.5;
+				s = fmod(s, 1.0);
+
+				ct[i] = {s, 0.0f};
+				ct[i + perfil.size() - 1] = {s, 1.0f};
+
+			}
+
+			for (int i = perfil.size() * num_instancias ; i < v.size(); i++){
+				alpha = atan2( v[i](2), v[i](0) );
+				beta = atan2( v[i](1), sqrt( pow( v[i](0) ,2) + pow ( v[i](2) ,2) ) );
+
+				s = 1.0;
+				t = 0.5 + beta/M_PI;
+
+				ct[i] = {s, t};
+			}
+
+
+
+			break;
+		case PLANA:
+			for (int i = 0; i < ct.size(); i++){
+				ct[i] = {v[i](0), (v[i](1) - v.front()(1) ) / (v.back()(1) - v.front()(1))} ;
+			}
+			break;
+
+	}
 }

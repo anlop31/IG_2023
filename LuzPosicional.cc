@@ -1,6 +1,7 @@
 #include <LuzPosicional.h>
 #include <auxiliar.h>
 
+using namespace std;
 
 LuzPosicional::LuzPosicional(
     Tupla3f posicion, GLenum idLuzOpenGL,
@@ -44,5 +45,11 @@ void LuzPosicional::variarPosicion(int x, int y, int z){
 
 /// @brief animar posición de la luz posicional
 void LuzPosicional::animarLuzPosicional(){
-    variarPosicion(2, 2, 2);
+    variarPosicion(0, 2, 0);
+
+    std::cout << "variado posicion: " << std::endl;
+    cout << "posicion(0)= " << posicion(0) << endl;
+    cout << "posicion(1) =" << posicion(1) << endl;
+    cout << "posicion(2)= " << posicion(2) << endl;
+
 }

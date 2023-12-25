@@ -417,18 +417,18 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          case '0': // GL_LIGHT0
             if (luz0 != nullptr)
                luz0->setActivada(!luz0->estadoActivada());
-            cout << "--LUZ 0 " << (luz0->estadoActivada() ? "ACTIVADA" : "DESACTIVADA") << endl;
+            cout << "--LUZ 0 (POSICIONAL)" << (luz0->estadoActivada() ? "ACTIVADA" : "DESACTIVADA") << endl;
             break;
          case '1': // GL_LIGHT1
             if (luz1 != nullptr)
                   luz1->setActivada(!luz1->estadoActivada());
-            cout << "--LUZ 1 " << (luz1->estadoActivada() ? "ACTIVADA" : "DESACTIVADA") << endl;
+            cout << "--LUZ 1 (DIRECCIONAL)" << (luz1->estadoActivada() ? "ACTIVADA" : "DESACTIVADA") << endl;
 
             break;
          case '2': // GL_LIGHT2
             if (luz2 != nullptr)
                   luz2->setActivada(!luz2->estadoActivada());
-            cout << "--LUZ 2 " << (luz2->estadoActivada() ? "ACTIVADA" : "DESACTIVADA") << endl;
+            cout << "--LUZ 2 (POSICIONAL)" << (luz2->estadoActivada() ? "ACTIVADA" : "DESACTIVADA") << endl;
             break;
          case 'A': // variar angulo alfa
             ultimaPulsada = 'A';

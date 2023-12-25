@@ -232,8 +232,8 @@ void Malla3D::setTextura(const std::string & archivo){
 
    if(es_cuadro)
       asignarPuntosTexturaCuadro(modo_textura);
-   else
-	   asignarPuntosTextura(modo_textura);
+   // else
+	//    asignarPuntosTextura(modo_textura);
 
 }
 
