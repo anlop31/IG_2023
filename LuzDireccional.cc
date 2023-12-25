@@ -1,5 +1,6 @@
 #include <LuzDireccional.h>
 #include <auxiliar.h>
+#include <unistd.h>
 
 LuzDireccional::LuzDireccional(Tupla2f direccion, GLenum idLuzOpenGL, 
     Tupla4f colorAmbiente, Tupla4f colorEspecular, Tupla4f colorDifuso){
@@ -62,4 +63,62 @@ void LuzDireccional::variarAnguloBeta(float incremento){
     posicion(0) = sin(alpha) * cos(beta);
     posicion(1) = sin(beta);
     posicion(2) = cos(alpha) * cos(beta);
+}
+
+void LuzDireccional::cambiarColor(){
+
+    // std::cout << "entrado en cambiarcolor" << std::endl;
+
+    // Aumentar color
+    while(colorDifuso(0) < 1 && aumentarColor){
+        if(colorDifuso(0) + 0.1 > 1){
+            colorDifuso = {
+                1,
+                colorDifuso(1),
+                colorDifuso(2),
+                1
+            };
+        }
+        else{
+            colorDifuso = {
+                colorDifuso(0)+0.1,
+                colorDifuso(1),
+                colorDifuso(2),
+                1
+            };
+        } 
+
+        if(colorDifuso(0) == 1){
+            aumentarColor = false; // salir del bucle
+        }
+    }
+
+    // Disminuir color
+    while(colorDifuso(0) > 0 && !aumentarColor){
+        if(colorDifuso(0) - 0.1 < 0){
+            colorDifuso = {
+                0,
+                colorDifuso(1),
+                colorDifuso(2),
+                1
+            };
+        }
+        else{
+            colorDifuso = {
+                colorDifuso(0)-0.1,
+                colorDifuso(1),
+                colorDifuso(2),
+                1
+            };
+        }
+
+        if(colorDifuso(0) == 0){
+            aumentarColor = true; // salir del bucle
+        }  
+    }
+}
+
+/// @brief Animar color de la luz direccional
+void LuzDireccional::animarLuzDireccional(){
+    cambiarColor();
 }

@@ -80,6 +80,7 @@ Escena::Escena()
 
       /* TEXTURAS */
       cuadro->setTextura("./img/cuadro.jpg");
+      esfera->setTextura("./img/cuadro.jpg");
 //
 }
 
@@ -118,6 +119,15 @@ void Escena::animarModeloJerarquico() {
       robot->animarModeloJerarquico();
 }
 
+void Escena::animarLuzDireccional(){
+   if(animacionLuzDireccional)
+      luz1->animarLuzDireccional();
+}
+void Escena::animarLuzPosicional(){
+   if(animacionLuzPosicional)
+      luz0->animarLuzPosicional();
+}
+
 void Escena::asignar_materiales(){
    // Constructor material: (difuso, especular, ambiente, brillo)
 
@@ -142,7 +152,7 @@ void Escena::asignar_materiales(){
    cubo->setMaterial(ruby);
    piramide->setMaterial(esmeralda);
 
-   esfera->setMaterial(plata);
+   esfera->setMaterial(blanco);
    cilindro->setMaterial(turquesa);
    cono->setMaterial(oro);
 
@@ -154,6 +164,7 @@ void Escena::asignar_materiales(){
 
 
    robot->setMaterialRobot(oro);
+   cuadro->setMaterial(blanco);
 }
 
 
@@ -232,7 +243,8 @@ void Escena::dibujarObjetos(){
    /*    OBJETOS DE REVOLUCIÓN   */
    //// ESFERA
    glPushMatrix();
-      glTranslatef(-200, 130, -100);
+      // glTranslatef(-200, 130, -100);
+      glTranslatef(-20, -20, 0);
       esfera->draw();
    glPopMatrix();
 
@@ -257,6 +269,7 @@ void Escena::dibujarObjetos(){
    glPopMatrix();
 
    glPushMatrix();
+      glTranslatef(30, 0, 0);
       cuadro->draw();
    glPopMatrix();
 
@@ -394,8 +407,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                modoSolido = true;
             }
             cout << "--ILUMINACIÓN " << (iluminacionActiva ? "ACTIVADA" : "DESACTIVADA") << endl;
-
+            modoMenu = LUCES;
             break;
+      }
+
+   if(modoMenu == LUCES){
+      switch (toupper(tecla))
+      {
          case '0': // GL_LIGHT0
             if (luz0 != nullptr)
                luz0->setActivada(!luz0->estadoActivada());
@@ -440,8 +458,20 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                cout << "--DECREMENTA BETA" << endl;
             }
             break;
+         case 'P':
+            // animar automaticamente luz puntual
+            animacionLuzPosicional = !animacionLuzPosicional;
+            cout << "-->ANIMACIÓN AUTOMÁTICA DE LUZ POSICIONAL " << (animacionLuzPosicional ? "ACTIVADA" : "DESACTIVADA") << endl;
+            break;
+         case 'D':
+            // animar automaticamente luz direccional
+            animacionLuzDireccional = !animacionLuzDireccional;
+            cout << "-->ANIMACIÓN AUTOMÁTICA DE LUZ DIRECCIONAL " << (animacionLuzDireccional ? "ACTIVADA" : "DESACTIVADA") << endl;
+            break;
+         default:
+            break;
       }
-
+   }
 
    if(modoMenu == ANIMACION){
       switch (toupper(tecla))

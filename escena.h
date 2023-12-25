@@ -15,7 +15,7 @@
 #include "robot.h"
 #include "cuadro.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,ANIMACION,GRADOS} menu;
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,ANIMACION,GRADOS,LUCES} menu;
 class Escena
 {
 
@@ -92,6 +92,8 @@ class Escena
     Escena();
 	void inicializar( int UI_window_width, int UI_window_height );
     void animarModeloJerarquico(); // animacion
+    void animarLuzDireccional();
+    void animarLuzPosicional();
 	void redimensionar( int newWidth, int newHeight ) ;
 
 	// Dibujar
@@ -102,6 +104,8 @@ class Escena
 
     // animacion
     bool animacionAutomatica = false;
+    bool animacionLuzDireccional = false;
+    bool animacionLuzPosicional = false;
     int numGrado = 0; // grado de libertad seleccionado
 
     // modelo jerárquico

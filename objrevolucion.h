@@ -35,6 +35,9 @@ protected:
     void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias);
     void asignarPuntosTextura(const modoTextura & modo);
 
+    std::vector<Tupla3f> perfil;
+    int num_instancias = 0;
+
 } ;
 
 

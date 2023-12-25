@@ -229,9 +229,15 @@ void Malla3D::setTextura(const std::string & archivo){
 
 	textura = new Textura(archivo);
 
-	asignarPuntosTextura(modo_textura);
+
+   if(es_cuadro)
+      asignarPuntosTexturaCuadro(modo_textura);
+   else
+	   asignarPuntosTextura(modo_textura);
 
 }
+
+
 
 /// @brief Revisar
 /// @param modo 
@@ -244,11 +250,15 @@ void Malla3D::asignarPuntosTextura(const modoTextura & modo){
 		ct[i] = {v[i](0), (v[i](1) - v.front()(1) ) / (v.back()(1) - v.front()(1))} ;
 	}
 
+   std::cout << "asignarPuntosTextura" << std::endl;
 }
 
 void Malla3D::asignarPuntosTexturaCuadro(const modoTextura & modo){
 
 	ct.clear();
+   ct.resize(v.size());
+
+   std::cout << "asignados puntos de textura de cuadro" << std::endl;
 
    ct[0] = {0.0f, 0.0f};
    ct[1] = {1.0f, 0.0f};

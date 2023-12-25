@@ -11,6 +11,8 @@ class LuzDireccional : public Luz
         float alpha ;
         float beta ;
         Tupla4f posicion_original;
+        int step = 0;
+        bool aumentarColor = true;
     public :
     // inicializar la fuente de luz
     LuzDireccional(     Tupla2f direccion,
@@ -24,6 +26,8 @@ class LuzDireccional : public Luz
     // Cambiar ángulo:
     void variarAnguloAlpha ( float incremento ) ;
     void variarAnguloBeta ( float incremento ) ;
+    void cambiarColor();
+    void animarLuzDireccional();
 };
 
 

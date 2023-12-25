@@ -42,6 +42,7 @@ class Malla3D
    
    // Textura
    Textura * textura = nullptr;
+   bool es_cuadro = false;
 
    GLuint CrearVBO (GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);
    void crearVBOS();

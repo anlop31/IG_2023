@@ -35,3 +35,14 @@ LuzPosicional::LuzPosicional(const Tupla3f & posicion){
         1
     };
 }
+
+void LuzPosicional::variarPosicion(int x, int y, int z){
+    posicion(0) += x;
+    posicion(1) += y;
+    posicion(2) += z;
+}
+
+/// @brief animar posición de la luz posicional
+void LuzPosicional::animarLuzPosicional(){
+    variarPosicion(2, 2, 2);
+}

@@ -27,7 +27,8 @@ Cuadro::Cuadro(const float lado) {
     modo_textura = PLANA;
 
     ct.resize(v.size());
-    asignarPuntosTexturaCuadro(modo_textura);
+    // asignarPuntosTexturaCuadro(modo_textura);
+    es_cuadro = true;
 
     // calcularCentro(); // para que?
 
@@ -35,7 +36,7 @@ Cuadro::Cuadro(const float lado) {
     // colores
     Tupla4f colorVertices = Tupla4f(1.0f, 0.0f, 0.0f, 1.0f);
     Tupla4f colorLineas = Tupla4f(0.0f, 0.0f, 1.0f, 1.0f);
-    Tupla4f colorSolido = Tupla4f(1.0f, 0.0f, 0.0f, 1.0f);
+    Tupla4f colorSolido = Tupla4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     setColor(colorVertices, colorLineas, colorSolido);
 

@@ -48,7 +48,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    // M = numero vertices del perfil
    int M = perfil_original.size();
 
-   std::vector<Tupla3f> perfil;
+   std::vector<Tupla3f> perfil_modificado;
 
    // Definimos el orden de lectura de los vertices (de arriba a abajo)
    int ini = 0, fin = perfil_original.size()-1, orientacion=1;
@@ -74,10 +74,10 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
       M--;
    }
 
-   perfil.resize(M);
+   perfil_modificado.resize(M);
    i=0;
    for (int j=ini; orientacion > 0 ? j<=fin : j>=fin; j += orientacion) {
-      perfil[i] = perfil_original[j];
+      perfil_modificado[i] = perfil_original[j];
       i++;
    }
 
@@ -89,9 +89,9 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    for (i = 0; i < N; ++i) { // 0 -> N 
       for(j = 0; j < M; ++j) { // 0 -> M
          v[(M*i)+j] = Tupla3f({
-            perfil[j][0] * cos((2.0*M_PI*i)/float(N)),
-            perfil[j][1],
-            perfil[j][0] * sin((2.0*M_PI*i)/float(N))
+            perfil_modificado[j][0] * cos((2.0*M_PI*i)/float(N)),
+            perfil_modificado[j][1],
+            perfil_modificado[j][0] * sin((2.0*M_PI*i)/float(N))
          });
       }  
    }
@@ -140,16 +140,43 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    
    calcularNormales();
 
+   perfil = perfil_modificado;
+   this->num_instancias = num_instancias;
 
+   asignarPuntosTextura(modo_textura);
 }
 
 
 void ObjRevolucion::asignarPuntosTextura(const modoTextura & modo){
    ct.resize(v.size());
 
+   std::cout << "asignarPuntosTextura objrevolucion" << std::endl;
+
 	float alpha, beta, h;
 
 	float s, t;
+
+   /****/
+   int M = perfil.size(); // vértices
+   int N = num_instancias; // copias del perfil
+   // en cada copia hay M vértices
+   // la coordenada s (x en textura) es común a todos los vértices
+   // de la instancia del perfil
+   // si = i/(N-1)
+   // tj (y en textura) tj=dj/dm-1 (ver las distancias)
+
+
+   for(int i=0; i<N; i++){
+      for(int j=0; j<M; j++){
+         h = v[i](1);
+
+         s = i/(N-1);
+         t = (h - perfil.front()(1) ) / (perfil.back()(1) - perfil.front()(1)) ;
+         ct[i] = {s, t};
+      }
+   }
+
+   /****/
 
    switch (modo) {
       case CILINDRICA:

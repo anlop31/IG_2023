@@ -14,6 +14,9 @@ class LuzPosicional : public Luz {
                         Tupla4f colorEspecular,
                         Tupla4f colorDifuso     );
 
+        void variarPosicion(int x, int y, int z);
+        void animarLuzPosicional();
+
 };
 
 #endif
