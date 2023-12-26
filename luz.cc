@@ -3,11 +3,12 @@
 #include<LuzDireccional.h>
 #include<LuzPosicional.h>
 
-
+/// @brief Constructor de luz
 Luz::Luz(){
     activada = false;
 }
 
+/// @brief Activar las luces
 void Luz::activar(){
 
     // glEnable(id);
@@ -20,11 +21,14 @@ void Luz::activar(){
 
 }
 
+/// @brief Obtener si una luz está activada
+/// @return Valor de "activada"
 bool Luz::estadoActivada(){
     return activada;
 }
 
-
+/// @brief Establecer el valor de activada
+/// @param nuevo_valor 
 void Luz::setActivada(const bool nuevo_valor){
     activada = nuevo_valor;
 

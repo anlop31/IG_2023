@@ -2,6 +2,16 @@
 #include <auxiliar.h>
 #include <unistd.h>
 
+#define EPSILON 0.0001
+
+using namespace std;
+
+/// @brief Constructor de LuzDireccional con parámetros
+/// @param direccion 
+/// @param idLuzOpenGL 
+/// @param colorAmbiente 
+/// @param colorEspecular 
+/// @param colorDifuso 
 LuzDireccional::LuzDireccional(Tupla2f direccion, GLenum idLuzOpenGL, 
     Tupla4f colorAmbiente, Tupla4f colorEspecular, Tupla4f colorDifuso){
 
@@ -22,6 +32,8 @@ LuzDireccional::LuzDireccional(Tupla2f direccion, GLenum idLuzOpenGL,
 }
 
 
+/// @brief Constructor de LuzDireccional solo con la orientación
+/// @param orientacion 
 LuzDireccional::LuzDireccional(const Tupla2f & orientacion){
     alpha = orientacion(0);
     beta = orientacion(1);
@@ -34,7 +46,8 @@ LuzDireccional::LuzDireccional(const Tupla2f & orientacion){
     colorEspecular = {1.0, 1.0, 1.0, 1.0};
 }
 
-
+/// @brief Función para variar el angulo alpha de la luz
+/// @param incremento 
 void LuzDireccional::variarAnguloAlpha(float incremento){
     alpha += incremento;
 
@@ -50,6 +63,8 @@ void LuzDireccional::variarAnguloAlpha(float incremento){
     posicion(2) = cos(alpha) * cos(beta);
 }
 
+/// @brief Función para variar el angulo beta de la luz
+/// @param incremento 
 void LuzDireccional::variarAnguloBeta(float incremento){
     beta += incremento;
     
@@ -65,15 +80,22 @@ void LuzDireccional::variarAnguloBeta(float incremento){
     posicion(2) = cos(alpha) * cos(beta);
 }
 
+/// @brief Función para cambiar el primer componente (R) del color de la luz
 void LuzDireccional::cambiarColor(){
 
-    // std::cout << "entrado en cambiarcolor" << std::endl;
+    if(colorDifuso(0) == 1){ // si ya está en 1, empezar bajando
+        aumentarColor = false;
+    }
+
+    if(colorDifuso(0) == 0){ // si ya está en 0, empezar subiendo
+        aumentarColor = true;
+    }
 
     // Aumentar color
-    while(colorDifuso(0) < 1 && aumentarColor){
-        if(colorDifuso(0) + 0.1 > 1){
+    if(colorDifuso(0) < 1 && aumentarColor){
+        if(colorDifuso(0) + 0.1 > 1){ // si sobrepasa 1, establecer a 1
             colorDifuso = {
-                1,
+                1, // establece a 1
                 colorDifuso(1),
                 colorDifuso(2),
                 1
@@ -81,23 +103,19 @@ void LuzDireccional::cambiarColor(){
         }
         else{
             colorDifuso = {
-                colorDifuso(0)+0.1,
+                colorDifuso(0)+0.1, // sumarle a la primera componente
                 colorDifuso(1),
                 colorDifuso(2),
                 1
             };
-        } 
-
-        if(colorDifuso(0) == 1){
-            aumentarColor = false; // salir del bucle
         }
     }
 
     // Disminuir color
-    while(colorDifuso(0) > 0 && !aumentarColor){
-        if(colorDifuso(0) - 0.1 < 0){
+    if(colorDifuso(0) > 0 && !aumentarColor){
+        if(colorDifuso(0) - 0.1 < 0){ // si sobrepasa 0, establecer a 0
             colorDifuso = {
-                0,
+                0, // establece a 0
                 colorDifuso(1),
                 colorDifuso(2),
                 1
@@ -105,16 +123,12 @@ void LuzDireccional::cambiarColor(){
         }
         else{
             colorDifuso = {
-                colorDifuso(0)-0.1,
+                colorDifuso(0)-0.1, // restarle a la primera componente
                 colorDifuso(1),
                 colorDifuso(2),
                 1
             };
         }
-
-        if(colorDifuso(0) == 0){
-            aumentarColor = true; // salir del bucle
-        }  
     }
 }
 

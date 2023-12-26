@@ -2,6 +2,8 @@
 #include "malla.h"
 #include "cuadro.h"
 
+/// @brief Constructor de cuadro
+/// @param lado 
 Cuadro::Cuadro(const float lado) {
 
     v.resize(4);
@@ -15,10 +17,8 @@ Cuadro::Cuadro(const float lado) {
     v[3] = {lado, lado, 0.0f};
 
     // inicializar las caras
-    // f[0] = {0, 1, 3}; // par
-    // f[1] = {3, 2, 0}; // impar
-    f[0] = {2, 0, 1}; // par
-    f[1] = {1, 3, 2}; // impar
+    f[0] = {2, 0, 1};
+    f[1] = {1, 3, 2}; 
 
     calcularNormales();
 
@@ -27,10 +27,7 @@ Cuadro::Cuadro(const float lado) {
     modo_textura = PLANA;
 
     ct.resize(v.size());
-    // asignarPuntosTexturaCuadro(modo_textura);
     es_cuadro = true;
-
-    // calcularCentro(); // para que?
 
 
     // colores
@@ -39,5 +36,7 @@ Cuadro::Cuadro(const float lado) {
     Tupla4f colorSolido = Tupla4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     setColor(colorVertices, colorLineas, colorSolido);
+
+    calcularNormales();
 
 }

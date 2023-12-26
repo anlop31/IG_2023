@@ -20,6 +20,11 @@ using namespace std;
 
 ObjRevolucion::ObjRevolucion() {}
 
+/// @brief Constructor de objeto de revolución a través de un archivo
+/// @param archivo 
+/// @param num_instancias 
+/// @param tapa_sup true si tiene, false si no
+/// @param tapa_inf true si tiene, false si no
 ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup, bool tapa_inf) {
    // completar ......(práctica 2)
    std::vector<Tupla3f> vertices;
@@ -31,11 +36,19 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 // *****************************************************************************
 // objeto de revolución obtenido a partir de un perfil (en un vector de puntos)
 
- 
+
+/// @brief Constructor de objeto de revolución a través de un vector de vértices
+/// @param archivo 
+/// @param num_instancias 
+/// @param tapa_sup true si tiene, false si no
+/// @param tapa_inf true si tiene, false si no
 ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_sup, bool tapa_inf) {
    crearMalla(archivo, num_instancias);
 }
 
+/// @brief Método para crear la malla del objeto de revolución
+/// @param perfil_original vértices
+/// @param num_instancias número de instancias del perfil
 void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias) {
    int cont = 0;
    int i, j;
@@ -149,39 +162,12 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    asignarPuntosTextura(modo_textura);
 }
 
-
+/// @brief Método para asignar los puntos de textura del objeto de revolución
+/// @param modo Modo de la textura (ESFERICA, CILINDRICA o PLANA)
 void ObjRevolucion::asignarPuntosTextura(const modoTextura & modo){
   
    ct.resize(v.size());
-/*
-   std::cout << "asignarPuntosTextura objrevolucion" << std::endl;
 
-	float alpha, beta, h;
-
-	float s, t;
-
-   int M = perfil.size(); // vértices
-   int N = num_instancias; // copias del perfil
-   // en cada copia hay M vértices
-   // la coordenada s (x en textura) es común a todos los vértices
-   // de la instancia del perfil
-   // si = i/(N-1)
-   // tj (y en textura) tj=dj/dm-1 (ver las distancias)
-
-
-   for(int i=0; i<N; i++){
-      for(int j=0; j<M; j++){
-         h = v[i](1);
-
-         s = i/(N-1);
-         t = (h - perfil.front()(1) ) / (perfil.back()(1) - perfil.front()(1)) ;
-         ct[i] = {s, t};
-      }
-   }
-
-   */
-
-/**/
    float alpha, beta, h;
 
 	float s, t;
@@ -260,6 +246,5 @@ void ObjRevolucion::asignarPuntosTextura(const modoTextura & modo){
 				ct[i] = {v[i](0), (v[i](1) - v.front()(1) ) / (v.back()(1) - v.front()(1))} ;
 			}
 			break;
-
 	}
 }

@@ -2,6 +2,8 @@
 #include "malla.h"
 #include "cubo.h"
 
+/// @brief Constructor de cubo
+/// @param lado 
 Cubo::Cubo(float lado)
 {
 

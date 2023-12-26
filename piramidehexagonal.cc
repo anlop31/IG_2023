@@ -3,6 +3,10 @@
 #include "piramidehexagonal.h"
 #include "math.h"
 
+/// @brief Constructor de pirámide hexagonal truncada
+/// @param h Altura de la pirámide
+/// @param r Radio de la base de la pirámide
+/// @param r_trunc Radio de la parte de arriba de la pirámide
 PiramideHexagonal::PiramideHexagonal(float h, float r, float r_trunc)
 {
 

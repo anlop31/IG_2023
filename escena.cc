@@ -113,21 +113,25 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	glViewport( 0, 0, UI_window_width, UI_window_height );
 }
 
-
+/// @brief Animar el modelo jerárquico
 void Escena::animarModeloJerarquico() {
    if(animacionAutomatica)
       robot->animarModeloJerarquico();
 }
 
+/// @brief Animar la luz direccional
 void Escena::animarLuzDireccional(){
    if(animacionLuzDireccional)
       luz1->animarLuzDireccional();
 }
+
+/// @brief Animar la luz posicional
 void Escena::animarLuzPosicional(){
    if(animacionLuzPosicional)
       luz0->animarLuzPosicional();
 }
 
+/// @brief Asignar los materiales a los objetos
 void Escena::asignar_materiales(){
    // Constructor material: (difuso, especular, ambiente, brillo)
 
@@ -167,7 +171,7 @@ void Escena::asignar_materiales(){
    cuadro->setMaterial(blanco);
 }
 
-
+/// @brief Activamos las luces
 void Escena::activar_luces(){
    glEnable(GL_LIGHTING); // activamos luces
    glShadeModel(GL_SMOOTH); // sombreado suave
@@ -191,7 +195,7 @@ void Escena::activar_luces(){
    }
 }
 
-
+/// @brief Método para dibujar los objetos en la escena
 void Escena::dibujarObjetos(){
    //// CUBO
    glPushMatrix();
@@ -283,6 +287,7 @@ void Escena::dibujarObjetos(){
 //
 // **************************************************************************
 
+/// @brief Método dibujar 
 void Escena::dibujar()
 {
    // no puedo usar opengl fuera de aqui
