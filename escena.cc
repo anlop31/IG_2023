@@ -80,7 +80,7 @@ Escena::Escena()
 
       /* TEXTURAS */
       cuadro->setTextura("./img/cuadro.jpg");
-      esfera->setTextura("./img/cuadro.jpg");
+      esfera->setTextura("./img/mapamundi.jpg");
 //
 }
 
