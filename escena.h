@@ -14,8 +14,19 @@
 #include <LuzPosicional.h>
 #include "robot.h"
 #include "cuadro.h"
+#include "camara.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,ANIMACION,GRADOS,LUCES} menu;
+#define MOUSE_WHEEL_UP 3
+#define MOUSE_WHEEL_DOWN 4
+
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,ANIMACION,GRADOS,LUCES,CAMARAS} menu;
+
+typedef enum {MOVIENDO_CAMARA_FIRSTPERSON, MOVIENDO_CAMARA_EXAMINAR, DESACTIVADO} estado_raton;
+
+// typedef enum {BOTON_DERECHO, BOTON_IZQUIERDO, RUEDA} boton;
+
+// typedef enum {PULSADO, SIN_PULSAR} estadoBoton;
+
 class Escena
 {
 
@@ -101,6 +112,18 @@ class Escena
 	void dibujar() ;
     void activar_luces();
     void asignar_materiales();
+
+    // Camara e interaccion
+    void clickRaton(int boton, int estado, int x, int y);
+    void ratonMovido(int x, int y);
+
+    int camaraActiva = 0;
+    std::vector<Camara> camaras;
+
+    int xant = 0,
+        yant = 0;
+
+    estado_raton estadoRaton = MOVIENDO_CAMARA_FIRSTPERSON;
 
     // animacion
     bool animacionAutomatica = false;

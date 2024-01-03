@@ -81,6 +81,13 @@ Escena::Escena()
       /* TEXTURAS */
       cuadro->setTextura("./img/cuadro.jpg");
       esfera->setTextura("./img/mapamundi.jpg");
+
+
+      /* CÁMARAS */
+      Tupla3f eye = {0, 100, 200}; 
+      Tupla3f at = {0, 0, 0};
+      Tupla3f up = {0, 1, 0};
+      Camara c0(eye, at, up, 0, 50.0, 2000.0);
 //
 }
 
@@ -104,6 +111,8 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
    // Modo de visualización sombreado suave
    // glShadeModel(GL_SMOOTH);
    // glShadeModel(GL_FLAT);
+
+   /////// Deshabilitar cosas para la selección
 
 
 	Width  = UI_window_width/10;
@@ -192,6 +201,46 @@ void Escena::activar_luces(){
       glPushMatrix();
          luz2->activar();
       glPopMatrix();
+   }
+}
+
+void Escena::clickRaton(int boton, int estado, int x, int y){
+   if (boton == GLUT_RIGHT_BUTTON){ // boton derecho (0: izquierdo, 2: rueda)
+      if(estado == GLUT_DOWN){ // pulsado (0: no pulsado)
+         // Se pulsa el botón, por lo que se entra en el estado "moviendo cámara"
+         // if(/* si hay objeto seleccionado */)
+         //    estadoRaton = MOVIENDO_CAMARA_EXAMINAR;
+         // else // no hay nada seleccionado
+         //    estadoRaton = MOVIENDO_CAMARA_FIRSTPERSON;
+      }
+      else{
+         // Se levanta el botón, por lo que sale del estado "moviendo cámara"
+         estadoRaton = DESACTIVADO;
+      }
+   } else if(boton == MOUSE_WHEEL_UP){
+      camaras[camaraActiva].zoom(0.8);
+   } else if(boton == MOUSE_WHEEL_DOWN){
+      camaras[camaraActiva].zoom(1.2);
+   }
+   // else if(boton == GLUT_LEFT_BUTTON){
+   //    if(estado == GLUT_UP){
+   //       // dibujaSeleccion();
+   //       // processPick(x,y);
+   //    }
+   // }
+
+   // change_projection(); // por que?
+}
+
+void Escena::ratonMovido(int x, int y){
+   if(estadoRaton == MOVIENDO_CAMARA_FIRSTPERSON){ // MOVIENDO_CAMARA_FIRSTPERSON (1: MOVIENDO_EXAMINAR)
+      camaras[camaraActiva].girar(x-xant, y-yant);
+      xant = x;
+      yant = y;
+   } else if(estadoRaton == MOVIENDO_CAMARA_EXAMINAR){
+      camaras[camaraActiva].girarExaminar(x-xant, y-yant);
+      xant = x;
+      yant = y;
    }
 }
 
@@ -559,6 +608,46 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       } 
    }
 
+   if(modoMenu == CAMARAS){
+      switch (toupper(tecla))
+      {
+      case '0':
+         camaraActiva = 0;
+         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         break;
+      case '1':
+         camaraActiva = 1;
+         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         break;
+      case '2':
+         camaraActiva = 2;
+         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         break;
+      case '3':
+         camaraActiva = 3;
+         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         break;
+      case '4':
+         camaraActiva = 4;
+         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         break;
+      case '5':
+         camaraActiva = 5;
+         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         break;
+      case '6':
+         camaraActiva = 6;
+         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         break;
+      case '7':
+         camaraActiva = 7;
+         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         break;
+      default:
+         break;
+      }
+   }
+
    return salir;
 }
 //**************************************************************************
@@ -623,9 +712,18 @@ void Escena::redimensionar( int newWidth, int newHeight )
 void Escena::change_observer()
 {
    // posicion del observador
+   // glMatrixMode(GL_MODELVIEW);
+   // glLoadIdentity();
+   // glTranslatef( 0.0, 0.0, -Observer_distance );
+   // glRotatef( Observer_angle_y, 0.0 ,1.0, 0.0 );
+   // glRotatef( Observer_angle_x, 1.0, 0.0, 0.0 );
+
+
+   // PRACTICA 6
+    // posicion del observador
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
-   glTranslatef( 0.0, 0.0, -Observer_distance );
-   glRotatef( Observer_angle_y, 0.0 ,1.0, 0.0 );
-   glRotatef( Observer_angle_x, 1.0, 0.0, 0.0 );
+   camaras[camaraActiva].setObserver();
+
+
 }

@@ -98,6 +98,14 @@ void funcion_idle(){
    glutPostRedisplay();
 }
 
+void ratonMovido( int x, int y ){
+   escena->ratonMovido(x, y);
+}
+
+void clickRaton( int boton, int estado, int x, int y ){
+   escena->clickRaton(boton, estado, x, y);
+}
+
 
 //***************************************************************************
 // Programa principal
@@ -168,6 +176,8 @@ int main( int argc, char **argv )
    escena->inicializar( UI_window_width, UI_window_height );
 
 
+   glutMouseFunc( clickRaton );
+   glutMotionFunc( ratonMovido );
 
    // ejecutar del bucle de eventos
    glutMainLoop();
