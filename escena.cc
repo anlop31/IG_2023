@@ -84,18 +84,25 @@ Escena::Escena()
 
 
       /* CÁMARAS */
-      Tupla3f eye = {0, 100, 200}; 
+      Tupla3f eye = {0, 150, 220}; 
       Tupla3f at = {0, 0, 0};
       Tupla3f up = {0, 1, 0};
       Camara cam0(eye, at, up, 0, 50.0, 2000.0);
 
-      eye = {0, 100, -200}; 
+      eye = {0, 100, 1000}; 
       at = {0, 0, 0};
       up = {0, 1, 0};
       Camara cam1(eye, at, up, 1, 50.0, 2000.0);
 
+      eye = {-200, 100, 150}; 
+      at = {-50, 0, 0};
+      up = {0, 1, 0};
+      Camara cam2(eye, at, up, 0, 50.0, 2000.0);
+
+
       camaras.push_back(cam0);
       camaras.push_back(cam1);
+      camaras.push_back(cam2);
 //
 }
 
@@ -240,18 +247,20 @@ void Escena::clickRaton(int boton, int estado, int x, int y){
          estadoRaton = DESACTIVADO;
       }
    } else if(boton == MOUSE_WHEEL_UP){
+      cout << "Zoom mas pequeño" << endl;
       camaras[camaraActiva].zoom(0.8);
    } else if(boton == MOUSE_WHEEL_DOWN){
+      cout << "Zoom mas grande" << endl;
       camaras[camaraActiva].zoom(1.2);
    }
-   // else if(boton == GLUT_LEFT_BUTTON){
-   //    if(estado == GLUT_UP){
-   //       // dibujaSeleccion();
-   //       // processPick(x,y);
-   //    }
-   // }
+   else if(boton == GLUT_LEFT_BUTTON){
+      if(estado == GLUT_UP){
+         // dibujaSeleccion();
+         // processPick(x,y);
+      }
+   }
 
-   // change_projection();
+   change_projection();
 
 }
 
@@ -267,8 +276,35 @@ void Escena::ratonMovido(int x, int y){
    }
 }
 
+void Escena::dibujaSeleccion(){
+   glDisable(GL_DITHER);
+   if(true){
+      glPushMatrix();
+         glColor3ub(255,0,0);
+         glTranslatef(-180, 0, -120); 
+         cubo->draw();
+      glPopMatrix();
+   }
+
+   glEnable(GL_DITHER);
+}
+
+void Escena::pick(int x, int y){
+
+   GLint viewport[4];
+	GLfloat pixel[3];
+
+
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	glReadPixels(x, viewport[3]-y, 1, 1, GL_RGB, GL_FLOAT, (void *) pixel);
+
+}
+
 /// @brief Método para dibujar los objetos en la escena
 void Escena::dibujarObjetos(){
+   dibujaSeleccion();
+
    //// CUBO
    glPushMatrix();
       glTranslatef(-180, 0, -120); 
@@ -408,6 +444,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    using namespace std ;
    cout << "Tecla pulsada: '" << tecla << "'" << endl;
    bool salir=false;
+         Tupla3f direccion = camaras[camaraActiva].getAt() - camaras[camaraActiva].getEye();
+
+
    switch( toupper(tecla) )
    {
       case 'Q' :
@@ -443,6 +482,34 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       case 'C':
          cout << "-->ENTRANDO A SELECCIÓN DE CAMARAS" << endl;
          modoMenu=CAMARAS;
+         break;
+      case 'Y': // arriba
+         // camaras[camaraActiva].mover(0, 4, 0);
+            direccion = direccion.normalized()*3;
+
+            camaras[camaraActiva].mover(direccion(0), direccion(1), direccion(2));
+         break;
+      case 'G': // izquierda
+         // camaras[camaraActiva].mover(-4, 0, 0);
+            direccion = direccion.normalized();
+
+				direccion = -direccion.cross(camaras[camaraActiva].getUp())*3;
+
+				camaras[camaraActiva].mover(direccion(0), direccion(1), direccion(2));
+         break;
+      case 'J': // derecha
+         // camaras[camaraActiva].mover(4, 0, 0);
+            direccion = direccion.normalized();
+
+				direccion = direccion.cross(camaras[camaraActiva].getUp())*3;
+
+				camaras[camaraActiva].mover(direccion(0), direccion(1), direccion(2));
+         break;
+      case 'H': // abajo
+         // camaras[camaraActiva].mover(0, -4, 0);
+            direccion = -direccion.normalized()*3;
+
+            camaras[camaraActiva].mover(direccion(0), direccion(1), direccion(2));
          break;
    }
 

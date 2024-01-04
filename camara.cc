@@ -199,3 +199,22 @@ float Camara::getBottom(){
 float Camara::getTop(){
     return top;
 }
+
+/// @brief Devuelve el parámetro at de la cámara
+/// @return at
+Tupla3f Camara::getAt(){
+    return at;
+}
+
+/// @brief Devuelve el parámetro eye de la cámara
+/// @return eye
+Tupla3f Camara::getEye(){
+    return eye;
+}
+
+/// @brief Devuelve el parámetro up de la cámara
+/// @return up
+Tupla3f Camara::getUp(){
+    return up;
+}
+

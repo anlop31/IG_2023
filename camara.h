@@ -38,4 +38,8 @@ class Camara {
     void setTop(float new_top);
     float getBottom();
     float getTop();
+    Tupla3f getAt();
+    Tupla3f getEye();
+    Tupla3f getUp();
+
 };

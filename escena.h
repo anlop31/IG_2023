@@ -117,6 +117,8 @@ class Escena
     // Camara e interaccion
     void clickRaton(int boton, int estado, int x, int y);
     void ratonMovido(int x, int y);
+    void dibujaSeleccion();
+    void pick(int x, int y);
 
     int camaraActiva = 0;
     std::vector<Camara> camaras;
