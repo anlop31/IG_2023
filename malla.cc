@@ -258,8 +258,6 @@ void Malla3D::asignarPuntosTexturaCuadro(const modoTextura & modo){
 	ct.clear();
    ct.resize(v.size());
 
-   std::cout << "asignados puntos de textura de cuadro" << std::endl;
-
    ct[0] = {0.0f, 0.0f};
    ct[1] = {1.0f, 0.0f};
    ct[2] = {0.0f, 1.0f};

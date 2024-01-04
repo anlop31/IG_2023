@@ -13,7 +13,7 @@ class Camara {
     Camara(
         Tupla3f eye, Tupla3f at, Tupla3f up,
         int tipo,
-        float left, float right, float near, float far
+        float near, float far
     );
 
     void rotarXExaminar(float angle);
@@ -31,5 +31,11 @@ class Camara {
 
     void setObserver(); // { gluLookAt(...) } completar
     void setProyeccion();
-    
+
+    void setLeft(float new_left);
+    void setRight(float new_right);
+    void setBottom(float new_bottom);
+    void setTop(float new_top);
+    float getBottom();
+    float getTop();
 };

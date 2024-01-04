@@ -87,7 +87,15 @@ Escena::Escena()
       Tupla3f eye = {0, 100, 200}; 
       Tupla3f at = {0, 0, 0};
       Tupla3f up = {0, 1, 0};
-      Camara c0(eye, at, up, 0, 50.0, 2000.0);
+      Camara cam0(eye, at, up, 0, 50.0, 2000.0);
+
+      eye = {0, 100, -200}; 
+      at = {0, 0, 0};
+      up = {0, 1, 0};
+      Camara cam1(eye, at, up, 1, 50.0, 2000.0);
+
+      camaras.push_back(cam0);
+      camaras.push_back(cam1);
 //
 }
 
@@ -118,7 +126,18 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
 
-   change_projection( float(UI_window_width)/float(UI_window_height) );
+   for (int i = 0; i < camaras.size(); i++){
+
+		camaras[i].setLeft(-UI_window_width/10);
+		camaras[i].setRight(UI_window_width/10);
+		camaras[i].setBottom(-UI_window_height/10);
+		camaras[i].setTop(UI_window_height/10);
+
+		//camaras[i].zoom((float)newWidth/(float)newHeight);
+	}
+
+   // change_projection( float(UI_window_width)/float(UI_window_height) );
+   change_projection();
 	glViewport( 0, 0, UI_window_width, UI_window_height );
 }
 
@@ -205,13 +224,16 @@ void Escena::activar_luces(){
 }
 
 void Escena::clickRaton(int boton, int estado, int x, int y){
+   xant = x;
+	yant = y;
+
    if (boton == GLUT_RIGHT_BUTTON){ // boton derecho (0: izquierdo, 2: rueda)
       if(estado == GLUT_DOWN){ // pulsado (0: no pulsado)
          // Se pulsa el botón, por lo que se entra en el estado "moviendo cámara"
          // if(/* si hay objeto seleccionado */)
          //    estadoRaton = MOVIENDO_CAMARA_EXAMINAR;
          // else // no hay nada seleccionado
-         //    estadoRaton = MOVIENDO_CAMARA_FIRSTPERSON;
+            estadoRaton = MOVIENDO_CAMARA_FIRSTPERSON;
       }
       else{
          // Se levanta el botón, por lo que sale del estado "moviendo cámara"
@@ -229,7 +251,8 @@ void Escena::clickRaton(int boton, int estado, int x, int y){
    //    }
    // }
 
-   // change_projection(); // por que?
+   // change_projection();
+
 }
 
 void Escena::ratonMovido(int x, int y){
@@ -416,6 +439,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       case 'M': // se desactiva animacion automatica
          cout << "-->ENTRANDO A SELECCIÓN DE GRADOS DE LIBERTAD" << endl;
          modoMenu=GRADOS;
+         break;
+      case 'C':
+         cout << "-->ENTRANDO A SELECCIÓN DE CAMARAS" << endl;
+         modoMenu=CAMARAS;
+         break;
    }
 
    // SELECCION OBJETO
@@ -613,35 +641,51 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       {
       case '0':
          camaraActiva = 0;
+         change_projection();
+         change_observer();
          cout << ">> CÁMARA 0 ACTIVADA" << endl;
          break;
       case '1':
          camaraActiva = 1;
-         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         change_projection();
+         change_observer();
+         cout << ">> CÁMARA 1 ACTIVADA" << endl;
          break;
       case '2':
          camaraActiva = 2;
-         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         change_projection();
+         change_observer();
+         cout << ">> CÁMARA 2 ACTIVADA" << endl;
          break;
       case '3':
          camaraActiva = 3;
-         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         change_projection();
+         change_observer();
+         cout << ">> CÁMARA 3 ACTIVADA" << endl;
          break;
       case '4':
          camaraActiva = 4;
-         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         change_projection();
+         change_observer();
+         cout << ">> CÁMARA 4 ACTIVADA" << endl;
          break;
       case '5':
          camaraActiva = 5;
-         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         change_projection();
+         change_observer();
+         cout << ">> CÁMARA 5 ACTIVADA" << endl;
          break;
       case '6':
          camaraActiva = 6;
-         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         change_projection();
+         change_observer();
+         cout << ">> CÁMARA 6 ACTIVADA" << endl;
          break;
       case '7':
          camaraActiva = 7;
-         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         change_projection();
+         change_observer();
+         cout << ">> CÁMARA 7 ACTIVADA" << endl;
          break;
       default:
          break;
@@ -654,25 +698,48 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
 void Escena::teclaEspecial( int Tecla1, int x, int y )
 {
+   // switch ( Tecla1 )
+   // {
+	//    case GLUT_KEY_LEFT:
+   //       Observer_angle_y-- ;
+   //       break;
+	//    case GLUT_KEY_RIGHT:
+   //       Observer_angle_y++ ;
+   //       break;
+	//    case GLUT_KEY_UP:
+   //       Observer_angle_x-- ;
+   //       break;
+	//    case GLUT_KEY_DOWN:
+   //       Observer_angle_x++ ;
+   //       break;
+	//    case GLUT_KEY_PAGE_UP:
+   //       Observer_distance *=1.2 ;
+   //       break;
+	//    case GLUT_KEY_PAGE_DOWN:
+   //       Observer_distance /= 1.2 ;
+   //       break;
+	// }
+
    switch ( Tecla1 )
    {
 	   case GLUT_KEY_LEFT:
-         Observer_angle_y-- ;
+			camaras[camaraActiva].rotarYExaminar(-1 * M_PI/180);
          break;
 	   case GLUT_KEY_RIGHT:
-         Observer_angle_y++ ;
+			camaras[camaraActiva].rotarYExaminar(1 * M_PI/180);
          break;
 	   case GLUT_KEY_UP:
-         Observer_angle_x-- ;
+			camaras[camaraActiva].rotarXExaminar(-1 * M_PI/180);
+
          break;
 	   case GLUT_KEY_DOWN:
-         Observer_angle_x++ ;
+			camaras[camaraActiva].rotarXExaminar(1 * M_PI/180);
          break;
 	   case GLUT_KEY_PAGE_UP:
-         Observer_distance *=1.2 ;
+			camaras[camaraActiva].zoom(0.8);
          break;
 	   case GLUT_KEY_PAGE_DOWN:
-         Observer_distance /= 1.2 ;
+			camaras[camaraActiva].zoom(1.2);
          break;
 	}
 
@@ -693,15 +760,28 @@ void Escena::change_projection( const float ratio_xy )
    const float wx = float(Height)*ratio_xy ;
    glFrustum( -wx, wx, -Height, Height, Front_plane, Back_plane );
 }
+
+void Escena::change_projection()
+{
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+
+   camaras[camaraActiva].setProyeccion();
+}
 //**************************************************************************
 // Funcion que se invoca cuando cambia el tamaño de la ventana
 //***************************************************************************
 
 void Escena::redimensionar( int newWidth, int newHeight )
 {
-   Width  = newWidth/10;
-   Height = newHeight/10;
-   change_projection( float(newHeight)/float(newWidth) );
+   const float ratio = (float)newWidth/(float)newHeight;
+
+	for (int i = 0; i < camaras.size(); i++){
+		camaras[i].setLeft(camaras[i].getBottom()*ratio);
+		camaras[i].setRight(camaras[i].getTop()*ratio);
+	}
+
+   change_projection();
    glViewport( 0, 0, newWidth, newHeight );
 }
 

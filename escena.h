@@ -46,6 +46,7 @@ class Escena
 
     // Transformación de cámara
 	void change_projection( const float ratio_xy );
+    void change_projection ();
 	void change_observer();
     
 
