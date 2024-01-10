@@ -8,10 +8,8 @@ using namespace std;
 /// @param at Adónde mira
 /// @param up "hacia arriba"
 /// @param tipo Ortogonal o perspectiva
-/// @param left 
-/// @param right 
-/// @param near
-/// @param far
+/// @param near Parámetro near
+/// @param far Parámetro far
 Camara::Camara(
     Tupla3f eye, Tupla3f at, Tupla3f up,
     int tipo,
@@ -22,9 +20,7 @@ Camara::Camara(
     this->up = up;
 
     this->tipo = tipo;
-
-    // this->left = left;
-    // this->right = right;
+    
     this->near = near;
     this->far = far;
 }
@@ -156,11 +152,9 @@ void Camara::setObserver(){
 void Camara::setProyeccion(){
     if(tipo == 0){ // 0: perspectiva
         glFrustum(left, right, bottom, top, near, far);
-        std::cout << "Establecida la proyección perspectiva con frustum" << std::endl;
     }
     else{ // 1: ortogonal
         glOrtho(left, right, bottom, top, near, far);
-        std::cout << "Establecida la proyección ortogonal" << std::endl;
     }
 }
 

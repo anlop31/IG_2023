@@ -43,6 +43,7 @@ class Malla3D
    std::vector<Tupla4f> getColorSolido();
    void setColorSolido(Tupla4f nuevoColorSolido);
    void setColorSeleccionSolido();
+   void setColorSolidoOriginal();
 
    protected:
 

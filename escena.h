@@ -19,6 +19,8 @@
 #define MOUSE_WHEEL_UP 3
 #define MOUSE_WHEEL_DOWN 4
 
+#define UMBRAL 0.01
+
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,ANIMACION,GRADOS,LUCES,CAMARAS} menu;
 
 typedef enum {MOVIENDO_CAMARA_FIRSTPERSON, MOVIENDO_CAMARA_EXAMINAR, DESACTIVADO} estado_raton;
@@ -97,6 +99,7 @@ class Escena
     bool primeraVezPulsado1 = true;
 
     bool modoSeleccion = false;
+    bool establecidoOriginal = true;
 
     // texturas
     Cuadro * cuadro = nullptr;
@@ -111,7 +114,7 @@ class Escena
 	void redimensionar( int newWidth, int newHeight ) ;
 
 	// Dibujar
-    void dibujarObjetos();
+    void dibujarObjetos(bool seleccion);
 	void dibujar() ;
     void activar_luces();
     void asignar_materiales();
@@ -119,14 +122,16 @@ class Escena
     // Camara e interaccion
     void clickRaton(int boton, int estado, int x, int y);
     void ratonMovido(int x, int y);
-    void dibujaSeleccion();
+    void dibujaSeleccion(int x, int y);
     void pick(int x, int y);
+    bool compararColores(Tupla3f pixel, Tupla3f color);
 
     int camaraActiva = 0;
     std::vector<Camara> camaras;
 
     int xant = 0,
         yant = 0;
+    bool fin_pick = true;
 
     estado_raton estadoRaton = MOVIENDO_CAMARA_FIRSTPERSON;
 

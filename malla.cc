@@ -20,7 +20,7 @@ using namespace std;
 // }
 
 
-// Cálculo de las normales
+/// @brief Método que calcula las normales de la malla
 void Malla3D::calcularNormales(){
    Tupla3f vectorA;
    Tupla3f vectorB;
@@ -64,6 +64,7 @@ void Malla3D::calcularNormales(){
 
 }
 
+/// @brief Crea los VBOs de la malla
 void Malla3D::crearVBOS(){
    // Crear VBO (si no creado (=0) se crea)
    if(id_vbo_ver == 0) // si no está creado el vbo de vértices
@@ -96,8 +97,7 @@ void Malla3D::crearVBOS(){
 }
 
 
-
-// Dibujar malla
+/// @brief Método dibujar de malla
 void Malla3D::draw()
 {
    // (la primera vez, se deben crear los VBOs y guardar sus identificadores en el objeto)
@@ -210,6 +210,11 @@ void Malla3D::draw()
    
 }
 
+/// @brief Método para crear vbo
+/// @param tipo_vbo 
+/// @param tam 
+/// @param puntero_ram 
+/// @return id_vbo
 GLuint Malla3D::CrearVBO ( GLuint tipo_vbo , GLuint tam , GLvoid * puntero_ram )
 {
    GLuint id_vbo ; // resultado: identificador de VBO
@@ -226,6 +231,10 @@ GLuint Malla3D::CrearVBO ( GLuint tipo_vbo , GLuint tam , GLvoid * puntero_ram )
    return id_vbo ; // devolver el identificador resultado
 }
 
+/// @brief Establece el color de la malla
+/// @param colorVertices 
+/// @param colorLineas 
+/// @param colorSolido 
 void Malla3D::setColor(Tupla4f colorVertices, Tupla4f colorLineas, Tupla4f colorSolido){
    cVertices.resize(v.size());
    cLineas.resize(v.size()); ///
@@ -236,21 +245,33 @@ void Malla3D::setColor(Tupla4f colorVertices, Tupla4f colorLineas, Tupla4f color
       cLineas[i] = colorLineas;
       cSolido[i] = colorSolido;
    }
+
+   cSolidoOriginal.resize(cSolido.size());
+   for(int i=0; i<v.size(); i++){
+      cSolidoOriginal[i] = cSolido[i];
+   }
 }
 
+/// @brief Establece el color de selección
+/// @param colorSeleccion 
 void Malla3D::setColorSeleccion(Tupla3f colorSeleccion){
    cSeleccion = colorSeleccion;
 }
 
+/// @brief Devuelve el color de selección
+/// @return 
 Tupla3f Malla3D::getColorSeleccion(){
    return cSeleccion;
 }
 
+/// @brief Establece el material
+/// @param mat nuevo material
 void Malla3D::setMaterial(Material mat){
    m = mat; // asignamos material
 }
 
-
+/// @brief Establece la textura
+/// @param archivo archivo imagen de la textura
 void Malla3D::setTextura(const std::string & archivo){
 
 	if (textura != nullptr)
@@ -266,6 +287,7 @@ void Malla3D::setTextura(const std::string & archivo){
 
 }
 
+/// @brief Calcula el centro de la malla
 void Malla3D::calcularCentro(){
 
    for(int i=0; i<v.size(); i++){
@@ -274,18 +296,22 @@ void Malla3D::calcularCentro(){
 
 	centro = centro / v.size();
 
-   cout << "centro: [" << centro(0) << ", " << centro(1) << ", " << centro(2) << "]" << endl;
-
 }
 
+/// @brief Devuelve el centro
+/// @return centro
 Tupla3f Malla3D::getCentro(){
    return centro;
 }
 
+/// @brief Devuelve el centro con las transformaciones de la matriz de vista
+/// @return centro_transformado
 Tupla3f Malla3D::getCentroTransformado(){
    return centro_transformado;
 }
 
+/// @brief Establece el color sólido al de selección cuando está seleccionado
+/// @param valor Si está seleccionado o no
 void Malla3D::setSeleccionado(bool valor){
    // cSolidoOriginal = cSolido;
 
@@ -315,28 +341,49 @@ void Malla3D::setSeleccionado(bool valor){
    }
 }
 
-
+/// @brief Devuelve el color sólido de la malla
+/// @return cSolido (vector de Tupla3f)
 std::vector<Tupla4f> Malla3D::getColorSolido(){
    return cSolido;
 }
 
+/// @brief Cambia el color sólido de la malla
+/// @param nuevoColorSolido 
 void Malla3D::setColorSolido(Tupla4f nuevoColorSolido){
    for(int i=0; i < v.size(); ++i){
       cSolido[i] = nuevoColorSolido;
    }
 }
 
+/// @brief Establece el color de sólido al mismo que de selección
 void Malla3D::setColorSeleccionSolido(){
-   cSeleccion = {
-      cSolido[0](0),
-      cSolido[0](1),
-      cSolido[0](2),
+   // Hacemos copia del color sólido
+   for(int i=0; i<v.size(); i++){
+      cSolidoOriginal[i] = cSolido[i];
+   }
+
+   // Nuevo color sólido --> el de selección
+   Tupla4f nuevoColorSolido = {
+      cSeleccion(0),
+      cSeleccion(1),
+      cSeleccion(2),
+      1.0f
    };
+
+   for(int i=0; i < v.size(); ++i){
+      cSolido[i] = nuevoColorSolido;
+   }
+}
+
+/// @brief Reestablece el color sólido a su valor original
+void Malla3D::setColorSolidoOriginal(){
+   for(int i=0; i < v.size(); ++i){
+      cSolido[i] = cSolidoOriginal[i];
+   }
 }
 
 
-
-/// @brief 
+/// @brief Asigna los puntos de textura de la malla
 /// @param modo 
 void Malla3D::asignarPuntosTextura(const modoTextura & modo){
 
@@ -350,6 +397,8 @@ void Malla3D::asignarPuntosTextura(const modoTextura & modo){
    std::cout << "asignarPuntosTextura" << std::endl;
 }
 
+/// @brief Asigna los puntos de textura de la malla si es un cuadro
+/// @param modo 
 void Malla3D::asignarPuntosTexturaCuadro(const modoTextura & modo){
 
 	ct.clear();
