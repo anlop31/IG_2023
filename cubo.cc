@@ -52,12 +52,6 @@ Cubo::Cubo(float lado)
    f[11] = {0, 6, 1};
 
 
-   setColor(
-      Tupla4f(1.0f, 0.0f, 0.0f, 1.0f), // color vértices
-      Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), // color líneas
-      Tupla4f(1.0f, 0.0f, 0.0f, 1.0f)  // color sólido
-   );
-
    calcularNormales();
    calcularCentro();
 

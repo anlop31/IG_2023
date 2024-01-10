@@ -218,6 +218,33 @@ void Malla3D::calcularCentro(){
 
 }
 
+/// @brief Calcula el centro de la malla segun la matriz de vista
+void Malla3D::calcularCentroVista(){
+   GLfloat mat[16];
+   glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+
+   Tupla3f n_centro;
+
+   // aplicamos la transformacion de la matriz al punto
+   n_centro(0) = mat[0] * centro(0) + mat[4] * centro(1) + mat[8] * centro(2) + mat[12];
+   n_centro(1) = mat[1] * centro(0) + mat[5] * centro(1) + mat[9] * centro(2) + mat[13];
+   n_centro(2) = mat[2] * centro(0) + mat[6] * centro(1) + mat[10] * centro(2) + mat[14];
+
+   centroTransformado = n_centro;
+}
+
+/// @brief Establece cSolidoOriginal igual a cSolido
+bool Malla3D::actualizarColorSolidoOriginal(){
+   if(cSolido[0](0) == cSeleccion(0) &&
+         cSolido[0](0) == cSeleccion(0) &&
+         cSolido[0](0) == cSeleccion(0)) return false;
+
+   for(int i=0; i<v.size(); i++){
+      cSolidoOriginal[i] = cSolido[i];
+   }
+
+   return true;
+}
 
 
 /* SET Y GET */
@@ -287,6 +314,7 @@ void Malla3D::setColorSolido(Tupla4f nuevoColorSolido){
    for(int i=0; i < v.size(); ++i){
       cSolido[i] = nuevoColorSolido;
    }
+   actualizarColorSolidoOriginal();
 }
 
 
@@ -297,12 +325,10 @@ std::vector<Tupla4f> Malla3D::getColorSolido(){
 }
 
 
-/// @brief Establece el color de sólido al mismo que de selección
+/// @brief Establece el color de sólido el mismo que de selección
 void Malla3D::setColorSeleccionSolido(){
    // Hacemos copia del color sólido
-   for(int i=0; i<v.size(); i++){
-      cSolidoOriginal[i] = cSolido[i];
-   }
+   actualizarColorSolidoOriginal();
 
    // Nuevo color sólido --> el de selección
    Tupla4f nuevoColorSolido = {
@@ -333,9 +359,7 @@ void Malla3D::setSeleccionado(bool valor){
 
    cSolidoOriginal.resize(v.size());
 
-   for(int i=0; i<v.size(); i++){
-      cSolidoOriginal[i] = cSolido[i];
-   }
+   actualizarColorSolidoOriginal();
 
    Tupla4f nuevoColorSolido = {
       cSeleccion(0),

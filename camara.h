@@ -10,6 +10,8 @@ class Camara {
     int tipo;
     float left, right, near, far, bottom, top; // o bien aspect, fov, near, far;
 
+    std::string objetoSeleccionado = "NINGUNO";
+
     public:
     Camara(
         Tupla3f eye, Tupla3f at, Tupla3f up,
@@ -50,5 +52,8 @@ class Camara {
 
     void setAt(Tupla3f newAt);
     void setEye(Tupla3f newEye);
-    void setUp(Tupla3f newUp);    
+    void setUp(Tupla3f newUp);  
+
+    void setObjetoSeleccionado(std::string objetoSeleccionado);
+    std::string getObjetoSeleccionado();  
 };

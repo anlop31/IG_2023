@@ -30,30 +30,24 @@ Camara::Camara(
 /// @brief Rotar en x cuando examinas un objeto
 /// @param angle Ángulo de rotación
 void Camara::rotarXExaminar(float angle){
-    // cambia el eye????
-    // eye.x += angle??
 
-    Tupla3f eye_centro = eye - at; // es el vector de eye a at?
+    Tupla3f eye_at = eye - at; // es el vector de eye a at?
 
-	float modulo = sqrt(eye_centro.lengthSq()); // lo que mide el vector
+	eye_at(1) = cos(angle) * eye_at(1) - sin(angle) * eye_at(2);
+	eye_at(2) = sin(angle) * eye_at(1) + cos(angle) * eye_at(2);
 
-
-	//eye(1) = cos(angle)*eye(1) - sin(angle) * eye(2);
-	eye_centro(1) = cos(angle) * eye_centro(1) - sin(angle) * eye_centro(2);
-
-   //eye(2) = sin(angle) * eye(1) + cos(angle) * eye(2);
-	eye_centro(2) = sin(angle) * eye_centro(1) + cos(angle) * eye_centro(2);
-
-	eye_centro = eye_centro.normalized() * modulo;  // normaliza y luego le da la longitud
-
-
-	eye = eye_centro + at;
+	eye = eye_at + at;
 }
 
 /// @brief 
 /// @param angle Ángulo de rotación
 void Camara::rotarYExaminar(float angle){
+    Tupla3f eye_at = eye - at;
 
+    eye_at(0) = cos(angle) * eye_at(0) + sin(angle) * eye_at(2);
+    eye_at(2) = -sin(angle) * eye_at(0) + cos(angle) * eye_at(2);
+
+	eye = eye_at + at;
 }
 
 /// @brief 
@@ -116,7 +110,6 @@ void Camara::mover(float x, float y, float z){
 void Camara::girar(float x, float y){
     if ((at - eye)(2) > 0) y = -y;
 
-	//at = {at(0) + x, at(1) - y, at(2)};
 	rotarXFirstPerson(-y *  M_PI/180);
     rotarYFirstPerson(-x * M_PI/180);
 }
@@ -125,7 +118,8 @@ void Camara::girar(float x, float y){
 /// @param x observer_angle_x
 /// @param y observer_angle_y
 void Camara::girarExaminar(float x, float y){
-
+    rotarXExaminar( y * M_PI/180);
+    rotarYExaminar( x * M_PI/180);
 }
 
 /// @brief 
@@ -228,12 +222,24 @@ void Camara::setAt(Tupla3f newAt){
 
 /// @brief Establece el valor de eye
 /// @param newEye 
-void setEye(Tupla3f newEye){
+void Camara::setEye(Tupla3f newEye){
     eye = newEye;
 }
 
 /// @brief Establece el valor de Up
 /// @param newUp 
-void setUp(Tupla3f newUp){
+void Camara::setUp(Tupla3f newUp){
     up = newUp;
+}
+
+/// @brief Establece el objeto seleccionado por la cámara
+/// @param objetoSeleccionado 
+void Camara::setObjetoSeleccionado(std::string objeto){
+    objetoSeleccionado = objeto;
+}
+
+/// @brief Devuelve el objeto que tiene seleccionado la cámara
+/// @return 
+std::string Camara::getObjetoSeleccionado(){
+    return objetoSeleccionado;
 }

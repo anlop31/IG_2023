@@ -26,6 +26,11 @@ Escena::Escena()
 
    // Objetos iniciales
    cubo = new Cubo(60.0); // cubo creado
+   cubo->setColor(
+      Tupla4f(1.0f, 0.0f, 0.0f, 1.0f), // color vértices
+      Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), // color líneas
+      Tupla4f(1.0f, 0.0f, 0.0f, 1.0f)  // color sólido
+   );
    piramide = new PiramideHexagonal(80.0, 80.0, 40.0); // piramide creada
 
    // Objetos de revolución
@@ -252,30 +257,46 @@ void Escena::activar_luces(){
 
 /// @brief Método para dibujar los objetos en la escena
 void Escena::dibujarObjetos(bool seleccion){
-   
-      // modoSeleccion=seleccion;
-      // if(modoSeleccion)
-      //    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
       //// CUBO
       if(modoSeleccion && !fin_pick){
          cubo->setColorSeleccionSolido();
-         cout << "Color solido establecido para cubo: {" << cubo->getColorSolido()[0](0) << ", ";
-         cout << cubo->getColorSolido()[0](1) << ", " << cubo->getColorSolido()[0](2) << "}" <<endl;
          establecidoOriginal = false;
       }
       if(!modoSeleccion && fin_pick && !establecidoOriginal){
          cubo->setColorSolidoOriginal(); // haria falta comprobacion de si ya esta en el original
-         cout << "Establecido el color original" << endl;
+         // cout << "Establecido el color original" << endl;
          establecidoOriginal = true;
          modoSeleccion=false;
       }
+
+
+      if(camaras[camaraActiva].getObjetoSeleccionado() == "CUBO"){
+         cubo->setColorSeleccionSolido();
+         establecidoOriginal = false;
+         // cout << "color cambiado porque esta seleccionado" << endl;
+      }else{
+         if(!establecidoOriginal){
+            // cout << "vuelta al original, ya no esta seleccionado"<<endl;
+            cubo->setColorSolidoOriginal();
+            establecidoOriginal = true;
+         }
+      }
+
+      // cout << "objeto seleccionado de la camara:" << camaras[camaraActiva].getObjetoSeleccionado() <<endl;
+
 
       glPushMatrix();
          // glTranslatef(-180, 0, -120); 
          glTranslatef(-30, 0, 50); 
          cubo->draw();      
       glPopMatrix();
+
+      
+      // debug
+      // Tupla4f colorCuboActual = cubo->getColorSolido()[0];
+      // cout << "color solido del cubo: "<< colorCuboActual(0) <<", "<<colorCuboActual(1)<<", "<<colorCuboActual(2)<<endl;
+      //
 
 
       //// PIRAMIDE
@@ -414,13 +435,15 @@ void Escena::clickRaton(int boton, int estado, int x, int y){
    xant = x;
 	yant = y;
 
+   cout << "...Objeto seleccionado de la camara: " << camaras[camaraActiva].getObjetoSeleccionado() << endl;
+
    if (boton == GLUT_RIGHT_BUTTON){ // boton derecho 
       if(estado == GLUT_DOWN){ // pulsado 
          // Se pulsa el botón, por lo que se entra en el estado "moviendo cámara"
-         // if(/* si hay objeto seleccionado */)
-         //    estadoRaton = MOVIENDO_CAMARA_EXAMINAR;
-         // else // no hay nada seleccionado
+         if(camaras[camaraActiva].getObjetoSeleccionado() == "NINGUNO")
             estadoRaton = MOVIENDO_CAMARA_FIRSTPERSON;
+         else // se selecciona algo
+            estadoRaton = CAMARA_EXAMINAR;
       }
       else{
          // Se levanta el botón, por lo que sale del estado "moviendo cámara"
@@ -450,7 +473,8 @@ void Escena::ratonMovido(int x, int y){
       camaras[camaraActiva].girar(x-xant, y-yant);
       xant = x;
       yant = y;
-   } else if(estadoRaton == MOVIENDO_CAMARA_EXAMINAR){
+   } else if(estadoRaton == CAMARA_EXAMINAR){
+      cout << "-------MODO EXAMINAR-------" << endl;
       camaras[camaraActiva].girarExaminar(x-xant, y-yant);
       xant = x;
       yant = y;
@@ -458,7 +482,7 @@ void Escena::ratonMovido(int x, int y){
 }
 
 void Escena::dibujaSeleccion(int x, int y){
-   cout << "\n******dibujaSeleccion******" << endl << endl;
+   // cout << "\n******dibujaSeleccion******" << endl << endl;
 
    glDisable(GL_DITHER);
    glDisable(GL_LIGHTING);
@@ -466,9 +490,9 @@ void Escena::dibujaSeleccion(int x, int y){
 
    fin_pick = false;
 
-      glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
-      change_observer();
-      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+      // glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
+      // change_observer();
+      // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
       modoSeleccion=true;
       dibujarObjetos(true);
@@ -483,7 +507,7 @@ void Escena::dibujaSeleccion(int x, int y){
    glEnable(GL_LIGHTING);
    glEnable(GL_TEXTURE);
 
-   cout << "******fin dibujaSeleccion******" << endl << endl;
+   // cout << "******fin dibujaSeleccion******" << endl << endl;
 }
 
 void Escena::pick(int x, int y){
@@ -516,58 +540,77 @@ void Escena::pick(int x, int y){
 
    cout << "\n";
 
+   Tupla3f centro;
+
    if (compararColores(pixel_leido, csCubo)){
       cout << "\tCubo seleccionado!" << endl;
-      camaras[camaraActiva].setAt(cubo->getCentroTransformado());
-      cout << "->Centro del cubo: (" << cubo->getCentroTransformado()(0) << ", " << cubo->getCentroTransformado()(1) << ", " << cubo->getCentroTransformado()(2) << ")" << endl;
+      // cubo->calcularCentroVista();
+      centro = cubo->getCentroTransformado();
+      centro = centroObjeto(centro);
+
+      camaras[camaraActiva].setAt(centro);
+      camaras[camaraActiva].setObjetoSeleccionado("CUBO");
+
+      // cout << "\t\t->Centro del cubo: (" << cubo->getCentroTransformado()(0) << ", " << cubo->getCentroTransformado()(1) << ", " << cubo->getCentroTransformado()(2) << ")" << endl;
+      // cout << "\t\t->Centro del cubo con funcion: (" << centro(0) << ", " << centro(1) << ", " << centro(2) << ")" << endl;
    }
    else if (compararColores(pixel_leido, csCono)){
       cout << "\tCono seleccionado!" << endl;
       camaras[camaraActiva].setAt(cono->getCentroTransformado());
-      cout << "->Centro del cono: (" << cono->getCentroTransformado()(0) << ", " << cono->getCentroTransformado()(1) << ", " << cono->getCentroTransformado()(2) << ")" << endl;
-
+      // cout << "->Centro del cono: (" << cono->getCentroTransformado()(0) << ", " << cono->getCentroTransformado()(1) << ", " << cono->getCentroTransformado()(2) << ")" << endl;
+      camaras[camaraActiva].setObjetoSeleccionado("CONO");
    }
    else if (compararColores(pixel_leido, csCilindro)){
       cout << "\tCilindro seleccionado!" << endl;
       camaras[camaraActiva].setAt(cilindro->getCentroTransformado());
-      cout << "->Centro del cilindro: (" << cilindro->getCentroTransformado()(0) << ", " << cilindro->getCentroTransformado()(1) << ", " << cilindro->getCentroTransformado()(2) << ")" << endl;
-
+      // cout << "->Centro del cilindro: (" << cilindro->getCentroTransformado()(0) << ", " << cilindro->getCentroTransformado()(1) << ", " << cilindro->getCentroTransformado()(2) << ")" << endl;
+      camaras[camaraActiva].setObjetoSeleccionado("CONO");
    }
    else if (compararColores(pixel_leido, csEsfera)){
       cout << "\tEsfera seleccionada!" << endl;
       camaras[camaraActiva].setAt(esfera->getCentroTransformado());
+      camaras[camaraActiva].setObjetoSeleccionado("ESFERA");
    }
    else if (compararColores(pixel_leido, csPiramide)){
       cout << "\tPirámide seleccionada!" << endl;
       camaras[camaraActiva].setAt(piramide->getCentroTransformado());
+      camaras[camaraActiva].setObjetoSeleccionado("PIRAMIDE");
    }
    else if (compararColores(pixel_leido, csObjPLY_1)){
       cout << "\tObjPLY_1 seleccionado!" << endl;
       camaras[camaraActiva].setAt(ObjPLY_1->getCentroTransformado());
-      cout << "->Centro del objply1: (" << ObjPLY_1->getCentroTransformado()(0) << ", " << ObjPLY_1->getCentroTransformado()(1) << ", " << ObjPLY_1->getCentroTransformado()(2) << ")" << endl;
+      // cout << "->Centro del objply1: (" << ObjPLY_1->getCentroTransformado()(0) << ", " << ObjPLY_1->getCentroTransformado()(1) << ", " << ObjPLY_1->getCentroTransformado()(2) << ")" << endl;
+      camaras[camaraActiva].setObjetoSeleccionado("OBJPLY_1");
    }
    else if (compararColores(pixel_leido, csObjPLY_2)){
       cout << "\tObjPLY_2 seleccionado!" << endl;
       camaras[camaraActiva].setAt(ObjPLY_2->getCentroTransformado());
+      camaras[camaraActiva].setObjetoSeleccionado("OBJPLY_2");
    }
    else if (compararColores(pixel_leido, csObjPLY_3)){
       cout << "\tObjPLY_3 seleccionado!" << endl;
       camaras[camaraActiva].setAt(ObjPLY_3->getCentroTransformado());
+      camaras[camaraActiva].setObjetoSeleccionado("OBJPLY_3");
    }
    else if (compararColores(pixel_leido, csPeon1)){
       cout << "\tPeon1 seleccionado!" << endl;
       camaras[camaraActiva].setAt(peon1->getCentroTransformado());
+      camaras[camaraActiva].setObjetoSeleccionado("PEON1");  
    }
    else if (compararColores(pixel_leido, csPeon2)){
       cout << "\tPeon2 seleccionado!" << endl;
       camaras[camaraActiva].setAt(peon2->getCentroTransformado());
+      camaras[camaraActiva].setObjetoSeleccionado("PEON2");
    }
    else if (compararColores(pixel_leido, csCuadro)){
       cout << "\tCuadro seleccionado!" << endl;
       camaras[camaraActiva].setAt(cuadro->getCentroTransformado());
+      camaras[camaraActiva].setObjetoSeleccionado("CUADRO");   
    }
-   else
+   else{
       cout << "\tNada seleccionado!" << endl;
+      camaras[camaraActiva].setObjetoSeleccionado("NINGUNO");   
+   }
 
    cout << endl;
 
@@ -588,6 +631,156 @@ bool Escena::compararColores(Tupla3f pixel, Tupla3f color) {
 
    return true;  // Los colores son iguales dentro del umbral de tolerancia
 }
+
+Tupla3f Escena::centroObjeto(Tupla3f centro){
+   Tupla3f centroTransformado;
+
+      GLfloat mat[16];
+         glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+
+	GLfloat inv[16];
+
+	invertirMatriz(mat, inv);
+
+
+	// aplicamos la transformacion de la matriz al punto
+	centroTransformado(0) = inv[0] * centro(0) + inv[4] * centro(1) + inv[8] * centro(2) + inv[12];
+	centroTransformado(1) = inv[1] * centro(0) + inv[5] * centro(1) + inv[9] * centro(2) + inv[13];
+	centroTransformado(2) = inv[2] * centro(0) + inv[6] * centro(1) + inv[10] * centro(2) + inv[14];
+
+	return centroTransformado;
+}
+
+
+bool Escena::invertirMatriz(const float m[16], float invOut[16]){
+   double inv[16], det;
+    int i;
+
+    inv[0] = m[5]  * m[10] * m[15] -
+             m[5]  * m[11] * m[14] -
+             m[9]  * m[6]  * m[15] +
+             m[9]  * m[7]  * m[14] +
+             m[13] * m[6]  * m[11] -
+             m[13] * m[7]  * m[10];
+
+    inv[4] = -m[4]  * m[10] * m[15] +
+              m[4]  * m[11] * m[14] +
+              m[8]  * m[6]  * m[15] -
+              m[8]  * m[7]  * m[14] -
+              m[12] * m[6]  * m[11] +
+              m[12] * m[7]  * m[10];
+
+    inv[8] = m[4]  * m[9] * m[15] -
+             m[4]  * m[11] * m[13] -
+             m[8]  * m[5] * m[15] +
+             m[8]  * m[7] * m[13] +
+             m[12] * m[5] * m[11] -
+             m[12] * m[7] * m[9];
+
+    inv[12] = -m[4]  * m[9] * m[14] +
+               m[4]  * m[10] * m[13] +
+               m[8]  * m[5] * m[14] -
+               m[8]  * m[6] * m[13] -
+               m[12] * m[5] * m[10] +
+               m[12] * m[6] * m[9];
+
+    inv[1] = -m[1]  * m[10] * m[15] +
+              m[1]  * m[11] * m[14] +
+              m[9]  * m[2] * m[15] -
+              m[9]  * m[3] * m[14] -
+              m[13] * m[2] * m[11] +
+              m[13] * m[3] * m[10];
+
+    inv[5] = m[0]  * m[10] * m[15] -
+             m[0]  * m[11] * m[14] -
+             m[8]  * m[2] * m[15] +
+             m[8]  * m[3] * m[14] +
+             m[12] * m[2] * m[11] -
+             m[12] * m[3] * m[10];
+
+    inv[9] = -m[0]  * m[9] * m[15] +
+              m[0]  * m[11] * m[13] +
+              m[8]  * m[1] * m[15] -
+              m[8]  * m[3] * m[13] -
+              m[12] * m[1] * m[11] +
+              m[12] * m[3] * m[9];
+
+    inv[13] = m[0]  * m[9] * m[14] -
+              m[0]  * m[10] * m[13] -
+              m[8]  * m[1] * m[14] +
+              m[8]  * m[2] * m[13] +
+              m[12] * m[1] * m[10] -
+              m[12] * m[2] * m[9];
+
+    inv[2] = m[1]  * m[6] * m[15] -
+             m[1]  * m[7] * m[14] -
+             m[5]  * m[2] * m[15] +
+             m[5]  * m[3] * m[14] +
+             m[13] * m[2] * m[7] -
+             m[13] * m[3] * m[6];
+
+    inv[6] = -m[0]  * m[6] * m[15] +
+              m[0]  * m[7] * m[14] +
+              m[4]  * m[2] * m[15] -
+              m[4]  * m[3] * m[14] -
+              m[12] * m[2] * m[7] +
+              m[12] * m[3] * m[6];
+
+    inv[10] = m[0]  * m[5] * m[15] -
+              m[0]  * m[7] * m[13] -
+              m[4]  * m[1] * m[15] +
+              m[4]  * m[3] * m[13] +
+              m[12] * m[1] * m[7] -
+              m[12] * m[3] * m[5];
+
+    inv[14] = -m[0]  * m[5] * m[14] +
+               m[0]  * m[6] * m[13] +
+               m[4]  * m[1] * m[14] -
+               m[4]  * m[2] * m[13] -
+               m[12] * m[1] * m[6] +
+               m[12] * m[2] * m[5];
+
+    inv[3] = -m[1] * m[6] * m[11] +
+              m[1] * m[7] * m[10] +
+              m[5] * m[2] * m[11] -
+              m[5] * m[3] * m[10] -
+              m[9] * m[2] * m[7] +
+              m[9] * m[3] * m[6];
+
+    inv[7] = m[0] * m[6] * m[11] -
+             m[0] * m[7] * m[10] -
+             m[4] * m[2] * m[11] +
+             m[4] * m[3] * m[10] +
+             m[8] * m[2] * m[7] -
+             m[8] * m[3] * m[6];
+
+    inv[11] = -m[0] * m[5] * m[11] +
+               m[0] * m[7] * m[9] +
+               m[4] * m[1] * m[11] -
+               m[4] * m[3] * m[9] -
+               m[8] * m[1] * m[7] +
+               m[8] * m[3] * m[5];
+
+    inv[15] = m[0] * m[5] * m[10] -
+              m[0] * m[6] * m[9] -
+              m[4] * m[1] * m[10] +
+              m[4] * m[2] * m[9] +
+              m[8] * m[1] * m[6] -
+              m[8] * m[2] * m[5];
+
+    det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
+
+    if (det == 0)
+        return false;
+
+    det = 1.0 / det;
+
+    for (i = 0; i < 16; i++)
+        invOut[i] = inv[i] * det;
+
+    return true;
+}
+
 
 
 //**************************************************************************

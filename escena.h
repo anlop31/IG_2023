@@ -15,6 +15,7 @@
 #include "robot.h"
 #include "cuadro.h"
 #include "camara.h"
+#include "math.h"
 
 #define MOUSE_WHEEL_UP 3
 #define MOUSE_WHEEL_DOWN 4
@@ -23,7 +24,7 @@
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,ANIMACION,GRADOS,LUCES,CAMARAS} menu;
 
-typedef enum {MOVIENDO_CAMARA_FIRSTPERSON, MOVIENDO_CAMARA_EXAMINAR, DESACTIVADO} estado_raton;
+typedef enum {MOVIENDO_CAMARA_FIRSTPERSON, CAMARA_EXAMINAR, DESACTIVADO} estado_raton;
 
 // typedef enum {BOTON_DERECHO, BOTON_IZQUIERDO, RUEDA} boton;
 
@@ -143,6 +144,8 @@ class Escena
     void dibujaSeleccion(int x, int y);
     void pick(int x, int y);
     bool compararColores(Tupla3f pixel, Tupla3f color);
+    Tupla3f centroObjeto(Tupla3f centro);
+    bool invertirMatriz(const float m[16], float invOut[16]);
 
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;

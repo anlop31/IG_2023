@@ -34,6 +34,8 @@ class Malla3D
    void asignarPuntosTexturaCuadro(const modoTextura & modo);
    
    void calcularCentro();
+   void calcularCentroVista();
+   bool actualizarColorSolidoOriginal();
 
    /* SET Y GET */
    // Texturas
