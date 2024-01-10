@@ -19,84 +19,6 @@ using namespace std;
 // 	}
 // }
 
-
-/// @brief Método que calcula las normales de la malla
-void Malla3D::calcularNormales(){
-   Tupla3f vectorA;
-   Tupla3f vectorB;
-
-   Tupla3f perpendicular;
-   Tupla3f normal;
-
-   // La cara esta formada por los puntos p, q y r, A = q - p y B = r - p
-   // Una normal por vértice
-   nv.resize(v.size());
-
-
-   for(int i = 0; i < nv.size(); i++){
-      nv[i] = {0,0,0};
-   }
-
-   for(int i = 0; i < f.size(); i++){
-      vectorA = v[f[i](1)] - v[f[i](0)];
-      vectorB = v[f[i](2)] - v[f[i](0)];
-
-
-      // calculamos la perpendicular haciendo el producto vectorial
-      perpendicular = vectorA.cross(vectorB);
-
-      // lo normalizamos si los vectores son nulos
-		// por si repetimos los puntos de los polos
-		if (perpendicular.lengthSq() > 0)
-      	normal = perpendicular.normalized();
-
-
-      nv[f[i](0)] = nv[f[i](0)] + normal;
-      nv[f[i](1)] = nv[f[i](1)] + normal;
-      nv[f[i](2)] = nv[f[i](2)] + normal;
-
-   }
-
-   for(int i = 0; i < nv.size(); i++){
-      if(nv[i].lengthSq() > 0)
-         nv[i] = nv[i].normalized();
-   }
-
-}
-
-/// @brief Crea los VBOs de la malla
-void Malla3D::crearVBOS(){
-   // Crear VBO (si no creado (=0) se crea)
-   if(id_vbo_ver == 0) // si no está creado el vbo de vértices
-      id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, 3*v.size()*sizeof(float), v.data());
-
-   if(id_vbo_tri == 0) // si no está creado el vbo de triángulos
-      id_vbo_tri = CrearVBO(GL_ELEMENT_ARRAY_BUFFER, 3*f.size()*sizeof(int), f.data());
-
-   // Crear VBO colores
-   if(id_vbo_cd == 0)
-      id_vbo_cd = CrearVBO(GL_ARRAY_BUFFER, 4*cVertices.size()*sizeof(float), cVertices.data());
-   if(id_vbo_cl == 0)
-      id_vbo_cl = CrearVBO(GL_ARRAY_BUFFER, 4*cLineas.size()*sizeof(float), cLineas.data());
-   if(id_vbo_cs == 0)
-      id_vbo_cs = CrearVBO(GL_ARRAY_BUFFER, 4*cSolido.size()*sizeof(float), cSolido.data());
-
-   // Crear VBO normales
-   if(id_vbo_nc == 0)
-      id_vbo_nc = CrearVBO(GL_ARRAY_BUFFER, 3*nc.size()*sizeof(float), nc.data());
-   if(id_vbo_nv == 0)
-      id_vbo_nv = CrearVBO(GL_ARRAY_BUFFER, 3*nv.size()*sizeof(float), nv.data());
-
-   // Crear VBO texturas
-   if(id_vbo_ct == 0)
-      id_vbo_ct = CrearVBO(GL_ARRAY_BUFFER, 3*ct.size()*sizeof(float), ct.data());
-   
-   // if(id_vbo_cSel == 0)
-   //    id_vbo_cSel = CrearVBO(GL_ARRAY_BUFFER, 3*cSeleccion.size()*sizeof(float), cSeleccion.data());
-
-}
-
-
 /// @brief Método dibujar de malla
 void Malla3D::draw()
 {
@@ -133,7 +55,7 @@ void Malla3D::draw()
             n_centro(1) = mat[1] * centro(0) + mat[5] * centro(1) + mat[9] * centro(2) + mat[13];
             n_centro(2) = mat[2] * centro(0) + mat[6] * centro(1) + mat[10] * centro(2) + mat[14];
 
-            centro_transformado = n_centro;
+            centroTransformado = n_centro;
          // }
          
 
@@ -210,26 +132,118 @@ void Malla3D::draw()
    
 }
 
-/// @brief Método para crear vbo
-/// @param tipo_vbo 
-/// @param tam 
-/// @param puntero_ram 
-/// @return id_vbo
-GLuint Malla3D::CrearVBO ( GLuint tipo_vbo , GLuint tam , GLvoid * puntero_ram )
-{
-   GLuint id_vbo ; // resultado: identificador de VBO
+
+/// @brief Método que calcula las normales de la malla
+void Malla3D::calcularNormales(){
+   Tupla3f vectorA;
+   Tupla3f vectorB;
+
+   Tupla3f perpendicular;
+   Tupla3f normal;
+
+   // La cara esta formada por los puntos p, q y r, A = q - p y B = r - p
+   // Una normal por vértice
+   nv.resize(v.size());
 
 
-   glGenBuffers ( 1 , & id_vbo ); // crear nuevo VBO, obtener identificador
-   glBindBuffer ( tipo_vbo , id_vbo ); // activar el VBO usando su identificador
+   for(int i = 0; i < nv.size(); i++){
+      nv[i] = {0,0,0};
+   }
 
-   // esta instrucción hace la transferencia de datos desde RAM hacia GPU
-   glBufferData ( tipo_vbo , tam , puntero_ram , GL_STATIC_DRAW );
+   for(int i = 0; i < f.size(); i++){
+      vectorA = v[f[i](1)] - v[f[i](0)];
+      vectorB = v[f[i](2)] - v[f[i](0)];
 
-   glBindBuffer ( tipo_vbo , 0 ); // desactivacion del VBO
-   
-   return id_vbo ; // devolver el identificador resultado
+
+      // calculamos la perpendicular haciendo el producto vectorial
+      perpendicular = vectorA.cross(vectorB);
+
+      // lo normalizamos si los vectores son nulos
+		// por si repetimos los puntos de los polos
+		if (perpendicular.lengthSq() > 0)
+      	normal = perpendicular.normalized();
+
+
+      nv[f[i](0)] = nv[f[i](0)] + normal;
+      nv[f[i](1)] = nv[f[i](1)] + normal;
+      nv[f[i](2)] = nv[f[i](2)] + normal;
+
+   }
+
+   for(int i = 0; i < nv.size(); i++){
+      if(nv[i].lengthSq() > 0)
+         nv[i] = nv[i].normalized();
+   }
+
 }
+
+
+/// @brief Asigna los puntos de textura de la malla
+/// @param modo 
+void Malla3D::asignarPuntosTextura(const modoTextura & modo){
+
+	ct.resize(v.size());
+
+
+	for (int i = 0; i < ct.size(); i++){
+		ct[i] = {v[i](0), (v[i](1) - v.front()(1) ) / (v.back()(1) - v.front()(1))} ;
+	}
+
+   std::cout << "asignarPuntosTextura" << std::endl;
+}
+
+
+/// @brief Asigna los puntos de textura de la malla si es un cuadro
+/// @param modo 
+void Malla3D::asignarPuntosTexturaCuadro(const modoTextura & modo){
+
+	ct.clear();
+   ct.resize(v.size());
+
+   ct[0] = {0.0f, 0.0f};
+   ct[1] = {1.0f, 0.0f};
+   ct[2] = {0.0f, 1.0f};
+   ct[3] = {1.0f, 1.0f};
+}
+
+
+/// @brief Calcula el centro de la malla
+void Malla3D::calcularCentro(){
+
+   for(int i=0; i<v.size(); i++){
+      centro = centro + v[i];
+   }
+
+	centro = centro / v.size();
+
+}
+
+
+
+/* SET Y GET */
+
+// --- TEXTURAS
+
+/// @brief Establece la textura
+/// @param archivo archivo imagen de la textura
+void Malla3D::setTextura(const std::string & archivo){
+
+	if (textura != nullptr)
+		delete textura;
+
+	textura = new Textura(archivo);
+
+
+   if(es_cuadro)
+      asignarPuntosTexturaCuadro(modo_textura);
+   // else
+	//    asignarPuntosTextura(modo_textura);
+
+}
+
+
+
+// --- COLORES
 
 /// @brief Establece el color de la malla
 /// @param colorVertices 
@@ -252,11 +266,13 @@ void Malla3D::setColor(Tupla4f colorVertices, Tupla4f colorLineas, Tupla4f color
    }
 }
 
+
 /// @brief Establece el color de selección
 /// @param colorSeleccion 
 void Malla3D::setColorSeleccion(Tupla3f colorSeleccion){
    cSeleccion = colorSeleccion;
 }
+
 
 /// @brief Devuelve el color de selección
 /// @return 
@@ -264,57 +280,55 @@ Tupla3f Malla3D::getColorSeleccion(){
    return cSeleccion;
 }
 
-/// @brief Establece el material
-/// @param mat nuevo material
-void Malla3D::setMaterial(Material mat){
-   m = mat; // asignamos material
+
+/// @brief Cambia el color sólido de la malla
+/// @param nuevoColorSolido 
+void Malla3D::setColorSolido(Tupla4f nuevoColorSolido){
+   for(int i=0; i < v.size(); ++i){
+      cSolido[i] = nuevoColorSolido;
+   }
 }
 
-/// @brief Establece la textura
-/// @param archivo archivo imagen de la textura
-void Malla3D::setTextura(const std::string & archivo){
 
-	if (textura != nullptr)
-		delete textura;
-
-	textura = new Textura(archivo);
-
-
-   if(es_cuadro)
-      asignarPuntosTexturaCuadro(modo_textura);
-   // else
-	//    asignarPuntosTextura(modo_textura);
-
+/// @brief Devuelve el color sólido de la malla
+/// @return cSolido (vector de Tupla4f)
+std::vector<Tupla4f> Malla3D::getColorSolido(){
+   return cSolido;
 }
 
-/// @brief Calcula el centro de la malla
-void Malla3D::calcularCentro(){
 
+/// @brief Establece el color de sólido al mismo que de selección
+void Malla3D::setColorSeleccionSolido(){
+   // Hacemos copia del color sólido
    for(int i=0; i<v.size(); i++){
-      centro = centro + v[i];
+      cSolidoOriginal[i] = cSolido[i];
    }
 
-	centro = centro / v.size();
+   // Nuevo color sólido --> el de selección
+   Tupla4f nuevoColorSolido = {
+      cSeleccion(0),
+      cSeleccion(1),
+      cSeleccion(2),
+      1.0f
+   };
 
+   for(int i=0; i < v.size(); ++i){
+      cSolido[i] = nuevoColorSolido;
+   }
 }
 
-/// @brief Devuelve el centro
-/// @return centro
-Tupla3f Malla3D::getCentro(){
-   return centro;
+
+/// @brief Reestablece el color sólido a su valor original
+void Malla3D::setColorSolidoOriginal(){
+   for(int i=0; i < v.size(); ++i){
+      cSolido[i] = cSolidoOriginal[i];
+   }
 }
 
-/// @brief Devuelve el centro con las transformaciones de la matriz de vista
-/// @return centro_transformado
-Tupla3f Malla3D::getCentroTransformado(){
-   return centro_transformado;
-}
 
 /// @brief Establece el color sólido al de selección cuando está seleccionado
 /// @param valor Si está seleccionado o no
 void Malla3D::setSeleccionado(bool valor){
-   // cSolidoOriginal = cSolido;
-
    seleccionado = valor;
 
    cSolidoOriginal.resize(v.size());
@@ -341,72 +355,108 @@ void Malla3D::setSeleccionado(bool valor){
    }
 }
 
-/// @brief Devuelve el color sólido de la malla
-/// @return cSolido (vector de Tupla3f)
-std::vector<Tupla4f> Malla3D::getColorSolido(){
-   return cSolido;
-}
 
-/// @brief Cambia el color sólido de la malla
-/// @param nuevoColorSolido 
-void Malla3D::setColorSolido(Tupla4f nuevoColorSolido){
-   for(int i=0; i < v.size(); ++i){
-      cSolido[i] = nuevoColorSolido;
-   }
-}
 
-/// @brief Establece el color de sólido al mismo que de selección
-void Malla3D::setColorSeleccionSolido(){
-   // Hacemos copia del color sólido
-   for(int i=0; i<v.size(); i++){
-      cSolidoOriginal[i] = cSolido[i];
-   }
+// --- MATERIALES 
 
-   // Nuevo color sólido --> el de selección
-   Tupla4f nuevoColorSolido = {
-      cSeleccion(0),
-      cSeleccion(1),
-      cSeleccion(2),
-      1.0f
-   };
-
-   for(int i=0; i < v.size(); ++i){
-      cSolido[i] = nuevoColorSolido;
-   }
-}
-
-/// @brief Reestablece el color sólido a su valor original
-void Malla3D::setColorSolidoOriginal(){
-   for(int i=0; i < v.size(); ++i){
-      cSolido[i] = cSolidoOriginal[i];
-   }
+/// @brief Establece el material
+/// @param mat nuevo material
+void Malla3D::setMaterial(Material mat){
+   m = mat; 
 }
 
 
-/// @brief Asigna los puntos de textura de la malla
-/// @param modo 
-void Malla3D::asignarPuntosTextura(const modoTextura & modo){
-
-	ct.resize(v.size());
-
-
-	for (int i = 0; i < ct.size(); i++){
-		ct[i] = {v[i](0), (v[i](1) - v.front()(1) ) / (v.back()(1) - v.front()(1))} ;
-	}
-
-   std::cout << "asignarPuntosTextura" << std::endl;
+/// @brief Devuelve el material de la malla
+/// @param mat 
+/// @return mmaterial de la malla
+Material Malla3D::getMaterial(){
+   return m;
 }
 
-/// @brief Asigna los puntos de textura de la malla si es un cuadro
-/// @param modo 
-void Malla3D::asignarPuntosTexturaCuadro(const modoTextura & modo){
 
-	ct.clear();
-   ct.resize(v.size());
-
-   ct[0] = {0.0f, 0.0f};
-   ct[1] = {1.0f, 0.0f};
-   ct[2] = {0.0f, 1.0f};
-   ct[3] = {1.0f, 1.0f};
+/// @brief Establece el material de selección
+/// @param matSelNuevo 
+void Malla3D::setMaterialSeleccion(Material matSelNuevo){
+   mSeleccion = matSelNuevo;
 }
 
+
+/// @brief Devuelve el material de selección de la malla
+/// @return mSeleccion (material de selección)
+Material Malla3D::getMaterialSeleccion(){
+   return mSeleccion;
+}
+
+
+
+// --- OTROS
+
+/// @brief Devuelve el centro
+/// @return centro
+Tupla3f Malla3D::getCentro(){
+   return centro;
+}
+
+
+/// @brief Devuelve el centro con las transformaciones de la matriz de vista
+/// @return centroTransformado
+Tupla3f Malla3D::getCentroTransformado(){
+   return centroTransformado;
+}
+
+
+
+/* MÉTODOS VBOS */
+/// @brief Crea los VBOs de la malla
+void Malla3D::crearVBOS(){
+   // Crear VBO (si no creado (=0) se crea)
+   if(id_vbo_ver == 0) // si no está creado el vbo de vértices
+      id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, 3*v.size()*sizeof(float), v.data());
+
+   if(id_vbo_tri == 0) // si no está creado el vbo de triángulos
+      id_vbo_tri = CrearVBO(GL_ELEMENT_ARRAY_BUFFER, 3*f.size()*sizeof(int), f.data());
+
+   // Crear VBO colores
+   if(id_vbo_cd == 0)
+      id_vbo_cd = CrearVBO(GL_ARRAY_BUFFER, 4*cVertices.size()*sizeof(float), cVertices.data());
+   if(id_vbo_cl == 0)
+      id_vbo_cl = CrearVBO(GL_ARRAY_BUFFER, 4*cLineas.size()*sizeof(float), cLineas.data());
+   if(id_vbo_cs == 0)
+      id_vbo_cs = CrearVBO(GL_ARRAY_BUFFER, 4*cSolido.size()*sizeof(float), cSolido.data());
+
+   // Crear VBO normales
+   if(id_vbo_nc == 0)
+      id_vbo_nc = CrearVBO(GL_ARRAY_BUFFER, 3*nc.size()*sizeof(float), nc.data());
+   if(id_vbo_nv == 0)
+      id_vbo_nv = CrearVBO(GL_ARRAY_BUFFER, 3*nv.size()*sizeof(float), nv.data());
+
+   // Crear VBO texturas
+   if(id_vbo_ct == 0)
+      id_vbo_ct = CrearVBO(GL_ARRAY_BUFFER, 3*ct.size()*sizeof(float), ct.data());
+   
+   // if(id_vbo_cSel == 0)
+   //    id_vbo_cSel = CrearVBO(GL_ARRAY_BUFFER, 3*cSeleccion.size()*sizeof(float), cSeleccion.data());
+
+}
+
+
+/// @brief Método para crear vbo
+/// @param tipo_vbo 
+/// @param tam 
+/// @param puntero_ram 
+/// @return id_vbo
+GLuint Malla3D::CrearVBO ( GLuint tipo_vbo , GLuint tam , GLvoid * puntero_ram )
+{
+   GLuint id_vbo ; // resultado: identificador de VBO
+
+
+   glGenBuffers ( 1 , & id_vbo ); // crear nuevo VBO, obtener identificador
+   glBindBuffer ( tipo_vbo , id_vbo ); // activar el VBO usando su identificador
+
+   // esta instrucción hace la transferencia de datos desde RAM hacia GPU
+   glBufferData ( tipo_vbo , tam , puntero_ram , GL_STATIC_DRAW );
+
+   glBindBuffer ( tipo_vbo , 0 ); // desactivacion del VBO
+   
+   return id_vbo ; // devolver el identificador resultado
+}

@@ -28,51 +28,61 @@ class Malla3D
 
    // función que dibuja el objeto en modo diferido (usando VBOs)
    void draw() ;
-   void setColor(Tupla4f colorVertices, Tupla4f colorLineas, Tupla4f colorSolido);
-   void setColorSeleccion(Tupla3f colorSeleccion);
-   Tupla3f getColorSeleccion();
-   void setMaterial(Material mat);
+
    void calcularNormales();
    void asignarPuntosTextura(const modoTextura & modo);
    void asignarPuntosTexturaCuadro(const modoTextura & modo);
-   void setTextura(const std::string & n);
+   
    void calcularCentro();
-   Tupla3f getCentro();
-   Tupla3f getCentroTransformado();
-   void setSeleccionado(bool valor);
-   std::vector<Tupla4f> getColorSolido();
+
+   /* SET Y GET */
+   // Texturas
+   void setTextura(const std::string & n);
+
+   // Colores
+   void setColor(Tupla4f colorVertices, Tupla4f colorLineas, Tupla4f colorSolido);
+   void setColorSeleccion(Tupla3f colorSeleccion);
+   Tupla3f getColorSeleccion();
    void setColorSolido(Tupla4f nuevoColorSolido);
+   std::vector<Tupla4f> getColorSolido();
    void setColorSeleccionSolido();
    void setColorSolidoOriginal();
 
+   void setSeleccionado(bool valor);
+
+   // Materiales
+   void setMaterial(Material mat);
+   Material getMaterial();
+   void setMaterialSeleccion(Material matSelNuevo);
+   Material getMaterialSeleccion();
+
+   // Otros
+   Tupla3f getCentro();
+   Tupla3f getCentroTransformado();
+   
    protected:
 
    // Material
-   Material m; // definir un constructor por defecto
+   Material m;
+
+   Material mSeleccion;
    
    // Textura
    Textura * textura = nullptr;
    bool es_cuadro = false;
 
+   // Métodos VBOS
    GLuint CrearVBO (GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);
    void crearVBOS();
 
-   Tupla3f centro; // vértice que está en el centro
-   Tupla3f centro_transformado;
 
    std::vector<Tupla3f> v ;   // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
    std::vector<Tupla3i> f ; // una terna de 3 enteros por cada cara o triángulo
 
-   // vector de normales de caras
-   std::vector<Tupla3f> nc;
-   // vector de normales de vértices
-   std::vector<Tupla3f> nv;
+   std::vector<Tupla3f> nc; // vector de normales de caras
+   std::vector<Tupla3f> nv; // vector de normales de vértices
 
-   // vector de coordenadas de textura
-   std::vector<Tupla2f> ct; // tiene nv de tamaño
-
-   // completar P1: tabla de colores
-   // Completar P1: vbo y método asociado
+   std::vector<Tupla2f> ct; // vector de coordenadas de textura
    
    // Tabla de colores
    std::vector<Tupla4f> cVertices;
@@ -82,6 +92,9 @@ class Malla3D
    std::vector<Tupla4f> cSolidoOriginal;
 
    Tupla3f cSeleccion;
+   
+   Tupla3f centro; // vértice que está en el centro
+   Tupla3f centroTransformado;
 
    bool seleccionado = false;
 

@@ -57,15 +57,15 @@ Escena::Escena()
       cilindro->setColorSeleccion({1.0f, 0.0f, 0.0f});
       cono->setColorSeleccion({1.0f, 0.0f, 1.0f});
 
-      ObjPLY_1->setColorSeleccion({1.0f, 1.0f, 0.0f});
-      ObjPLY_2->setColorSeleccion({1.0f, 0.25f, 1.0f});
-      ObjPLY_3->setColorSeleccion({0.0f, 0.0f, 1.0f});
+      // ObjPLY_1->setColorSeleccion({1.0f, 1.0f, 0.0f});
+      // ObjPLY_2->setColorSeleccion({1.0f, 0.25f, 1.0f});
+      // ObjPLY_3->setColorSeleccion({0.0f, 0.0f, 1.0f});
 
-      peon1->setColorSeleccion({0.5f, 0.0f, 0.0f});
-      peon2->setColorSeleccion({0.0f, 0.5f, 1.0f});
+      // peon1->setColorSeleccion({0.5f, 0.0f, 0.0f});
+      // peon2->setColorSeleccion({0.0f, 0.5f, 1.0f});
 
       cuadro->setColorSeleccion({1.0f, 0.5f, 1.0f});
-      robot->setColorSeleccion({0.5f, 0.5f, 0.7f});
+      // robot->setColorSeleccion({0.5f, 0.5f, 0.7f});
    //
 
    /* MODELO JERÁRQUICO */
@@ -250,6 +250,166 @@ void Escena::activar_luces(){
    }
 }
 
+/// @brief Método para dibujar los objetos en la escena
+void Escena::dibujarObjetos(bool seleccion){
+   
+      // modoSeleccion=seleccion;
+      // if(modoSeleccion)
+      //    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+      //// CUBO
+      if(modoSeleccion && !fin_pick){
+         cubo->setColorSeleccionSolido();
+         cout << "Color solido establecido para cubo: {" << cubo->getColorSolido()[0](0) << ", ";
+         cout << cubo->getColorSolido()[0](1) << ", " << cubo->getColorSolido()[0](2) << "}" <<endl;
+         establecidoOriginal = false;
+      }
+      if(!modoSeleccion && fin_pick && !establecidoOriginal){
+         cubo->setColorSolidoOriginal(); // haria falta comprobacion de si ya esta en el original
+         cout << "Establecido el color original" << endl;
+         establecidoOriginal = true;
+         modoSeleccion=false;
+      }
+
+      glPushMatrix();
+         // glTranslatef(-180, 0, -120); 
+         glTranslatef(-30, 0, 50); 
+         cubo->draw();      
+      glPopMatrix();
+
+
+      //// PIRAMIDE
+      // if(seleccion && !fin_pick){
+      //    piramide->setColorSeleccionSolido();
+      //    cout << "Color solido establecido para piramide: {"<<piramide->getColorSolido()[0](0) <<", ";
+      //    cout << piramide->getColorSolido()[0](1) <<", "<< piramide->getColorSolido()[0](2) << "}" << endl << endl;
+      // }
+      // else if(seleccion && fin_pick){
+      //    piramide->setColorSolidoOriginal(); // haria falta comprobacion de si ya esta en el original
+      // }
+
+      glPushMatrix();
+         glTranslatef(200, 0, -150); 
+         piramide->draw();
+      glPopMatrix();
+
+
+      /*    PLYS   */
+      //// HORMIGA (ObjPLY_1)
+      glPushMatrix();
+         glTranslatef(100, 0, 100);
+         glScalef(2, 2, 2); 
+         ObjPLY_1->draw(); // hormiga
+      glPopMatrix();
+
+
+      //// BEETHOVEN (ObjPLY_2)
+      glPushMatrix();
+         glTranslatef(200, 0, 0);
+         glScalef(10, 10, 10);
+         ObjPLY_2->draw(); // Beethoven
+      glPopMatrix();
+
+
+      // PEÓN BLANCO (material puramente difuso, sin brillos especulares)
+      glPushMatrix();
+         glTranslatef(-120, 0, 80);
+         glScalef(15, 15, 15);
+         peon1->draw(); // peón
+      glPopMatrix();
+
+      //// PEÓN NEGRO (material especular de alto brillo)
+      glPushMatrix();
+         glTranslatef(-180, 0, 80);
+         glScalef(15, 15, 15);
+         peon2->draw(); // peón
+      glPopMatrix();
+
+
+      /*    OBJETOS DE REVOLUCIÓN   */
+      //// ESFERA
+      glPushMatrix();
+         // glTranslatef(-20, -20, 0);
+         glTranslatef(-180, 100, -120); 
+         esfera->draw();
+      glPopMatrix();
+
+
+      //// CILINDRO
+      glPushMatrix();
+         glTranslatef(-150, 0, 0);
+         cilindro->draw();
+      glPopMatrix();
+
+
+      //// CONO
+      glPushMatrix();
+         glTranslatef(100, 0, 0);
+         cono->draw();
+      glPopMatrix();
+
+      //// ROBOT
+      glPushMatrix();
+         glTranslatef(0, 0, -200);
+         robot->draw();
+      glPopMatrix();
+
+      glPushMatrix();
+         glTranslatef(30, 0, 0);
+         cuadro->draw();
+      glPopMatrix();
+
+
+}
+
+
+// **************************************************************************
+//
+// función de dibujo de la escena: limpia ventana, fija cámara, dibuja ejes,
+// y dibuja los objetos
+//
+// **************************************************************************
+
+/// @brief Método dibujar 
+void Escena::dibujar()
+{
+   // no puedo usar opengl fuera de aqui
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
+	change_observer();
+
+   // ejes en color plano
+   glDisable(GL_LIGHTING);
+   ejes.draw();
+
+
+   if (iluminacionActiva){
+      activar_luces();
+   }
+
+   // cout << "modoseleccion: " << (modoSeleccion ? "si" : "no") << endl;
+   // cout << "finpick: " << (fin_pick ? "si" : "no") << endl;
+   // cout << "establecidoOriginal: " << (establecidoOriginal ? "si" : "no") << endl;
+   // cout << endl;
+
+   if (modoPunto && !modoSeleccion) {
+      glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); // puntos (front)
+      // cout << "-MODO PUNTOS ACTIVO-" << endl;
+      dibujarObjetos(false);
+   }
+   if (modoLinea && !modoSeleccion) {
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // lineas
+      // cout << "-MODO LINEAS ACTIVO-" << endl;
+      dibujarObjetos(false);
+   }
+   if (modoSolido && !modoSeleccion) {
+      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // solido (back)
+      // cout << "-MODO SOLIDO ACTIVO-" << endl;
+      dibujarObjetos(false);
+   }
+
+    
+}
+
 void Escena::clickRaton(int boton, int estado, int x, int y){
    xant = x;
 	yant = y;
@@ -429,165 +589,6 @@ bool Escena::compararColores(Tupla3f pixel, Tupla3f color) {
    return true;  // Los colores son iguales dentro del umbral de tolerancia
 }
 
-/// @brief Método para dibujar los objetos en la escena
-void Escena::dibujarObjetos(bool seleccion){
-   
-      // modoSeleccion=seleccion;
-      // if(modoSeleccion)
-      //    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-      //// CUBO
-      if(modoSeleccion && !fin_pick){
-         cubo->setColorSeleccionSolido();
-         cout << "Color solido establecido para cubo: {" << cubo->getColorSolido()[0](0) << ", ";
-         cout << cubo->getColorSolido()[0](1) << ", " << cubo->getColorSolido()[0](2) << "}" <<endl;
-         establecidoOriginal = false;
-      }
-      if(!modoSeleccion && fin_pick && !establecidoOriginal){
-         cubo->setColorSolidoOriginal(); // haria falta comprobacion de si ya esta en el original
-         cout << "Establecido el color original" << endl;
-         establecidoOriginal = true;
-         modoSeleccion=false;
-      }
-
-      glPushMatrix();
-         // glTranslatef(-180, 0, -120); 
-         glTranslatef(-30, 0, 50); 
-         cubo->draw();      
-      glPopMatrix();
-
-
-      //// PIRAMIDE
-      // if(seleccion && !fin_pick){
-      //    piramide->setColorSeleccionSolido();
-      //    cout << "Color solido establecido para piramide: {"<<piramide->getColorSolido()[0](0) <<", ";
-      //    cout << piramide->getColorSolido()[0](1) <<", "<< piramide->getColorSolido()[0](2) << "}" << endl << endl;
-      // }
-      // else if(seleccion && fin_pick){
-      //    piramide->setColorSolidoOriginal(); // haria falta comprobacion de si ya esta en el original
-      // }
-
-      glPushMatrix();
-         glTranslatef(200, 0, -150); 
-         piramide->draw();
-      glPopMatrix();
-
-
-      /*    PLYS   */
-      //// HORMIGA (ObjPLY_1)
-      glPushMatrix();
-         glTranslatef(100, 0, 100);
-         glScalef(2, 2, 2); 
-         ObjPLY_1->draw(); // hormiga
-      glPopMatrix();
-
-
-      //// BEETHOVEN (ObjPLY_2)
-      glPushMatrix();
-         glTranslatef(200, 0, 0);
-         glScalef(10, 10, 10);
-         ObjPLY_2->draw(); // Beethoven
-      glPopMatrix();
-
-
-      // PEÓN BLANCO (material puramente difuso, sin brillos especulares)
-      glPushMatrix();
-         glTranslatef(-120, 0, 80);
-         glScalef(15, 15, 15);
-         peon1->draw(); // peón
-      glPopMatrix();
-
-      //// PEÓN NEGRO (material especular de alto brillo)
-      glPushMatrix();
-         glTranslatef(-180, 0, 80);
-         glScalef(15, 15, 15);
-         peon2->draw(); // peón
-      glPopMatrix();
-
-
-      /*    OBJETOS DE REVOLUCIÓN   */
-      //// ESFERA
-      glPushMatrix();
-         // glTranslatef(-20, -20, 0);
-         glTranslatef(-180, 100, -120); 
-         esfera->draw();
-      glPopMatrix();
-
-
-      //// CILINDRO
-      glPushMatrix();
-         glTranslatef(-150, 0, 0);
-         cilindro->draw();
-      glPopMatrix();
-
-
-      //// CONO
-      glPushMatrix();
-         glTranslatef(100, 0, 0);
-         cono->draw();
-      glPopMatrix();
-
-      //// ROBOT
-      glPushMatrix();
-         glTranslatef(0, 0, -200);
-         robot->draw();
-      glPopMatrix();
-
-      glPushMatrix();
-         glTranslatef(30, 0, 0);
-         cuadro->draw();
-      glPopMatrix();
-
-
-}
-
-
-// **************************************************************************
-//
-// función de dibujo de la escena: limpia ventana, fija cámara, dibuja ejes,
-// y dibuja los objetos
-//
-// **************************************************************************
-
-/// @brief Método dibujar 
-void Escena::dibujar()
-{
-   // no puedo usar opengl fuera de aqui
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
-	change_observer();
-
-   // ejes en color plano
-   glDisable(GL_LIGHTING);
-   ejes.draw();
-
-
-   if (iluminacionActiva){
-      activar_luces();
-   }
-
-   // cout << "modoseleccion: " << (modoSeleccion ? "si" : "no") << endl;
-   // cout << "finpick: " << (fin_pick ? "si" : "no") << endl;
-   // cout << "establecidoOriginal: " << (establecidoOriginal ? "si" : "no") << endl;
-   // cout << endl;
-
-   if (modoPunto && !modoSeleccion) {
-      glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); // puntos (front)
-      // cout << "-MODO PUNTOS ACTIVO-" << endl;
-      dibujarObjetos(false);
-   }
-   if (modoLinea && !modoSeleccion) {
-      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // lineas
-      // cout << "-MODO LINEAS ACTIVO-" << endl;
-      dibujarObjetos(false);
-   }
-   if (modoSolido && !modoSeleccion) {
-      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // solido (back)
-      // cout << "-MODO SOLIDO ACTIVO-" << endl;
-      dibujarObjetos(false);
-   }
-
-    
-}
 
 //**************************************************************************
 //

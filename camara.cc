@@ -176,6 +176,14 @@ void Camara::setBottom(float new_bottom){
     bottom = new_bottom;
 }
 
+float Camara::getLeft(){
+    return left;
+}
+
+float Camara::getRight(){
+    return right;
+}
+
 /// @brief Establece un nuevo valor de top
 /// @param new_top 
 void Camara::setTop(float new_top){
@@ -212,7 +220,20 @@ Tupla3f Camara::getUp(){
     return up;
 }
 
+/// @brief Establece el valor de at
+/// @param newAt 
 void Camara::setAt(Tupla3f newAt){
     at = newAt;
 }
 
+/// @brief Establece el valor de eye
+/// @param newEye 
+void setEye(Tupla3f newEye){
+    eye = newEye;
+}
+
+/// @brief Establece el valor de Up
+/// @param newUp 
+void setUp(Tupla3f newUp){
+    up = newUp;
+}

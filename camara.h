@@ -1,15 +1,16 @@
 #include "auxiliar.h"
 
 class Camara {
-    public:
+    private:
 
     Tupla3f eye;
     Tupla3f at;
     Tupla3f up;
 
-    int tipo; // 0: perspectiva o 1: ortogonal
+    int tipo;
     float left, right, near, far, bottom, top; // o bien aspect, fov, near, far;
 
+    public:
     Camara(
         Tupla3f eye, Tupla3f at, Tupla3f up,
         int tipo,
@@ -29,6 +30,7 @@ class Camara {
     void girarExaminar(float x, float y);
     void zoom(float factor);
 
+    /* SET Y GET */
     void setObserver(); // { gluLookAt(...) } completar
     void setProyeccion();
 
@@ -36,10 +38,17 @@ class Camara {
     void setRight(float new_right);
     void setBottom(float new_bottom);
     void setTop(float new_top);
+
+    float getLeft();
+    float getRight();
     float getBottom();
     float getTop();
+
     Tupla3f getAt();
     Tupla3f getEye();
     Tupla3f getUp();
+
     void setAt(Tupla3f newAt);
+    void setEye(Tupla3f newEye);
+    void setUp(Tupla3f newUp);    
 };

@@ -34,8 +34,6 @@ class Escena
 
    private:
 
-   
-
  // ** PARÁMETROS DE LA CÁMARA (PROVISIONAL)
        
        // variables que definen la posicion de la camara en coordenadas polares
@@ -51,12 +49,11 @@ class Escena
     void change_projection ();
 	void change_observer();
     
-
-
    void clear_window();
 
    menu modoMenu=NADA;
-   // Objetos de la escena
+
+   /* OBJETOS DE LA ESCENA */
    Ejes ejes;
    Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'
    PiramideHexagonal * piramide = nullptr ; // es importante inicializarlo a 'nullptr'
@@ -70,7 +67,20 @@ class Escena
    ObjRevolucion * peon1 = nullptr;
    ObjRevolucion * peon2 = nullptr;
 
-    // variables para controlar la figura a visualizar
+    // Modelo jerárquico
+    Robot * robot = nullptr;
+
+    // Texturas
+    Cuadro * cuadro = nullptr;
+
+    /* LUCES */ 
+    LuzPosicional * luz0 = nullptr;  
+    LuzDireccional * luz1 = nullptr;
+    LuzPosicional * luz2 = nullptr;  
+
+    /****/
+
+    // Variables para controlar la figura a visualizar
     bool hayCubo = false;
     bool hayPiramide = false;
 
@@ -79,53 +89,21 @@ class Escena
     bool hayPLY_3 = false;
     
 
-    // variables para controlar el modo de visualización, y poder combinarlos
+    // Variables para controlar el modo de visualización, y poder combinarlos
     bool modoPunto = false;
     bool modoLinea = false;
     bool modoSolido = true;
 
-
-    /* LUCES */ 
-    LuzPosicional * luz0 = nullptr;  
-    LuzDireccional * luz1 = nullptr;
-    LuzPosicional * luz2 = nullptr;  
-
     // Iluminacion activa
     bool iluminacionActiva = false;
 
+    // Variables para controlar las teclas pulsadas
     unsigned char ultimaPulsada = 'N';
 
     bool primeraVezPulsado0 = true;
     bool primeraVezPulsado1 = true;
 
-    bool modoSeleccion = false;
-    bool establecidoOriginal = true;
-
-    // texturas
-    Cuadro * cuadro = nullptr;
-
-   public:
-
-    Escena();
-	void inicializar( int UI_window_width, int UI_window_height );
-    void animarModeloJerarquico(); // animacion
-    void animarLuzDireccional();
-    void animarLuzPosicional();
-	void redimensionar( int newWidth, int newHeight ) ;
-
-	// Dibujar
-    void dibujarObjetos(bool seleccion);
-	void dibujar() ;
-    void activar_luces();
-    void asignar_materiales();
-
-    // Camara e interaccion
-    void clickRaton(int boton, int estado, int x, int y);
-    void ratonMovido(int x, int y);
-    void dibujaSeleccion(int x, int y);
-    void pick(int x, int y);
-    bool compararColores(Tupla3f pixel, Tupla3f color);
-
+    // Variables cámara y pick
     int camaraActiva = 0;
     std::vector<Camara> camaras;
 
@@ -133,17 +111,38 @@ class Escena
         yant = 0;
     bool fin_pick = true;
 
+    bool modoSeleccion = false;
+    bool establecidoOriginal = true;
+
     estado_raton estadoRaton = MOVIENDO_CAMARA_FIRSTPERSON;
 
-    // animacion
+    // Variables animación
     bool animacionAutomatica = false;
     bool animacionLuzDireccional = false;
     bool animacionLuzPosicional = false;
     int numGrado = 0; // grado de libertad seleccionado
 
-    // modelo jerárquico
-    Robot * robot = nullptr;
+   public:
 
+    Escena();
+	void inicializar( int UI_window_width, int UI_window_height );
+    void animarModeloJerarquico();
+    void animarLuzDireccional();
+    void animarLuzPosicional();
+	void redimensionar( int newWidth, int newHeight ) ;
+
+	// Dibujar
+    void activar_luces();
+    void asignar_materiales();
+    void dibujarObjetos(bool seleccion);
+	void dibujar();
+
+    // Camara e interaccion
+    void clickRaton(int boton, int estado, int x, int y);
+    void ratonMovido(int x, int y);
+    void dibujaSeleccion(int x, int y);
+    void pick(int x, int y);
+    bool compararColores(Tupla3f pixel, Tupla3f color);
 
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
