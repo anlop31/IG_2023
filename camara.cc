@@ -218,3 +218,7 @@ Tupla3f Camara::getUp(){
     return up;
 }
 
+void Camara::setAt(Tupla3f newAt){
+    at = newAt;
+}
+

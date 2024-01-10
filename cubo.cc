@@ -59,6 +59,7 @@ Cubo::Cubo(float lado)
    );
 
    calcularNormales();
+   calcularCentro();
 
 }
 

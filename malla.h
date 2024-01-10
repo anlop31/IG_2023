@@ -29,11 +29,20 @@ class Malla3D
    // función que dibuja el objeto en modo diferido (usando VBOs)
    void draw() ;
    void setColor(Tupla4f colorVertices, Tupla4f colorLineas, Tupla4f colorSolido);
+   void setColorSeleccion(Tupla3f colorSeleccion);
+   Tupla3f getColorSeleccion();
    void setMaterial(Material mat);
    void calcularNormales();
    void asignarPuntosTextura(const modoTextura & modo);
    void asignarPuntosTexturaCuadro(const modoTextura & modo);
    void setTextura(const std::string & n);
+   void calcularCentro();
+   Tupla3f getCentro();
+   Tupla3f getCentroTransformado();
+   void setSeleccionado(bool valor);
+   std::vector<Tupla4f> getColorSolido();
+   void setColorSolido(Tupla4f nuevoColorSolido);
+   void setColorSeleccionSolido();
 
    protected:
 
@@ -47,7 +56,8 @@ class Malla3D
    GLuint CrearVBO (GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);
    void crearVBOS();
 
-
+   Tupla3f centro; // vértice que está en el centro
+   Tupla3f centro_transformado;
 
    std::vector<Tupla3f> v ;   // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
    std::vector<Tupla3i> f ; // una terna de 3 enteros por cada cara o triángulo
@@ -68,6 +78,12 @@ class Malla3D
    std::vector<Tupla4f> cLineas;
    std::vector<Tupla4f> cSolido;
 
+   std::vector<Tupla4f> cSolidoOriginal;
+
+   Tupla3f cSeleccion;
+
+   bool seleccionado = false;
+
    // Variables vbo
    GLuint id_vbo_ver = 0;
    GLuint id_vbo_tri = 0;
@@ -79,6 +95,8 @@ class Malla3D
    GLuint id_vbo_nv = 0; // vbo normales de los vértices
 
    GLuint id_vbo_ct = 0; // vbo coordenadas de textura
+
+   GLuint id_vbo_cSel = 0;
 
 
    modoTextura modo_textura = PLANA;

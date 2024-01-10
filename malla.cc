@@ -89,6 +89,9 @@ void Malla3D::crearVBOS(){
    // Crear VBO texturas
    if(id_vbo_ct == 0)
       id_vbo_ct = CrearVBO(GL_ARRAY_BUFFER, 3*ct.size()*sizeof(float), ct.data());
+   
+   // if(id_vbo_cSel == 0)
+   //    id_vbo_cSel = CrearVBO(GL_ARRAY_BUFFER, 3*cSeleccion.size()*sizeof(float), cSeleccion.data());
 
 }
 
@@ -118,6 +121,24 @@ void Malla3D::draw()
 
    } 
    //
+         ///
+         // if(seleccionado){
+            GLfloat mat[16];
+            glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+
+            Tupla3f n_centro;
+
+            // aplicamos la transformacion de la matriz al punto
+            n_centro(0) = mat[0] * centro(0) + mat[4] * centro(1) + mat[8] * centro(2) + mat[12];
+            n_centro(1) = mat[1] * centro(0) + mat[5] * centro(1) + mat[9] * centro(2) + mat[13];
+            n_centro(2) = mat[2] * centro(0) + mat[6] * centro(1) + mat[10] * centro(2) + mat[14];
+
+            centro_transformado = n_centro;
+         // }
+         
+
+
+
 
    // Texturas
    if (textura != nullptr) {
@@ -172,7 +193,7 @@ void Malla3D::draw()
    // desactivar buffer: VBO de triángulos
    glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER , 0 );
    
-   // Desactivar texturas
+   // desactivar texturas
    if (textura != nullptr) {
 	  glDisable( GL_TEXTURE_2D );
 	  glDisable(GL_TEXTURE_COORD_ARRAY);
@@ -182,7 +203,7 @@ void Malla3D::draw()
    glDisableClientState ( GL_VERTEX_ARRAY );
    glDisableClientState ( GL_COLOR_ARRAY );
 
-
+   // desactivar luces
    if (glIsEnabled(GL_LIGHTING)){
       glDisableClientState( GL_LIGHTING );
    }
@@ -217,6 +238,14 @@ void Malla3D::setColor(Tupla4f colorVertices, Tupla4f colorLineas, Tupla4f color
    }
 }
 
+void Malla3D::setColorSeleccion(Tupla3f colorSeleccion){
+   cSeleccion = colorSeleccion;
+}
+
+Tupla3f Malla3D::getColorSeleccion(){
+   return cSeleccion;
+}
+
 void Malla3D::setMaterial(Material mat){
    m = mat; // asignamos material
 }
@@ -237,9 +266,77 @@ void Malla3D::setTextura(const std::string & archivo){
 
 }
 
+void Malla3D::calcularCentro(){
+
+   for(int i=0; i<v.size(); i++){
+      centro = centro + v[i];
+   }
+
+	centro = centro / v.size();
+
+   cout << "centro: [" << centro(0) << ", " << centro(1) << ", " << centro(2) << "]" << endl;
+
+}
+
+Tupla3f Malla3D::getCentro(){
+   return centro;
+}
+
+Tupla3f Malla3D::getCentroTransformado(){
+   return centro_transformado;
+}
+
+void Malla3D::setSeleccionado(bool valor){
+   // cSolidoOriginal = cSolido;
+
+   seleccionado = valor;
+
+   cSolidoOriginal.resize(v.size());
+
+   for(int i=0; i<v.size(); i++){
+      cSolidoOriginal[i] = cSolido[i];
+   }
+
+   Tupla4f nuevoColorSolido = {
+      cSeleccion(0),
+      cSeleccion(1),
+      cSeleccion(2),
+      1.0f
+   };
+
+   if(seleccionado){ // se ha seleccionado
+      for(int i=0; i < v.size(); ++i){
+         cSolido[i] = nuevoColorSolido;
+      }
+   } else { // se ha deseleccionado
+      for(int i=0; i < v.size(); ++i){
+         cSolido[i] = cSolidoOriginal[i];
+      }
+   }
+}
 
 
-/// @brief Revisar
+std::vector<Tupla4f> Malla3D::getColorSolido(){
+   return cSolido;
+}
+
+void Malla3D::setColorSolido(Tupla4f nuevoColorSolido){
+   for(int i=0; i < v.size(); ++i){
+      cSolido[i] = nuevoColorSolido;
+   }
+}
+
+void Malla3D::setColorSeleccionSolido(){
+   cSeleccion = {
+      cSolido[0](0),
+      cSolido[0](1),
+      cSolido[0](2),
+   };
+}
+
+
+
+/// @brief 
 /// @param modo 
 void Malla3D::asignarPuntosTextura(const modoTextura & modo){
 

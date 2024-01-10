@@ -154,6 +154,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    }
    
    calcularNormales();
+   calcularCentro();
 
    perfil = perfil_modificado;
    this->num_instancias = num_instancias;

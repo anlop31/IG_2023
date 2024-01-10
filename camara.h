@@ -41,5 +41,5 @@ class Camara {
     Tupla3f getAt();
     Tupla3f getEye();
     Tupla3f getUp();
-
+    void setAt(Tupla3f newAt);
 };

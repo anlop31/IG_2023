@@ -26,30 +26,60 @@ Escena::Escena()
 
    // Objetos iniciales
    cubo = new Cubo(60.0); // cubo creado
+   cubo->setColorSeleccion({0.0f, 0.0f, 1.0f});
    piramide = new PiramideHexagonal(80.0, 80.0, 40.0); // piramide creada
 
    // Objetos de revolución
    esfera = new Esfera(30, 30, 40);
+      esfera->setColorSeleccion({0.0f, 1.0f, 1.0f});
+
    cilindro = new Cilindro(4, 10, 50.0, 50.0); 
+      cilindro->setColorSeleccion({1.0f, 0.0f, 0.0f});
    cono = new Cono(3, 10, 70, 25);
+      cono->setColorSeleccion({1.0f, 0.0f, 1.0f});
+
 
    // Objetos PLY
    ObjPLY_1 = new ObjPLY("./plys/ant.ply");
+      ObjPLY_1->setColorSeleccion({1.0f, 1.0f, 0.0f});
    ObjPLY_2 = new ObjPLY("./plys/beethoven.ply");
+      ObjPLY_2->setColorSeleccion({1.0f, 0.25f, 1.0f});
    ObjPLY_2->setColor(Tupla4f(0.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(1.0f, 0.0f, 0.0f, 1.0f));
    ObjPLY_3 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
+      ObjPLY_3->setColorSeleccion({0.0f, 0.0f, 1.0f});
    ObjPLY_3->setColor(Tupla4f(1.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(0.1f, 0.6f, 0.1f, 1.0f));
 
    peon1 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
+      peon1->setColorSeleccion({0.5f, 0.0f, 0.0f});
+
    peon2 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
+      peon2->setColorSeleccion({0.0f, 0.5f, 1.0f});
+
 
    // para texturas
    cuadro = new Cuadro(60.0);
+      cuadro->setColorSeleccion({1.0f, 0.5f, 1.0f});
+
 
 
    /* MODELO JERÁRQUICO */
    robot = new Robot();
+      robot->setColorSeleccion({0.5f, 0.5f, 0.5f});
 
+
+         /** PRUEBAS **/
+         cubo->setColorSeleccionSolido();
+         piramide->setColorSeleccionSolido();
+         esfera->setColorSeleccionSolido();
+         cilindro->setColorSeleccionSolido();
+         cono->setColorSeleccionSolido();
+         // ObjPLY_1->setColorSeleccionSolido();
+         // ObjPLY_2->setColorSeleccionSolido();
+         // ObjPLY_3->setColorSeleccionSolido();
+         // peon1->setColorSeleccionSolido();
+         // peon2->setColorSeleccionSolido();
+         // cuadro->setColorSeleccionSolido();
+         // robot->setColorSeleccionSolido();
 
    /* Asignar materiales a los objetos */
    asignar_materiales();
@@ -255,8 +285,9 @@ void Escena::clickRaton(int boton, int estado, int x, int y){
    }
    else if(boton == GLUT_LEFT_BUTTON){
       if(estado == GLUT_UP){
-         // dibujaSeleccion();
+         dibujaSeleccion();
          // processPick(x,y);
+         pick(x, y);
       }
    }
 
@@ -278,112 +309,187 @@ void Escena::ratonMovido(int x, int y){
 
 void Escena::dibujaSeleccion(){
    glDisable(GL_DITHER);
-   if(true){
-      glPushMatrix();
-         glColor3ub(255,0,0);
-         glTranslatef(-180, 0, -120); 
-         cubo->draw();
-      glPopMatrix();
-   }
+   // glDisable(GL_LIGHTING);
+   // glDisable(GL_TEXTURE);
+
+   glPushMatrix();
+            cubo->setSeleccionado(true);
+            modoSeleccion = true;
+
+      glTranslatef(-180, 0, -20); 
+      // cubo->setColorSeleccion({0.0f, 0.0f, 1.0f});
+      cubo->draw();
+
+            modoSeleccion = false;
+            cubo->setSeleccionado(false);
+   glPopMatrix();
 
    glEnable(GL_DITHER);
+   // glEnable(GL_LIGHTING);
+   // glEnable(GL_TEXTURE);
 }
 
 void Escena::pick(int x, int y){
 
+   // glDisable(GL_DITHER);
+
    GLint viewport[4];
 	GLfloat pixel[3];
-
 
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
 	glReadPixels(x, viewport[3]-y, 1, 1, GL_RGB, GL_FLOAT, (void *) pixel);
 
+   Tupla3f pixel_leido = {pixel[0], pixel[1], pixel[2]};
+
+      Tupla3f csCubo = cubo->getColorSeleccion();
+      Tupla3f csCono = cubo->getColorSeleccion();
+      Tupla3f csEsfera = esfera->getColorSeleccion();
+      Tupla3f csPiramide = esfera->getColorSeleccion();
+      Tupla3f csCilindro = esfera->getColorSeleccion();
+      Tupla3f csObjPLY_1 = ObjPLY_1->getColorSeleccion();
+      Tupla3f csObjPLY_2 = ObjPLY_2->getColorSeleccion();
+      Tupla3f csObjPLY_3 = ObjPLY_3->getColorSeleccion();
+      Tupla3f csPeon1 = peon1->getColorSeleccion();
+      Tupla3f csPeon2 = peon2->getColorSeleccion();
+      Tupla3f csCuadro = cuadro->getColorSeleccion();
+
+
+   cout << "Pixel leido: (" << pixel_leido(0) << ", " << pixel_leido(1) << ", " << pixel_leido(2) << ")" << endl;
+
+   if (pixel_leido(0) == csCubo(0) && pixel_leido(1) == csCubo(1) && pixel_leido(2) == csCubo(2)){
+      cout << "Cubo pulsado" << endl;
+      camaras[camaraActiva].setAt(cubo->getCentroTransformado());
+      cout << "Centro del cubo: (" << cubo->getCentroTransformado()(0) << ", " << cubo->getCentroTransformado()(1) << ", " << cubo->getCentroTransformado()(2) << ")" << endl;
+   }
+   else if (pixel_leido(0) == csCono(0) && pixel_leido(1) == csCono(1) && pixel_leido(2) == csCono(2)){
+      cout << "Cono pulsado" << endl;
+      camaras[camaraActiva].setAt(cono->getCentroTransformado());
+      cout << "Centro del cono: (" << cono->getCentroTransformado()(0) << ", " << cono->getCentroTransformado()(1) << ", " << cono->getCentroTransformado()(2) << ")" << endl;
+
+   }
+   else if (pixel_leido(0) == csCilindro(0) && pixel_leido(1) == csCilindro(1) && pixel_leido(2) == csCilindro(2)){
+      cout << "Cilindro pulsado" << endl;
+      camaras[camaraActiva].setAt(cilindro->getCentroTransformado());
+      cout << "Centro del cilindro: (" << cilindro->getCentroTransformado()(0) << ", " << cilindro->getCentroTransformado()(1) << ", " << cilindro->getCentroTransformado()(2) << ")" << endl;
+
+   }
+   else if (pixel_leido(0) == csEsfera(0) && pixel_leido(1) == csEsfera(1) && pixel_leido(2) == csEsfera(2)){
+      cout << "Esfera pulsada" << endl;
+      camaras[camaraActiva].setAt(esfera->getCentroTransformado());
+   }
+   else if (pixel_leido(0) == csPiramide(0) && pixel_leido(1) == csPiramide(1) && pixel_leido(2) == csPiramide(2)){
+      cout << "Pirámide pulsada" << endl;
+      camaras[camaraActiva].setAt(piramide->getCentroTransformado());
+   }
+   else if (pixel_leido(0) == csObjPLY_1(0) && pixel_leido(1) == csObjPLY_1(1) && pixel_leido(2) == csObjPLY_1(2)){
+      cout << "ObjPLY_1 seleccionado" << endl;
+      camaras[camaraActiva].setAt(ObjPLY_1->getCentroTransformado());
+      cout << "Centro del objply1: (" << ObjPLY_1->getCentroTransformado()(0) << ", " << ObjPLY_1->getCentroTransformado()(1) << ", " << ObjPLY_1->getCentroTransformado()(2) << ")" << endl;
+   }
+   else if (pixel_leido(0) == csObjPLY_2(0) && pixel_leido(1) == csObjPLY_2(1) && pixel_leido(2) == csObjPLY_2(2)){
+      cout << "ObjPLY_2 seleccionado" << endl;
+      camaras[camaraActiva].setAt(ObjPLY_2->getCentroTransformado());
+   }
+   else if (pixel_leido(0) == csObjPLY_3(0) && pixel_leido(1) == csObjPLY_3(1) && pixel_leido(2) == csObjPLY_3(1)){
+      cout << "ObjPLY_3 seleccionado" << endl;
+      camaras[camaraActiva].setAt(ObjPLY_3->getCentroTransformado());
+   }
+   else
+      cout << "Nada seleccionado!" << endl;
+
+   cout << endl;
+
+   change_projection();
+
 }
 
 /// @brief Método para dibujar los objetos en la escena
 void Escena::dibujarObjetos(){
-   dibujaSeleccion();
+   // dibujaSeleccion();
 
-   //// CUBO
-   glPushMatrix();
-      glTranslatef(-180, 0, -120); 
-      cubo->draw();
-   glPopMatrix();
-
-
-   //// PIRAMIDE
-
-   glPushMatrix();
-      glTranslatef(200, 0, -150); 
-      piramide->draw();
-   glPopMatrix();
+   if(!modoSeleccion){
+      //// CUBO
+      glPushMatrix();
+         glTranslatef(-180, 0, -120); 
+         cubo->draw();      
+      glPopMatrix();
 
 
-   /*    PLYS   */
-   //// HORMIGA (ObjPLY_1)
-   glPushMatrix();
-      glTranslatef(100, 0, 100);
-      glScalef(2, 2, 2); 
-      ObjPLY_1->draw(); // hormiga
-   glPopMatrix();
+      //// PIRAMIDE
+
+      glPushMatrix();
+         glTranslatef(200, 0, -150); 
+         piramide->draw();
+      glPopMatrix();
 
 
-   //// BEETHOVEN (ObjPLY_2)
-   glPushMatrix();
-      glTranslatef(200, 0, 0);
-      glScalef(10, 10, 10);
-      ObjPLY_2->draw(); // Beethoven
-   glPopMatrix();
+      /*    PLYS   */
+      //// HORMIGA (ObjPLY_1)
+      glPushMatrix();
+         glTranslatef(100, 0, 100);
+         glScalef(2, 2, 2); 
+         ObjPLY_1->draw(); // hormiga
+      glPopMatrix();
 
 
-   // PEÓN BLANCO (material puramente difuso, sin brillos especulares)
-   glPushMatrix();
-      glTranslatef(-120, 0, 80);
-      glScalef(15, 15, 15);
-      peon1->draw(); // peón
-   glPopMatrix();
-
-   //// PEÓN NEGRO (material especular de alto brillo)
-   glPushMatrix();
-      glTranslatef(-180, 0, 80);
-      glScalef(15, 15, 15);
-      peon2->draw(); // peón
-   glPopMatrix();
+      //// BEETHOVEN (ObjPLY_2)
+      glPushMatrix();
+         glTranslatef(200, 0, 0);
+         glScalef(10, 10, 10);
+         ObjPLY_2->draw(); // Beethoven
+      glPopMatrix();
 
 
-   /*    OBJETOS DE REVOLUCIÓN   */
-   //// ESFERA
-   glPushMatrix();
-      // glTranslatef(-200, 130, -100);
-      glTranslatef(-20, -20, 0);
-      esfera->draw();
-   glPopMatrix();
+      // PEÓN BLANCO (material puramente difuso, sin brillos especulares)
+      glPushMatrix();
+         glTranslatef(-120, 0, 80);
+         glScalef(15, 15, 15);
+         peon1->draw(); // peón
+      glPopMatrix();
+
+      //// PEÓN NEGRO (material especular de alto brillo)
+      glPushMatrix();
+         glTranslatef(-180, 0, 80);
+         glScalef(15, 15, 15);
+         peon2->draw(); // peón
+      glPopMatrix();
 
 
-   //// CILINDRO
-   glPushMatrix();
-      glTranslatef(-150, 0, 0);
-      cilindro->draw();
-   glPopMatrix();
+      /*    OBJETOS DE REVOLUCIÓN   */
+      //// ESFERA
+      glPushMatrix();
+         // glTranslatef(-200, 130, -100);
+         glTranslatef(-20, -20, 0);
+         esfera->draw();
+      glPopMatrix();
 
 
-   //// CONO
-   glPushMatrix();
-      glTranslatef(100, 0, 0);
-      cono->draw();
-   glPopMatrix();
+      //// CILINDRO
+      glPushMatrix();
+         glTranslatef(-150, 0, 0);
+         cilindro->draw();
+      glPopMatrix();
 
-   //// ROBOT
-   glPushMatrix();
-      glTranslatef(0, 0, -200);
-      robot->draw();
-   glPopMatrix();
 
-   glPushMatrix();
-      glTranslatef(30, 0, 0);
-      cuadro->draw();
-   glPopMatrix();
+      //// CONO
+      glPushMatrix();
+         glTranslatef(100, 0, 0);
+         cono->draw();
+      glPopMatrix();
+
+      //// ROBOT
+      glPushMatrix();
+         glTranslatef(0, 0, -200);
+         robot->draw();
+      glPopMatrix();
+
+      glPushMatrix();
+         glTranslatef(30, 0, 0);
+         cuadro->draw();
+      glPopMatrix();
+
+   }
 
 }
 

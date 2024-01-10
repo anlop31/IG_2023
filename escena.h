@@ -96,6 +96,8 @@ class Escena
     bool primeraVezPulsado0 = true;
     bool primeraVezPulsado1 = true;
 
+    bool modoSeleccion = false;
+
     // texturas
     Cuadro * cuadro = nullptr;
 
