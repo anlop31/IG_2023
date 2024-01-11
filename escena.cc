@@ -251,21 +251,15 @@ void Escena::activar_luces(){
    glShadeModel(GL_SMOOTH); // sombreado suave
 
    if(luz0 != nullptr){
-      glPushMatrix();
          luz0->activar();
-      glPopMatrix();
    }
 
    if(luz1 != nullptr){
-      glPushMatrix();
          luz1->activar();
-      glPopMatrix();
    }
 
    if(luz2 != nullptr){
-      glPushMatrix();
          luz2->activar();
-      glPopMatrix();
    }
 }
 
