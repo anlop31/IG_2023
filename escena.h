@@ -115,7 +115,7 @@ class Escena
     bool modoSeleccion = false;
     bool establecidoOriginal = true;
 
-    estado_raton estadoRaton = MOVIENDO_CAMARA_FIRSTPERSON;
+    estado_raton estadoRaton = DESACTIVADO;
 
     // Variables animación
     bool animacionAutomatica = false;

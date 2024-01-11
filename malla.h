@@ -93,7 +93,7 @@ class Malla3D
 
    std::vector<Tupla4f> cSolidoOriginal;
 
-   Tupla3f cSeleccion;
+   Tupla3f cSeleccion; // color de seleccion
    
    Tupla3f centro; // vértice que está en el centro
    Tupla3f centroTransformado;
@@ -112,7 +112,7 @@ class Malla3D
 
    GLuint id_vbo_ct = 0; // vbo coordenadas de textura
 
-   GLuint id_vbo_cSel = 0;
+   GLuint id_vbo_cSel = 0; // vbo colores de seleccion
 
 
    modoTextura modo_textura = PLANA;

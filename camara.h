@@ -54,6 +54,8 @@ class Camara {
     void setEye(Tupla3f newEye);
     void setUp(Tupla3f newUp);  
 
+    // Objetos seleccionados
     void setObjetoSeleccionado(std::string objetoSeleccionado);
     std::string getObjetoSeleccionado();  
+    
 };

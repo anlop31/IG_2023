@@ -32,6 +32,12 @@ Escena::Escena()
       Tupla4f(1.0f, 0.0f, 0.0f, 1.0f)  // color sólido
    );
    piramide = new PiramideHexagonal(80.0, 80.0, 40.0); // piramide creada
+   piramide->setColor(
+      Tupla4f(1.0f, 0.0f, 0.0f, 1.0f), // color puntos
+      Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), // color líneas
+      Tupla4f(0.0f, 1.0f, 0.0f, 1.0f)  // color sólido
+   );
+
 
    // Objetos de revolución
    esfera = new Esfera(30, 30, 40);
@@ -42,9 +48,17 @@ Escena::Escena()
    // Objetos PLY
    ObjPLY_1 = new ObjPLY("./plys/ant.ply");
    ObjPLY_2 = new ObjPLY("./plys/beethoven.ply");
-      ObjPLY_2->setColor(Tupla4f(0.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(1.0f, 0.0f, 0.0f, 1.0f));
+      ObjPLY_2->setColor(
+         Tupla4f(0.0f, 1.0f, 0.0f, 1.0f),
+         Tupla4f(0.0f, 0.0f, 1.0f, 1.0f),
+         Tupla4f(1.0f, 1.0f, 0.0f, 1.0f)
+      );
    ObjPLY_3 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
-      ObjPLY_3->setColor(Tupla4f(1.0f, 1.0f, 0.0f, 1.0f), Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), Tupla4f(0.1f, 0.6f, 0.1f, 1.0f));
+      ObjPLY_3->setColor(
+         Tupla4f(1.0f, 1.0f, 0.0f, 1.0f),
+         Tupla4f(0.0f, 0.0f, 1.0f, 1.0f),
+         Tupla4f(0.1f, 0.6f, 0.1f, 1.0f)
+      );
 
    peon1 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
    peon2 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
@@ -55,11 +69,11 @@ Escena::Escena()
 
 
    // Colores de selección
-      cubo->setColorSeleccion({0.0f, 0.0f, 1.0f});
-      piramide->setColorSeleccion({0.5f, 0.5f, 0.5f});
+      cubo->setColorSeleccion({1.0f, 0.0f, 0.0f});
+      piramide->setColorSeleccion({0.0f, 1.0f, 0.0f});
 
       esfera->setColorSeleccion({0.0f, 1.0f, 1.0f});
-      cilindro->setColorSeleccion({1.0f, 0.0f, 0.0f});
+      cilindro->setColorSeleccion({0.0f, 0.0f, 1.0f});
       cono->setColorSeleccion({1.0f, 0.0f, 1.0f});
 
       // ObjPLY_1->setColorSeleccion({1.0f, 1.0f, 0.0f});
@@ -259,10 +273,12 @@ void Escena::activar_luces(){
 void Escena::dibujarObjetos(bool seleccion){
 
       //// CUBO
+      //Si estamos en modo selección y todavía no ha terminado el pick
       if(modoSeleccion && !fin_pick){
-         cubo->setColorSeleccionSolido();
+         cubo->setColorSeleccionSolido(); // poner color de seleccion para que el pick lo lea
          establecidoOriginal = false;
       }
+      // cuando acabe el pick y ya no estemos en modo seleccion, volvemos a la normalidad
       if(!modoSeleccion && fin_pick && !establecidoOriginal){
          cubo->setColorSolidoOriginal(); // haria falta comprobacion de si ya esta en el original
          // cout << "Establecido el color original" << endl;
@@ -270,22 +286,24 @@ void Escena::dibujarObjetos(bool seleccion){
          modoSeleccion=false;
       }
 
-
-      if(camaras[camaraActiva].getObjetoSeleccionado() == "CUBO"){
+      // Para resaltar el seleccionado, cambiamos color (si es que lo está)
+      if(camaras[camaraActiva].getObjetoSeleccionado() == "CUBO" && establecidoOriginal){
          cubo->setColorSeleccionSolido();
          establecidoOriginal = false;
-         // cout << "color cambiado porque esta seleccionado" << endl;
-      }else{
+            // cout << ">>cubo SELECCIONADO... tiene color original?:" << (establecidoOriginal ? "si" : "no") << "\n";
+      }else if(camaras[camaraActiva].getObjetoSeleccionado() != "CUBO"){ // deja de estar seleccionado, devolvemos el color original
          if(!establecidoOriginal){
-            // cout << "vuelta al original, ya no esta seleccionado"<<endl;
+            // cout << ">>ya no esta seleccionado... vuelta al color original" << endl;
             cubo->setColorSolidoOriginal();
             establecidoOriginal = true;
          }
       }
 
-      // cout << "objeto seleccionado de la camara:" << camaras[camaraActiva].getObjetoSeleccionado() <<endl;
 
+            // cout << "=debug=Color original:" << (establecidoOriginal ? "si" : "no") << "\n";
+            // cout << "=debug=seleccionado por camara: " << camaras[camaraActiva].getObjetoSeleccionado() << endl;
 
+      // dibujamos cubo
       glPushMatrix();
          // glTranslatef(-180, 0, -120); 
          glTranslatef(-30, 0, 50); 
@@ -435,8 +453,6 @@ void Escena::clickRaton(int boton, int estado, int x, int y){
    xant = x;
 	yant = y;
 
-   cout << "...Objeto seleccionado de la camara: " << camaras[camaraActiva].getObjetoSeleccionado() << endl;
-
    if (boton == GLUT_RIGHT_BUTTON){ // boton derecho 
       if(estado == GLUT_DOWN){ // pulsado 
          // Se pulsa el botón, por lo que se entra en el estado "moviendo cámara"
@@ -444,16 +460,15 @@ void Escena::clickRaton(int boton, int estado, int x, int y){
             estadoRaton = MOVIENDO_CAMARA_FIRSTPERSON;
          else // se selecciona algo
             estadoRaton = CAMARA_EXAMINAR;
+         
       }
       else{
          // Se levanta el botón, por lo que sale del estado "moviendo cámara"
          estadoRaton = DESACTIVADO;
       }
    } else if(boton == MOUSE_WHEEL_UP){
-      cout << "Zoom mas pequeño" << endl;
       camaras[camaraActiva].zoom(0.8);
    } else if(boton == MOUSE_WHEEL_DOWN){
-      cout << "Zoom mas grande" << endl;
       camaras[camaraActiva].zoom(1.2);
    }
    else if(boton == GLUT_LEFT_BUTTON){
@@ -474,7 +489,6 @@ void Escena::ratonMovido(int x, int y){
       xant = x;
       yant = y;
    } else if(estadoRaton == CAMARA_EXAMINAR){
-      cout << "-------MODO EXAMINAR-------" << endl;
       camaras[camaraActiva].girarExaminar(x-xant, y-yant);
       xant = x;
       yant = y;
@@ -482,17 +496,12 @@ void Escena::ratonMovido(int x, int y){
 }
 
 void Escena::dibujaSeleccion(int x, int y){
-   // cout << "\n******dibujaSeleccion******" << endl << endl;
-
    glDisable(GL_DITHER);
    glDisable(GL_LIGHTING);
    glDisable(GL_TEXTURE);
 
-   fin_pick = false;
 
-      // glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
-      // change_observer();
-      // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+   fin_pick = false;
 
       modoSeleccion=true;
       dibujarObjetos(true);
@@ -506,8 +515,6 @@ void Escena::dibujaSeleccion(int x, int y){
    glEnable(GL_DITHER);
    glEnable(GL_LIGHTING);
    glEnable(GL_TEXTURE);
-
-   // cout << "******fin dibujaSeleccion******" << endl << endl;
 }
 
 void Escena::pick(int x, int y){
@@ -524,10 +531,10 @@ void Escena::pick(int x, int y){
    Tupla3f pixel_leido = {pixel[0], pixel[1], pixel[2]};
 
       Tupla3f csCubo = cubo->getColorSeleccion();
-      Tupla3f csCono = cubo->getColorSeleccion();
+      Tupla3f csCono = cono->getColorSeleccion();
       Tupla3f csEsfera = esfera->getColorSeleccion();
-      Tupla3f csPiramide = esfera->getColorSeleccion();
-      Tupla3f csCilindro = esfera->getColorSeleccion();
+      Tupla3f csPiramide = piramide->getColorSeleccion();
+      Tupla3f csCilindro = cilindro->getColorSeleccion();
       Tupla3f csObjPLY_1 = ObjPLY_1->getColorSeleccion();
       Tupla3f csObjPLY_2 = ObjPLY_2->getColorSeleccion();
       Tupla3f csObjPLY_3 = ObjPLY_3->getColorSeleccion();
@@ -536,7 +543,7 @@ void Escena::pick(int x, int y){
       Tupla3f csCuadro = cuadro->getColorSeleccion();
 
 
-   cout << "\tPIXEL LEIDO: (" << pixel_leido(0) << ", " << pixel_leido(1) << ", " << pixel_leido(2) << ")" << endl;
+   cout << "\n\tPIXEL LEIDO: (" << pixel_leido(0) << ", " << pixel_leido(1) << ", " << pixel_leido(2) << ")" << endl;
 
    cout << "\n";
 

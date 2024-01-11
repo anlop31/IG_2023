@@ -80,12 +80,6 @@ PiramideHexagonal::PiramideHexagonal(float h, float r, float r_trunc)
 
       // inicializar la/s tabla/s de colores
 
-      setColor(
-            Tupla4f(1.0f, 0.0f, 0.0f, 1.0f), // color puntos
-            Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), // color líneas
-            Tupla4f(0.0f, 1.0f, 0.0f, 1.0f)  // color sólido
-      );
-
       calcularNormales();
 
 

@@ -42,6 +42,7 @@ void Malla3D::draw()
       m.aplicar();
 
    } 
+
    //
          ///
          // if(seleccionado){
@@ -58,9 +59,6 @@ void Malla3D::draw()
             centroTransformado = n_centro;
          // }
          
-
-
-
 
    // Texturas
    if (textura != nullptr) {
@@ -235,6 +233,7 @@ void Malla3D::calcularCentroVista(){
 
 /// @brief Establece cSolidoOriginal igual a cSolido
 bool Malla3D::actualizarColorSolidoOriginal(){
+   // Si el color solido es el de seleccion no se hace copia
    if(cSolido[0](0) == cSeleccion(0) &&
          cSolido[0](0) == cSeleccion(0) &&
          cSolido[0](0) == cSeleccion(0)) return false;
@@ -331,7 +330,7 @@ void Malla3D::setColorSeleccionSolido(){
    actualizarColorSolidoOriginal();
 
    // Nuevo color sólido --> el de selección
-   Tupla4f nuevoColorSolido = {
+   Tupla4f colorSeleccion = {
       cSeleccion(0),
       cSeleccion(1),
       cSeleccion(2),
@@ -339,7 +338,7 @@ void Malla3D::setColorSeleccionSolido(){
    };
 
    for(int i=0; i < v.size(); ++i){
-      cSolido[i] = nuevoColorSolido;
+      cSolido[i] = colorSeleccion;
    }
 }
 
@@ -361,7 +360,7 @@ void Malla3D::setSeleccionado(bool valor){
 
    actualizarColorSolidoOriginal();
 
-   Tupla4f nuevoColorSolido = {
+   Tupla4f colorSeleccion = {
       cSeleccion(0),
       cSeleccion(1),
       cSeleccion(2),
@@ -370,7 +369,7 @@ void Malla3D::setSeleccionado(bool valor){
 
    if(seleccionado){ // se ha seleccionado
       for(int i=0; i < v.size(); ++i){
-         cSolido[i] = nuevoColorSolido;
+         cSolido[i] = colorSeleccion;
       }
    } else { // se ha deseleccionado
       for(int i=0; i < v.size(); ++i){
@@ -458,8 +457,8 @@ void Malla3D::crearVBOS(){
    if(id_vbo_ct == 0)
       id_vbo_ct = CrearVBO(GL_ARRAY_BUFFER, 3*ct.size()*sizeof(float), ct.data());
    
-   // if(id_vbo_cSel == 0)
-   //    id_vbo_cSel = CrearVBO(GL_ARRAY_BUFFER, 3*cSeleccion.size()*sizeof(float), cSeleccion.data());
+   if(id_vbo_cSel == 0)
+      id_vbo_cSel = CrearVBO(GL_ARRAY_BUFFER, 3*sizeof(float), &cSeleccion);
 
 }
 

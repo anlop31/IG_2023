@@ -7,7 +7,7 @@ using namespace std;
 /// @param eye Dónde está la cámara
 /// @param at Adónde mira
 /// @param up "hacia arriba"
-/// @param tipo Ortogonal o perspectiva
+/// @param tipo Perspectiva(0) u ortogonal(1)
 /// @param near Parámetro near
 /// @param far Parámetro far
 Camara::Camara(
@@ -27,7 +27,7 @@ Camara::Camara(
 
 /* ROTACIONES, MOVIMIENTOS Y ZOOM */
 
-/// @brief Rotar en x cuando examinas un objeto
+/// @brief Rotar en eje x cuando examinamos un objeto
 /// @param angle Ángulo de rotación
 void Camara::rotarXExaminar(float angle){
 
@@ -39,7 +39,7 @@ void Camara::rotarXExaminar(float angle){
 	eye = eye_at + at;
 }
 
-/// @brief 
+/// @brief Rotar en eje y cuando examinamos un objeto
 /// @param angle Ángulo de rotación
 void Camara::rotarYExaminar(float angle){
     Tupla3f eye_at = eye - at;
@@ -50,13 +50,13 @@ void Camara::rotarYExaminar(float angle){
 	eye = eye_at + at;
 }
 
-/// @brief 
+/// @brief Rotar en eje z cuando examinamos un objeto
 /// @param angle Ángulo de rotación 
 void Camara::rotarZExaminar(float angle){
 
 }
 
-/// @brief Rota la cámara sobre el ángulo x en primera persona
+/// @brief Rota la cámara sobre el eje x en primera persona
 /// @param angle Ángulo de rotación
 void Camara::rotarXFirstPerson(float angle){
     Tupla3f at_eye = at - eye;
@@ -67,7 +67,7 @@ void Camara::rotarXFirstPerson(float angle){
 	at = at_eye + eye; // lo que cambia es el at
 }
 
-/// @brief Rota la cámara sobre el ángulo y en primera persona
+/// @brief Rota la cámara sobre el eje y en primera persona
 /// @param angle Ángulo de rotación
 void Camara::rotarYFirstPerson(float angle){
     Tupla3f at_eye = at - eye;
@@ -78,7 +78,7 @@ void Camara::rotarYFirstPerson(float angle){
 	at = at_eye + eye; // lo que cambia es el at
 }
 
-/// @brief Rota la cámara sobre el ángulo z en primera persona
+/// @brief Rota la cámara sobre el eje z en primera persona
 /// @param angle Ángulo de rotación
 void Camara::rotarZFirstPerson(float angle){
 
@@ -108,8 +108,6 @@ void Camara::mover(float x, float y, float z){
 /// @param x observer_angle_x
 /// @param y observer_angle_y
 void Camara::girar(float x, float y){
-    if ((at - eye)(2) > 0) y = -y;
-
 	rotarXFirstPerson(-y *  M_PI/180);
     rotarYFirstPerson(-x * M_PI/180);
 }
@@ -122,7 +120,7 @@ void Camara::girarExaminar(float x, float y){
     rotarYExaminar( x * M_PI/180);
 }
 
-/// @brief 
+/// @brief Hace zoom con la cámara aplicando un factor
 /// @param factor 
 void Camara::zoom(float factor){
     bottom *= factor;
@@ -170,18 +168,22 @@ void Camara::setBottom(float new_bottom){
     bottom = new_bottom;
 }
 
-float Camara::getLeft(){
-    return left;
-}
-
-float Camara::getRight(){
-    return right;
-}
-
 /// @brief Establece un nuevo valor de top
 /// @param new_top 
 void Camara::setTop(float new_top){
     top = new_top;
+}
+
+/// @brief Devuelve el valor left de la cámara
+/// @return left
+float Camara::getLeft(){
+    return left;
+}
+
+/// @brief Devuelve el valor right de la cámara
+/// @return right
+float Camara::getRight(){
+    return right;
 }
 
 /// @brief Devuelve el valor bottom de la cámara
@@ -239,7 +241,7 @@ void Camara::setObjetoSeleccionado(std::string objeto){
 }
 
 /// @brief Devuelve el objeto que tiene seleccionado la cámara
-/// @return 
+/// @return el objeto seleccionado por la cámara
 std::string Camara::getObjetoSeleccionado(){
     return objetoSeleccionado;
 }
