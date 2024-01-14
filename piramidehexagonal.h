@@ -23,8 +23,18 @@
 
 class PiramideHexagonal: public Malla3D
 {
+   private:
+   float altura;
+   float radioBase;
+   float radioTruncado;
+
    public:
       PiramideHexagonal(float h=1.0,float r=0.5, float r_trunc=0.25);
+
+      // SET Y GET
+      float getAltura();
+      float getRadioBase();
+      float getRadioTruncado();
 
 } ;
 

@@ -38,3 +38,8 @@ void Luz::setActivada(const bool nuevo_valor){
         glDisable(id);
 }
 
+
+
+int Luz::getId(){
+    return id;
+}

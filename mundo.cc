@@ -1,21 +1,25 @@
 #include "auxiliar.h"
 #include "malla.h"
-#include "cuadro.h"
+#include "mundo.h"
 
 /// @brief Constructor de cuadro
 /// @param lado 
-Cuadro::Cuadro(const float lado) {
+Mundo::Mundo(const float lado) {
     this->lado = lado;
     
-    v.resize(4);
+    v.resize(7);
 
     f.resize(2);
 
     // inicializar la tabla de vértices
-    v[0] = {0.0f, 0.0f, 0.0f};
-    v[1] = {lado, 0.0f, 0.0f};
-    v[2] = {0.0f, lado, 0.0f};
-    v[3] = {lado, lado, 0.0f};
+    v[0] = {0.0f, 0.0f, 0.0f}; // esquina inferior izquierda
+    v[1] = {lado, 0.0f, 0.0f}; // esquina inferior derecha
+    v[2] = {0.0f, lado, 0.0f}; // esquina superior izquierda
+    v[3] = {lado, lado, 0.0f}; // esquina superior derecha
+
+    v[4] = {0.0f, lado/10.0f, 0.0f}; // vertice intermedio para el lado izquierdo
+    v[5] = {0.1f * lado, 0.0f, 0.0f}; // vertice intermedio para el lado inferior
+    v[6] = {0.1f * lado, 0.1f * lado, 0.0f}; // vertice en mitad
 
     // inicializar las caras
     f[0] = {2, 0, 1};
@@ -28,7 +32,7 @@ Cuadro::Cuadro(const float lado) {
     modo_textura = PLANA;
 
     ct.resize(v.size());
-    es_cuadro = true;
+    es_mundo = true;
 
 
     // colores
@@ -42,6 +46,6 @@ Cuadro::Cuadro(const float lado) {
 
 }
 
-float Cuadro::getLado(){
+float Mundo::getLado(){
     return lado;
 }

@@ -109,6 +109,10 @@ void Robot::modificaDesplazamientoAislado(float valor){
     desplazamiento += valor;
 }
 
+void Robot::modificaDesplazamientoCabeza(float valor){
+    troncoPiernas->modificaDesplazamientoCabeza(valor);
+}
+
 /// @brief Cambiar el sentido de ambos brazos
 void Robot::cambiarSentidosBrazos(){
     brazo_izq->setSentidoPositivo(!brazo_izq->getSentidoPositivo());

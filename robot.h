@@ -44,6 +44,7 @@ class Robot : public ObjRevolucion
     void modificaGiroBrazos(float valor);
     void modificaDesplazamiento(float valor);
     void modificaDesplazamientoAislado(float valor);
+    void modificaDesplazamientoCabeza(float valor);
     
     void cambiarSentidosBrazos();
     void cambiarSentidosPiernas();

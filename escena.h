@@ -16,6 +16,8 @@
 #include "cuadro.h"
 #include "camara.h"
 #include "math.h"
+#include "carretera.h"
+#include "mundo.h"
 
 #define MOUSE_WHEEL_UP 3
 #define MOUSE_WHEEL_DOWN 4
@@ -38,41 +40,51 @@ class Escena
  // ** PARÁMETROS DE LA CÁMARA (PROVISIONAL)
        
        // variables que definen la posicion de la camara en coordenadas polares
-   GLfloat Observer_distance;
-   GLfloat Observer_angle_x;
-   GLfloat Observer_angle_y;
+    GLfloat Observer_distance;
+    GLfloat Observer_angle_x;
+    GLfloat Observer_angle_y;
 
-   // variables que controlan la ventana y la transformacion de perspectiva
-   GLfloat Width, Height, Front_plane, Back_plane;
+    // variables que controlan la ventana y la transformacion de perspectiva
+    GLfloat Width, Height, Front_plane, Back_plane;
 
     // Transformación de cámara
 	void change_projection( const float ratio_xy );
     void change_projection ();
 	void change_observer();
     
-   void clear_window();
+    void clear_window();
 
-   menu modoMenu=NADA;
+    menu modoMenu=NADA;
 
-   /* OBJETOS DE LA ESCENA */
-   Ejes ejes;
-   Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'
-   PiramideHexagonal * piramide = nullptr ; // es importante inicializarlo a 'nullptr'
-   Esfera * esfera = nullptr;
-   Cilindro * cilindro = nullptr;
-   Cono * cono = nullptr;
-   
-   ObjPLY * ObjPLY_1 = nullptr;
-   ObjPLY * ObjPLY_2 = nullptr;
-   ObjRevolucion * ObjPLY_3 = nullptr;
-   ObjRevolucion * peon1 = nullptr;
-   ObjRevolucion * peon2 = nullptr;
+    /* OBJETOS DE LA ESCENA */
+    Ejes ejes;
+    Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'
+    PiramideHexagonal * piramide = nullptr ; // es importante inicializarlo a 'nullptr'
+    Esfera * esfera = nullptr;
+    Cilindro * cilindro = nullptr;
+    Cono * cono = nullptr;
+
+    ObjPLY * ObjPLY_1 = nullptr;
+    ObjPLY * ObjPLY_2 = nullptr;
+    ObjRevolucion * ObjPLY_3 = nullptr;
+    ObjRevolucion * peon1 = nullptr;
+    ObjRevolucion * peon2 = nullptr;
+
+    ObjPLY * vehiculo = nullptr;
 
     // Modelo jerárquico
     Robot * robot = nullptr;
 
     // Texturas
     Cuadro * cuadro = nullptr;
+
+    // Carretera
+    Cuadro * carretera_cuadro = nullptr;
+
+    Carretera * carretera = nullptr;
+
+    // Mundo
+    Mundo * mundo = nullptr;
 
     /* LUCES */ 
     LuzPosicional * luz0 = nullptr;  

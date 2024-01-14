@@ -17,6 +17,8 @@ class Luz{
         void activar();
         bool estadoActivada();
         void setActivada(const bool nuevo_valor);
+        int getId();
+
 };
 
 #endif

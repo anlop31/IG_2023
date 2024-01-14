@@ -32,6 +32,8 @@ class Malla3D
    void calcularNormales();
    void asignarPuntosTextura(const modoTextura & modo);
    void asignarPuntosTexturaCuadro(const modoTextura & modo);
+   void asignarPuntosTexturaCarretera(const modoTextura & modo);
+   void asignarPuntosTexturaMundo(const modoTextura & modo);
    
    void calcularCentro();
    void calcularCentroVista();
@@ -72,6 +74,8 @@ class Malla3D
    // Textura
    Textura * textura = nullptr;
    bool es_cuadro = false;
+   bool es_carretera = false;
+   bool es_mundo = false;
 
    // Métodos VBOS
    GLuint CrearVBO (GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);

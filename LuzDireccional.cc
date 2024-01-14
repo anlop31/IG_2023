@@ -23,12 +23,15 @@ LuzDireccional::LuzDireccional(Tupla2f direccion, GLenum idLuzOpenGL,
     alpha = direccion(0);
     beta = direccion(1);
 
-    this->posicion = {
-        sin(alpha) * cos(beta),
-        sin(beta),
-        cos(alpha) * cos(beta),
-        0
-    };
+    // this->posicion = {
+    //     sin(alpha) * cos(beta),
+    //     sin(beta),
+    //     cos(alpha) * cos(beta),
+    //     0
+    // };
+
+     // actualizar posicion según alpha y beta
+    actualizarPosicion();
 }
 
 
@@ -38,6 +41,8 @@ LuzDireccional::LuzDireccional(const Tupla2f & orientacion){
     alpha = orientacion(0);
     beta = orientacion(1);
 
+    // actualizar posicion según alpha y beta
+    actualizarPosicion();
 
     // por defecto
     id = 0;
@@ -57,10 +62,8 @@ void LuzDireccional::variarAnguloAlpha(float incremento){
     else if(alpha < 0)
         alpha += M_PI*2.0;
 
-    // actualizar posicion
-    posicion(0) = sin(alpha) * cos(beta);
-    posicion(1) = sin(beta);
-    posicion(2) = cos(alpha) * cos(beta);
+    // actualizar posicion según alpha y beta
+    actualizarPosicion();
 }
 
 /// @brief Función para variar el angulo beta de la luz
@@ -74,10 +77,8 @@ void LuzDireccional::variarAnguloBeta(float incremento){
     else if(beta < 0)
         beta += M_PI*2.0;
     
-    // actualizar posicion
-    posicion(0) = sin(alpha) * cos(beta);
-    posicion(1) = sin(beta);
-    posicion(2) = cos(alpha) * cos(beta);
+    // actualizar posicion según alpha y beta
+    actualizarPosicion();
 }
 
 /// @brief Función para cambiar el primer componente (R) del color de la luz
@@ -103,7 +104,7 @@ void LuzDireccional::cambiarColor(){
         }
         else{
             colorDifuso = {
-                colorDifuso(0)+0.1, // sumarle a la primera componente
+                colorDifuso(0)+0.01, // sumarle a la primera componente
                 colorDifuso(1),
                 colorDifuso(2),
                 1
@@ -123,7 +124,7 @@ void LuzDireccional::cambiarColor(){
         }
         else{
             colorDifuso = {
-                colorDifuso(0)-0.1, // restarle a la primera componente
+                colorDifuso(0)-0.01, // restarle a la primera componente
                 colorDifuso(1),
                 colorDifuso(2),
                 1
@@ -135,4 +136,11 @@ void LuzDireccional::cambiarColor(){
 /// @brief Animar color de la luz direccional
 void LuzDireccional::animarLuzDireccional(){
     cambiarColor();
+}
+
+/// @brief Actualizar la posició de la luz direccional según alpha y beta
+void LuzDireccional::actualizarPosicion(){
+    posicion(0) = sin(alpha) * cos(beta);
+    posicion(1) = sin(beta);
+    posicion(2) = cos(alpha) * cos(beta);
 }

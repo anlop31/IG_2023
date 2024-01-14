@@ -25,6 +25,7 @@ class TroncoPiernas : public ObjRevolucion
     /* Modificadores */
     void modificaGiroPiernaIzq(float valor);
     void modificaGiroPiernaDer(float valor);
+    void modificaDesplazamientoCabeza(float valor);
 
     /* Métodos SET y GET */
     float getAlturaTronco();

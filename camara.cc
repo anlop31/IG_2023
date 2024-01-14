@@ -108,6 +108,8 @@ void Camara::mover(float x, float y, float z){
 /// @param x observer_angle_x
 /// @param y observer_angle_y
 void Camara::girar(float x, float y){
+    if ((at-eye)(2) > 0) y = -y;
+
 	rotarXFirstPerson(-y *  M_PI/180);
     rotarYFirstPerson(-x * M_PI/180);
 }

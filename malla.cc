@@ -204,6 +204,32 @@ void Malla3D::asignarPuntosTexturaCuadro(const modoTextura & modo){
    ct[3] = {1.0f, 1.0f};
 }
 
+/// @brief Asignar los puntos de textura de la malla si es un cuadro
+/// @param modo 
+void Malla3D::asignarPuntosTexturaCarretera(const modoTextura & modo){
+   ct.clear();
+   ct.resize(v.size());
+
+   ct[0] = {0.0f, 1.0f}; // (0,0,0)
+   ct[1] = {0.0f, 0.0f}; // (ancho,0,0)
+   ct[2] = {1.0f, 0.0f}; // (ancho,largo,0)
+   ct[3] = {1.0f, 1.0f}; // (0,largo,0)
+}
+
+void Malla3D::asignarPuntosTexturaMundo(const modoTextura & modo){
+   ct.clear();
+   ct.resize(v.size());
+
+   ct[0] = {0.0f, 0.0f};
+   // ct[4] = {0.0f, 1.0f};
+   // ct[5] = {1.0f, 0.0f};
+   // ct[6] = {1.0f, 1.0f};
+
+   ct[1] = {50.0f, 0.0f};
+   ct[2] = {0.0f, 50.0f};
+   ct[3] = {50.0f, 50.0f};
+}
+
 
 /// @brief Calcula el centro de la malla
 void Malla3D::calcularCentro(){
@@ -262,6 +288,10 @@ void Malla3D::setTextura(const std::string & archivo){
 
    if(es_cuadro)
       asignarPuntosTexturaCuadro(modo_textura);
+   else if(es_carretera)
+      asignarPuntosTexturaCarretera(modo_textura);
+   else if(es_mundo)
+      asignarPuntosTexturaMundo(modo_textura);
    // else
 	//    asignarPuntosTextura(modo_textura);
 

@@ -10,6 +10,10 @@
 PiramideHexagonal::PiramideHexagonal(float h, float r, float r_trunc)
 {
 
+      altura = h;
+      radioBase = r;
+      radioTruncado = r_trunc;
+
       // inicializar la tabla de vértices
       v.resize(14);
 
@@ -85,3 +89,22 @@ PiramideHexagonal::PiramideHexagonal(float h, float r, float r_trunc)
 
 }
 
+/* SET Y GET */
+
+/// @brief Devuelve la altura de la pirámide
+/// @return altura
+float PiramideHexagonal::getAltura(){
+      return altura;
+}
+
+/// @brief Devuelve el radio de la base de la pirámide
+/// @return radioBase
+float PiramideHexagonal::getRadioBase(){
+      return radioBase;
+}
+
+/// @brief Devuelve el radio de la base truncada de la pirámide
+/// @return radioTruncado
+float PiramideHexagonal::getRadioTruncado(){
+      return radioTruncado;
+}

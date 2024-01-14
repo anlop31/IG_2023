@@ -24,8 +24,12 @@
 
 class Cubo : public Malla3D
 {
+   private:
+   float lado;
+   
    public:
    Cubo(float l=1) ;
+   float getLado();
 
 } ;
 

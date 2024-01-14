@@ -25,7 +25,7 @@ Escena::Escena()
    /* OBJETOS */
 
    // Objetos iniciales
-   cubo = new Cubo(60.0); // cubo creado
+   cubo = new Cubo(80.0); // cubo creado
    cubo->setColor(
       Tupla4f(1.0f, 0.0f, 0.0f, 1.0f), // color vértices
       Tupla4f(0.0f, 0.0f, 1.0f, 1.0f), // color líneas
@@ -60,6 +60,8 @@ Escena::Escena()
          Tupla4f(0.1f, 0.6f, 0.1f, 1.0f)
       );
 
+   // vehiculo = new ObjPLY("./plys/bike.ply");
+
    peon1 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
    peon2 = new ObjRevolucion("./plys/peon.ply", 10, false, true);
 
@@ -67,6 +69,11 @@ Escena::Escena()
    // para texturas
    cuadro = new Cuadro(60.0);
 
+   // Carretera
+   carretera = new Carretera(120, 2000);
+
+   // Mundo
+   mundo = new Mundo(8000);
 
    // Colores de selección
       cubo->setColorSeleccion({1.0f, 0.0f, 0.0f});
@@ -107,7 +114,7 @@ Escena::Escena()
       GL_LIGHT1, // id
       {0.0, 0.0, 0.0, 1.0}, // color ambiente (negro)
       {1.0, 1.0, 1.0, 1.0}, // color especular (blanco)
-      {1.0, 1.0, 1.0, 1.0}); // color difuso (verde) [R-G-B]
+      {0.0, 1.0, 0.0, 1.0}); // color difuso (verde) [R-G-B]
 
    luz2 = new LuzPosicional(
       {200, 120, 200}, // posición en coordenadas
@@ -120,6 +127,15 @@ Escena::Escena()
       /* TEXTURAS */
       cuadro->setTextura("./img/cuadro.jpg");
       esfera->setTextura("./img/mapamundi.jpg");
+
+      carretera->setTextura("./img/carretera.jpg");
+
+      // mundo->setColor(
+      //       {1.0f, 0.0f, 0.0f, 1.0f},
+      //       {0.0f, 0.0f, 1.0f, 1.0f},
+      //       {0.2f, 0.0f, 0.4f, 1.0f}
+      //    );
+      mundo->setTextura("./img/suelo2.jpg");
 
 
       /* CÁMARAS */
@@ -243,6 +259,9 @@ void Escena::asignar_materiales(){
 
    robot->setMaterialRobot(oro);
    cuadro->setMaterial(blanco);
+   carretera->setMaterial(blanco);
+
+   mundo->setMaterial(perla);
 }
 
 /// @brief Activamos las luces
@@ -250,21 +269,37 @@ void Escena::activar_luces(){
    glEnable(GL_LIGHTING); // activamos luces
    glShadeModel(GL_SMOOTH); // sombreado suave
 
-   if(luz0 != nullptr){
+   if(luz0 != nullptr && luz0->getId() == GL_LIGHT0){
          luz0->activar();
    }
 
-   if(luz1 != nullptr){
+   if(luz1 != nullptr && luz1->getId() == GL_LIGHT1){
          luz1->activar();
    }
 
-   if(luz2 != nullptr){
+   if(luz2 != nullptr && luz2->getId() == GL_LIGHT2){
          luz2->activar();
    }
 }
 
 /// @brief Método para dibujar los objetos en la escena
 void Escena::dibujarObjetos(bool seleccion){
+
+      //// MUNDO
+      glPushMatrix();
+         glRotatef(-90, 1, 0, 0);
+         glTranslatef(-mundo->getLado()/2.0f, -mundo->getLado()/2.0f, 0); 
+         mundo->draw();      
+      glPopMatrix();
+
+      //// CARRETERA
+      glPushMatrix();
+         glTranslatef(0, 1, carretera->getLargo()/2.0f);
+         glRotatef(-90, 1, 0, 0);
+         glTranslatef(-carretera->getAncho()/2.0f, 0, 0); 
+         carretera->draw();      
+      glPopMatrix();
+
 
       //// CUBO
       //Si estamos en modo selección y todavía no ha terminado el pick
@@ -297,10 +332,8 @@ void Escena::dibujarObjetos(bool seleccion){
             // cout << "=debug=Color original:" << (establecidoOriginal ? "si" : "no") << "\n";
             // cout << "=debug=seleccionado por camara: " << camaras[camaraActiva].getObjetoSeleccionado() << endl;
 
-      // dibujamos cubo
       glPushMatrix();
-         // glTranslatef(-180, 0, -120); 
-         glTranslatef(-30, 0, 50); 
+         glTranslatef(200, 0, -100); 
          cubo->draw();      
       glPopMatrix();
 
@@ -310,19 +343,17 @@ void Escena::dibujarObjetos(bool seleccion){
       // cout << "color solido del cubo: "<< colorCuboActual(0) <<", "<<colorCuboActual(1)<<", "<<colorCuboActual(2)<<endl;
       //
 
+      glPushMatrix();
+         glTranslatef(
+            200 - cuadro->getLado()/2.0f,
+            (cubo->getLado()-cuadro->getLado())/2.0f,
+            -99 + (cubo->getLado()/2.0f));  
+         cuadro->draw();
+      glPopMatrix();
 
       //// PIRAMIDE
-      // if(seleccion && !fin_pick){
-      //    piramide->setColorSeleccionSolido();
-      //    cout << "Color solido establecido para piramide: {"<<piramide->getColorSolido()[0](0) <<", ";
-      //    cout << piramide->getColorSolido()[0](1) <<", "<< piramide->getColorSolido()[0](2) << "}" << endl << endl;
-      // }
-      // else if(seleccion && fin_pick){
-      //    piramide->setColorSolidoOriginal(); // haria falta comprobacion de si ya esta en el original
-      // }
-
       glPushMatrix();
-         glTranslatef(200, 0, -150); 
+         glTranslatef(-200, 0, -100); 
          piramide->draw();
       glPopMatrix();
 
@@ -330,7 +361,7 @@ void Escena::dibujarObjetos(bool seleccion){
       /*    PLYS   */
       //// HORMIGA (ObjPLY_1)
       glPushMatrix();
-         glTranslatef(100, 0, 100);
+         glTranslatef(180, 0, -380);
          glScalef(2, 2, 2); 
          ObjPLY_1->draw(); // hormiga
       glPopMatrix();
@@ -338,7 +369,7 @@ void Escena::dibujarObjetos(bool seleccion){
 
       //// BEETHOVEN (ObjPLY_2)
       glPushMatrix();
-         glTranslatef(200, 0, 0);
+         glTranslatef(200, 0, -300);
          glScalef(10, 10, 10);
          ObjPLY_2->draw(); // Beethoven
       glPopMatrix();
@@ -346,14 +377,14 @@ void Escena::dibujarObjetos(bool seleccion){
 
       // PEÓN BLANCO (material puramente difuso, sin brillos especulares)
       glPushMatrix();
-         glTranslatef(-120, 0, 80);
+         glTranslatef(-200, piramide->getAltura()+20, -100);
          glScalef(15, 15, 15);
          peon1->draw(); // peón
       glPopMatrix();
 
       //// PEÓN NEGRO (material especular de alto brillo)
       glPushMatrix();
-         glTranslatef(-180, 0, 80);
+         glTranslatef(200, cubo->getLado()+20, -100); // glTranslatef(200, 0, -100); 
          glScalef(15, 15, 15);
          peon2->draw(); // peón
       glPopMatrix();
@@ -363,34 +394,34 @@ void Escena::dibujarObjetos(bool seleccion){
       //// ESFERA
       glPushMatrix();
          // glTranslatef(-20, -20, 0);
-         glTranslatef(-180, 100, -120); 
+         glTranslatef(-150, 180, -150); 
          esfera->draw();
       glPopMatrix();
 
 
       //// CILINDRO
       glPushMatrix();
-         glTranslatef(-150, 0, 0);
+         glTranslatef(-200, 0, -300);
          cilindro->draw();
       glPopMatrix();
 
 
       //// CONO
       glPushMatrix();
-         glTranslatef(100, 0, 0);
+         glTranslatef(150, 0, 0);
          cono->draw();
       glPopMatrix();
 
       //// ROBOT
       glPushMatrix();
-         glTranslatef(0, 0, -200);
+         glTranslatef(0, 80, -200);
          robot->draw();
       glPopMatrix();
 
-      glPushMatrix();
-         glTranslatef(30, 0, 0);
-         cuadro->draw();
-      glPopMatrix();
+      //// VEHICULO
+      // glPushMatrix();
+      //    vehiculo->draw();
+      // glPopMatrix();
 
 
 }
@@ -943,11 +974,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          case '>': // incrementa el angulo
             if(ultimaPulsada == 'A'){
                cout << "--INCREMENTA ALFA" << endl;
-               luz1->variarAnguloAlpha(-5*M_PI/180);
+               luz1->variarAnguloAlpha(5*M_PI/180);
             }
             else if(ultimaPulsada == 'B'){ // la B
                cout << "--INCREMENTA BETA" << endl;
-               luz1->variarAnguloBeta(-5*M_PI/180);
+               luz1->variarAnguloBeta(5*M_PI/180);
             }
             break;
          case '<': // decrementa el angulo
@@ -980,11 +1011,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       {
       case '+':
          /* aumenta velocidad */
-         robot->cambiarVelocidad(2);
+         robot->cambiarVelocidad(0.4);
          break;
       case '-':
          /* disminuye velocidad */
-         robot->cambiarVelocidad(-2);
+         robot->cambiarVelocidad(-0.4);
          break;
       
       default:
@@ -1006,6 +1037,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             numGrado = 2;
             cout << "--GRADO 2 SELECCIONADO (MOVIMIENTO)" << endl;
             break;
+         case '3':
+            numGrado = 3;
+            cout << "--GRADO 3 SELECCIONADO (CABEZA)" << endl;
+            break;
          case '+':
             switch (numGrado)
             {
@@ -1025,6 +1060,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                   break;
                case 2:
                   robot->modificaDesplazamiento(5);
+                  break;
+               case 3:
+                  robot->modificaDesplazamientoCabeza(5);
                   break;
                default:
                   break;
@@ -1049,6 +1087,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                   break;
                case 2:
                   robot->modificaDesplazamiento(-5);
+                  break;
+               case 3:
+                  robot->modificaDesplazamientoCabeza(-5);
+                  break;
                default:
                   break;
             }

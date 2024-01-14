@@ -1,22 +1,21 @@
-#ifndef TRONCOCABEZA_H_INCLUDED
-#define TRONCOCABEZA_H_INCLUDED
+#ifndef CABEZA_H_INCLUDED
+#define CABEZA_H_INCLUDED
 
 #include "auxiliar.h"
 #include "objrevolucion.h"
 #include "esfera.h"
 #include "cilindro.h"
-#include "cabeza.h"
-
 
 // tronco y cabeza
-class TroncoCabeza : public ObjRevolucion
+class Cabeza : public ObjRevolucion
 {
 
     float h_tronco, r_tronco;
     float r_cabeza;
 
     // contendra 2 brazos
-    Cilindro * tronco = nullptr;
+    Cilindro * oreja1 = nullptr;
+    Cilindro * oreja2 = nullptr;
     Esfera * cabeza = nullptr;
 
     float desplazamientoCabeza = 0;
@@ -24,21 +23,18 @@ class TroncoCabeza : public ObjRevolucion
 
 
    public:
-    TroncoCabeza(float h, float r);
+    Cabeza(float r_cabeza);
     void draw();
 
     /* Métodos SET y GET */
-    float getAlturaTronco();
-    float getRadioTronco();
     float getRadioCabeza();
 
     /* Materiales */
-    void setMaterialCuerpo(Material m);
-    void setMaterialTronco(Material m);
     void setMaterialCabeza(Material m);
+    void setMaterialOrejas(Material m);
 
     /* Modificadores */
-    void modificaDesplazamientoCabeza(float valor);
+    void modificaDesplazamientoCabeza(float valor); //??
 
 };
 

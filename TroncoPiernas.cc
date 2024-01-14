@@ -43,6 +43,10 @@ void TroncoPiernas::modificaGiroPiernaDer(float valor){
     pierna_der->modificaGiroPierna(valor);
 }
 
+void TroncoPiernas::modificaDesplazamientoCabeza(float valor){
+    troncoCabeza->modificaDesplazamientoCabeza(valor);
+}
+
 /* MÉTODOS SET Y GET */
 
 /// @brief Obtener la altura del tronco
