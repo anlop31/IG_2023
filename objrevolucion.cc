@@ -176,14 +176,15 @@ void ObjRevolucion::asignarPuntosTextura(const modoTextura & modo){
 	switch (modo){
 		case CILINDRICA:
 			for (int i = 0; i < ct.size(); i++){
-				alpha = atan2( v[i](2), v[i](0) );
-				h = v[i](1);
+				alpha = atan2( v[i](2), v[i](0) ); // atan2(z,x)
+				h = v[i](1); // h = y
 
-				s = 1 - ( 0.5 + (alpha/(M_PI*2)) );
-				s += 0.5;
-				s = fmod(s, 1.0);
+            // se lo restamos a 1 porque alpha puede estar fuera de [0, 2*M_PI]
+				s = 1 - ( 0.5 + (alpha/(M_PI*2)) ); // está entre [-0.5, 0.5]
+				s += 0.5; // entre [0, 1]
+				s = fmod(s, 1.0); // asegurarnos que esté entre [0, 1]
 
-				//std::cout << s <<  " " << alpha << std::endl;
+            // t = perfil[0](y) / (perfil[perfil.size](y) - perfil[0](y))
 				t = (h - perfil.front()(1) ) / (perfil.back()(1) - perfil.front()(1)) ;
 
 				ct[i] = {s, t};
@@ -204,21 +205,25 @@ void ObjRevolucion::asignarPuntosTextura(const modoTextura & modo){
 
 		case ESFERICA:
 			for (int i = 0; i < ct.size(); i++){
+            // atan2(z,x)
 				alpha = atan2( v[i](2), v[i](0) );
-				beta = atan2( v[i](1), sqrt( pow( v[i](0) ,2) + pow ( v[i](2) ,2) ) );
+            // atan2(y, raiz de x^2+z^2)
+				beta = atan2( v[i](1), sqrt( pow(v[i](0), 2) + pow (v[i](2), 2) ) ); 
 
-				s = 1 - ( 0.5 + (alpha/(M_PI*2)) );
-				s += 0.5;
-				s = fmod(s, 1.0);
+            // se lo restamos a 1 porque alpha puede estar fuera de [0, 2*M_PI]
+				s = 1 - ( 0.5 + (alpha/(M_PI*2)) ); // está entre [-0.5, 0.5]
+				s += 0.5; // entre [0, 1]
+				s = fmod(s, 1.0); // asegurarnos que esté entre [0, 1]
 				t = 0.5 + beta/M_PI;
 
 				ct[i] = {s, t};
 			}
 
-			// asignamos las coordenadas de los extremos
+			// Asignar coordenadas de textura a los extremos
 			for (int i = 0; i < v.size(); i = i + perfil.size()){
-				int a = i + perfil.size()/2;
-				alpha = atan2( v[a](2), v[a](0) );
+            // Calcular el índice del vértice central del extremo
+				int e = i + perfil.size()/2;
+				alpha = atan2( v[e](2), v[e](0) );
 
 				s = 1 - ( 0.5 + (alpha/(M_PI*2)) );
 				s += 0.5;
@@ -231,7 +236,7 @@ void ObjRevolucion::asignarPuntosTextura(const modoTextura & modo){
 
 			for (int i = perfil.size() * num_instancias ; i < v.size(); i++){
 				alpha = atan2( v[i](2), v[i](0) );
-				beta = atan2( v[i](1), sqrt( pow( v[i](0) ,2) + pow ( v[i](2) ,2) ) );
+				beta = atan2( v[i](1), sqrt( pow(v[i](0), 2) + pow (v[i](2), 2) ) );
 
 				s = 1.0;
 				t = 0.5 + beta/M_PI;

@@ -57,10 +57,4 @@ void LuzPosicional::variarPosicion(int x, int y, int z){
 /// @brief Animar posición de la luz posicional
 void LuzPosicional::animarLuzPosicional(){
     variarPosicion(0, 2, 0);
-
-    std::cout << "variado posicion: " << std::endl;
-    cout << "posicion(0)= " << posicion(0) << endl;
-    cout << "posicion(1) =" << posicion(1) << endl;
-    cout << "posicion(2)= " << posicion(2) << endl;
-
 }

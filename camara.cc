@@ -10,10 +10,15 @@ using namespace std;
 /// @param tipo Perspectiva(0) u ortogonal(1)
 /// @param near Parámetro near
 /// @param far Parámetro far
+/// @param bottom Parámetro bottom
+/// @param top Parámetro top
+/// @param left Parámetro left
+/// @param right Parámetro right
 Camara::Camara(
     Tupla3f eye, Tupla3f at, Tupla3f up,
     int tipo,
-    float near, float far)
+    float near, float far,
+    float bottom, float top, float left, float right)
 {
     this->eye = eye;
     this->at = at;
@@ -23,6 +28,11 @@ Camara::Camara(
     
     this->near = near;
     this->far = far;
+
+    this->bottom = bottom;
+    this->top = top;
+    this->left = left;
+    this->right = right;
 }
 
 /* ROTACIONES, MOVIMIENTOS Y ZOOM */

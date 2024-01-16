@@ -116,6 +116,8 @@ class Escena
     bool primeraVezPulsado0 = true;
     bool primeraVezPulsado1 = true;
 
+    bool entradoMenu = false;
+
     // Variables cámara y pick
     int camaraActiva = 0;
     std::vector<Camara> camaras;
@@ -130,7 +132,7 @@ class Escena
     estado_raton estadoRaton = DESACTIVADO;
 
     // Variables animación
-    bool animacionAutomatica = false;
+    bool animacionAutomatica = true;
     bool animacionLuzDireccional = false;
     bool animacionLuzPosicional = false;
     int numGrado = 0; // grado de libertad seleccionado
@@ -160,6 +162,12 @@ class Escena
     bool invertirMatriz(const float m[16], float invOut[16]);
 
 	// Interacción con la escena
+    void mostrarMenuPrincipal();
+    void mostrarMenuGradosLibertad();
+    void mostrarMenuLuces();
+    void mostrarMenuAnimacionAutomatica();
+    void mostrarMenuSeleccionCamaras();
+    void mostrarMenuVisualizacion();
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
 	void teclaEspecial( int Tecla1, int x, int y );
 

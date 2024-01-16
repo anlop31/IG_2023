@@ -16,7 +16,8 @@ class Camara {
     Camara(
         Tupla3f eye, Tupla3f at, Tupla3f up,
         int tipo,
-        float near, float far
+        float near, float far,
+        float bottom, float top, float left, float right
     );
 
     void rotarXExaminar(float angle);

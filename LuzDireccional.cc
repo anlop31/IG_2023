@@ -2,7 +2,6 @@
 #include <auxiliar.h>
 #include <unistd.h>
 
-#define EPSILON 0.0001
 
 using namespace std;
 
@@ -143,4 +142,5 @@ void LuzDireccional::actualizarPosicion(){
     posicion(0) = sin(alpha) * cos(beta);
     posicion(1) = sin(beta);
     posicion(2) = cos(alpha) * cos(beta);
+    posicion(3) = 0;
 }

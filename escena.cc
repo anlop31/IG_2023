@@ -129,12 +129,6 @@ Escena::Escena()
       esfera->setTextura("./img/mapamundi.jpg");
 
       carretera->setTextura("./img/carretera.jpg");
-
-      // mundo->setColor(
-      //       {1.0f, 0.0f, 0.0f, 1.0f},
-      //       {0.0f, 0.0f, 1.0f, 1.0f},
-      //       {0.2f, 0.0f, 0.4f, 1.0f}
-      //    );
       mundo->setTextura("./img/suelo2.jpg");
 
 
@@ -142,17 +136,21 @@ Escena::Escena()
       Tupla3f eye = {0, 150, 220}; 
       Tupla3f at = {0, 0, 0};
       Tupla3f up = {0, 1, 0};
-      Camara cam0(eye, at, up, 0, 50.0, 2000.0);
+      Camara cam0(eye, at, up, 0, 50.0, 2000.0, -50.0, 50.0, -50.0, 50.0);
+      // constructor: eye, at, up, tipo(perspectiva), near, far, bottom, top, left, right
 
       eye = {0, 100, 1000}; 
       at = {0, 0, 0};
       up = {0, 1, 0};
-      Camara cam1(eye, at, up, 1, 50.0, 2000.0);
+      Camara cam1(eye, at, up, 1, 50.0, 2000.0, -50.0, 50.0, -50.0, 50.0);
+      // constructor: eye, at, up, tipo(ortogonal), near, far, bottom, top, left, right
 
       eye = {-200, 100, 150}; 
       at = {-50, 0, 0};
       up = {0, 1, 0};
-      Camara cam2(eye, at, up, 0, 50.0, 2000.0);
+      Camara cam2(eye, at, up, 0, 50.0, 2000.0, -50.0, 50.0, -50.0, 50.0);
+      // constructor: eye, at, up, tipo(perspectiva), near, far, bottom, top, left, right
+
 
 
       camaras.push_back(cam0);
@@ -178,29 +176,16 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
    // para evitar que se altere la longitud de las normales:
    glEnable(GL_NORMALIZE);
 
-   // Modo de visualización sombreado suave
-   // glShadeModel(GL_SMOOTH);
-   // glShadeModel(GL_FLAT);
-
    /////// Deshabilitar cosas para la selección
 
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
 
-   for (int i = 0; i < camaras.size(); i++){
-
-		camaras[i].setLeft(-UI_window_width/10);
-		camaras[i].setRight(UI_window_width/10);
-		camaras[i].setBottom(-UI_window_height/10);
-		camaras[i].setTop(UI_window_height/10);
-
-		//camaras[i].zoom((float)newWidth/(float)newHeight);
-	}
-
-   // change_projection( float(UI_window_width)/float(UI_window_height) );
    change_projection();
 	glViewport( 0, 0, UI_window_width, UI_window_height );
+
+   mostrarMenuPrincipal();
 }
 
 /// @brief Animar el modelo jerárquico
@@ -568,9 +553,9 @@ void Escena::pick(int x, int y){
       Tupla3f csCuadro = cuadro->getColorSeleccion();
 
 
-   cout << "\n\tPIXEL LEIDO: (" << pixel_leido(0) << ", " << pixel_leido(1) << ", " << pixel_leido(2) << ")" << endl;
+   // cout << "\n\tPIXEL LEIDO: (" << pixel_leido(0) << ", " << pixel_leido(1) << ", " << pixel_leido(2) << ")" << endl;
 
-   cout << "\n";
+   // cout << "\n";
 
    Tupla3f centro;
 
@@ -813,6 +798,63 @@ bool Escena::invertirMatriz(const float m[16], float invOut[16]){
     return true;
 }
 
+/* FUNCIONES PARA MOSTRAR MENÚ */
+
+void Escena::mostrarMenuPrincipal(){
+   cout << "\n\n\tOpciones de menú: " << endl;
+   cout << "\t'V' -> Menú visualización" << endl;
+   cout << "\t'A' -> Animación automática" << endl;
+   cout << "\t'M' -> Animación manual" << endl;
+   cout << "\t'C' -> Selección de cámara" << endl;
+   cout << "\t'Y' -> Mover la cámara hacia delante" << endl;
+   cout << "\t'H' -> Mover la cámara hacia atrás" << endl;
+   cout << "\t'G' -> Mover la cámara hacia la izquierda" << endl;
+   cout << "\t'J' -> Mover la cámara hacia la derecha" << endl;
+   cout << "\t'Q' -> Fin del programa" << endl << endl;
+}
+
+void Escena::mostrarMenuGradosLibertad(){
+   cout << "\n\n\tMenú de animación manual: " << endl;
+   cout << "\t'0' a '3' -> Seleccionar grado de libertad" << endl;
+   cout << "\t'+' -> Aumentar valor del grado de libertad seleccionado" << endl;
+   cout << "\t'-' -> Disminuir valor del grado de libertad seleccionado" << endl;
+   cout << "\t'Q' -> Salir de este menú" << endl << endl;
+
+}
+
+void Escena::mostrarMenuLuces(){
+   cout << "\n\n\tMenú de luces: " << endl;
+   cout << "\t'0' a '2' -> seleccionar luz" << endl;
+   cout << "\t'A' -> Activará el modo variación del ángulo alfa" << endl;
+   cout << "\t'B' -> Activará el modo variación del ángulo beta" << endl;
+   cout << "\t'>' -> Incrementa el ángulo seleccionado" << endl;
+   cout << "\t'<' -> Decrementa el ángulo seleccionado" << endl;
+   cout << "\t'P' -> Se anima automáticamente la luz puntual" << endl;
+   cout << "\t'D' -> Se anima automáticamente el color de la luz direccional" << endl;
+   cout << "\t'Q' -> Salir de este menú" << endl << endl;
+}
+
+void Escena::mostrarMenuAnimacionAutomatica(){
+   cout << "\n\n\t'+' -> Aumentar valor del grado de libertad seleccionado" << endl;
+   cout << "\t'-' -> Disminuir valor del grado de libertad seleccionado" << endl;
+   cout << "\t'Q' -> Salir de este menú" << endl << endl;
+}
+
+void Escena::mostrarMenuSeleccionCamaras(){
+   cout << "\n\n\tMenú de selección de cámaras" << endl;
+   cout << "\t'0 a '7' -> Seleccionar cámara" << endl;
+   cout << "\t'Q' -> Salir de este menú" << endl << endl;
+}
+
+void Escena::mostrarMenuVisualizacion(){
+   cout << "\n\n\tMenú de visualización: " << endl;
+   cout << "\t'P' -> Activar/desactivar modo puntos" << endl;
+   cout << "\t'L' -> Activar/desactivar modo lineas" << endl;
+   cout << "\t'S' -> Activar/desactivar modo solido" << endl;
+   cout << "\t'I' -> Entrar en modo luces" << endl;
+   cout << "\t'Q' -> Salir de este menú" << endl;
+}
+
 
 
 //**************************************************************************
@@ -823,10 +865,11 @@ bool Escena::invertirMatriz(const float m[16], float invOut[16]){
 //
 //**************************************************************************
 
+
 bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 {
    using namespace std ;
-   cout << "Tecla pulsada: '" << tecla << "'" << endl;
+   // cout << "Tecla pulsada: '" << tecla << "'" << endl;
    bool salir=false;
          Tupla3f direccion = camaras[camaraActiva].getAt() - camaras[camaraActiva].getEye();
 
@@ -837,35 +880,40 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          if (modoMenu!=NADA){
             modoMenu=NADA;            
             cout << "-->VOLVIENDO A MENÚ PRINCIPAL" << endl;
+            mostrarMenuPrincipal();
          }
          else {
             salir=true ;
          }
          break ;
-      case 'O' :
-         // ESTAMOS EN MODO SELECCION DE OBJETO
-         cout << "-->ENTRANDO A MENÚ DE SELECCIÓN DE OBJETO" << endl;
-         modoMenu=SELOBJETO; 
-         break ;
+      // case 'O' :
+      //    // ESTAMOS EN MODO SELECCION DE OBJETO
+      //    cout << "-->ENTRANDO A MENÚ DE SELECCIÓN DE OBJETO" << endl;
+      //    modoMenu=SELOBJETO; 
+      //    break ;
       case 'V' :
          // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
-         cout << "-->ENTRANDO A MENÚ DE VISUALIZACIÓN" << endl;
+         // cout << "-->ENTRANDO A MENÚ DE VISUALIZACIÓN" << endl;
          modoMenu=SELVISUALIZACION;
+         mostrarMenuVisualizacion();
          break ;
       case 'A':
+         animacionAutomatica = !animacionAutomatica;
+         cout << "-->ANIMACIÓN AUTOMÁTICA " << (animacionAutomatica ? "ACTIVADA" : "DESACTIVADA") << endl;
          if(modoMenu==NADA){ // si no está en ningun submenú
-            animacionAutomatica = !animacionAutomatica;
-            cout << "-->ANIMACIÓN AUTOMÁTICA " << (animacionAutomatica ? "ACTIVADA" : "DESACTIVADA") << endl;
             modoMenu=ANIMACION;
          }
+         mostrarMenuAnimacionAutomatica();
          break;
       case 'M': // se desactiva animacion automatica
-         cout << "-->ENTRANDO A SELECCIÓN DE GRADOS DE LIBERTAD" << endl;
+         // cout << "-->ENTRANDO A SELECCIÓN DE GRADOS DE LIBERTAD" << endl;
          modoMenu=GRADOS;
+         mostrarMenuGradosLibertad();
          break;
       case 'C':
-         cout << "-->ENTRANDO A SELECCIÓN DE CAMARAS" << endl;
+         // cout << "-->ENTRANDO A SELECCIÓN DE CAMARAS" << endl;
          modoMenu=CAMARAS;
+         mostrarMenuSeleccionCamaras();
          break;
       case 'Y': // arriba
          // camaras[camaraActiva].mover(0, 4, 0);
@@ -916,31 +964,35 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                iluminacionActiva = false;
             }
             modoPunto = !modoPunto; 
-            cout << "--MODO PUNTOS " << (modoPunto ? "ACTIVADO" : "DESACTIVADO") << endl;
+            cout << "--MODO PUNTOS " << (modoPunto ? "ACTIVADO" : "DESACTIVADO") << endl << endl;
+            mostrarMenuVisualizacion();
             break;
          case 'L': // modo líneas
             if(iluminacionActiva){
                iluminacionActiva = false;
             }
             modoLinea = !modoLinea; 
-            cout << "--MODO LÍNEAS " << (modoLinea ? "ACTIVADO" : "DESACTIVADO") << endl;
+            cout << "--MODO LÍNEAS " << (modoLinea ? "ACTIVADO" : "DESACTIVADO") << endl << endl;
+            mostrarMenuVisualizacion();
             break;
          case 'S': // modo sólido
             if(iluminacionActiva){
                iluminacionActiva = false;
             }
             modoSolido = !modoSolido; 
-            cout << "--MODO SÓLIDO " << (modoSolido ? "ACTIVADO" : "DESACTIVADO") << endl;
+            cout << "\n\n--MODO SÓLIDO " << (modoSolido ? "ACTIVADO" : "DESACTIVADO") << endl << endl;
+            mostrarMenuVisualizacion();
             break;
-         case 'T': // activar iluminación
+         case 'I': // activar iluminación
             iluminacionActiva = !iluminacionActiva;
             if(iluminacionActiva){
                modoLinea = false;
                modoPunto = false;
                modoSolido = true;
             }
-            cout << "--ILUMINACIÓN " << (iluminacionActiva ? "ACTIVADA" : "DESACTIVADA") << endl;
+            cout << "--ILUMINACIÓN " << (iluminacionActiva ? "ACTIVADA" : "DESACTIVADA") << endl << endl;
             modoMenu = LUCES;
+            mostrarMenuLuces();
             break;
       }
 
@@ -951,95 +1003,104 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             if (luz0 != nullptr)
                luz0->setActivada(!luz0->estadoActivada());
             cout << "--LUZ 0 (POSICIONAL)" << (luz0->estadoActivada() ? "ACTIVADA" : "DESACTIVADA") << endl;
+            mostrarMenuLuces();
             break;
          case '1': // GL_LIGHT1
             if (luz1 != nullptr)
                   luz1->setActivada(!luz1->estadoActivada());
             cout << "--LUZ 1 (DIRECCIONAL)" << (luz1->estadoActivada() ? "ACTIVADA" : "DESACTIVADA") << endl;
-
+            mostrarMenuLuces();
             break;
          case '2': // GL_LIGHT2
             if (luz2 != nullptr)
                   luz2->setActivada(!luz2->estadoActivada());
             cout << "--LUZ 2 (POSICIONAL)" << (luz2->estadoActivada() ? "ACTIVADA" : "DESACTIVADA") << endl;
+            mostrarMenuLuces();
             break;
          case 'A': // variar angulo alfa
             ultimaPulsada = 'A';
             cout << "--CAMBIAR ÁNGULO ALFA..." << endl;
+            mostrarMenuLuces();
             break;
          case 'B': // variar angulo beta
             ultimaPulsada = 'B';
             cout << "--CAMBIAR ÁNGULO BETA..." << endl;
+            mostrarMenuLuces();
             break;
          case '>': // incrementa el angulo
             if(ultimaPulsada == 'A'){
-               cout << "--INCREMENTA ALFA" << endl;
                luz1->variarAnguloAlpha(5*M_PI/180);
             }
-            else if(ultimaPulsada == 'B'){ // la B
-               cout << "--INCREMENTA BETA" << endl;
+            else if(ultimaPulsada == 'B'){
                luz1->variarAnguloBeta(5*M_PI/180);
             }
             break;
          case '<': // decrementa el angulo
             if(ultimaPulsada == 'A'){
                luz1->variarAnguloAlpha(-5*M_PI/180);
-               cout << "--DECREMENTA ALFA" << endl;
             }
             else if(ultimaPulsada == 'B'){ // la B
                luz1->variarAnguloBeta(-5*M_PI/180);
-               cout << "--DECREMENTA BETA" << endl;
             }
             break;
          case 'P':
             // animar automaticamente luz puntual
             animacionLuzPosicional = !animacionLuzPosicional;
             cout << "-->ANIMACIÓN AUTOMÁTICA DE LUZ POSICIONAL " << (animacionLuzPosicional ? "ACTIVADA" : "DESACTIVADA") << endl;
+            mostrarMenuLuces();
             break;
          case 'D':
             // animar automaticamente luz direccional
             animacionLuzDireccional = !animacionLuzDireccional;
             cout << "-->ANIMACIÓN AUTOMÁTICA DE LUZ DIRECCIONAL " << (animacionLuzDireccional ? "ACTIVADA" : "DESACTIVADA") << endl;
+            mostrarMenuLuces();
             break;
          default:
             break;
       }
    }
 
-   if(modoMenu == ANIMACION){
+   if(modoMenu == ANIMACION){ // tecla A
       switch (toupper(tecla))
       {
       case '+':
          /* aumenta velocidad */
          robot->cambiarVelocidad(0.4);
+         cout << "-->AUMENTADA VELOCIDAD" << endl;
+         mostrarMenuAnimacionAutomatica();
          break;
       case '-':
          /* disminuye velocidad */
          robot->cambiarVelocidad(-0.4);
+         cout << "-->DISMINUIDA VELOCIDAD" << endl;
+         mostrarMenuAnimacionAutomatica();
          break;
-      
       default:
          break;
       }
    }
 
-   if(modoMenu == GRADOS){
+   if(modoMenu == GRADOS){ // tecla M
       switch(toupper(tecla)){
          case '0':
             numGrado = 0; 
             cout << "--GRADO 0 SELECCIONADO (PIERNAS)" << endl;
+            mostrarMenuGradosLibertad();
             break;
          case '1':
             numGrado = 1;
             cout << "--GRADO 1 SELECCIONADO (BRAZOS)" << endl;
+            mostrarMenuGradosLibertad();
             break;
          case '2':
             numGrado = 2;
             cout << "--GRADO 2 SELECCIONADO (MOVIMIENTO)" << endl;
+            mostrarMenuGradosLibertad();
             break;
          case '3':
             numGrado = 3;
             cout << "--GRADO 3 SELECCIONADO (CABEZA)" << endl;
+            mostrarMenuGradosLibertad();
             break;
          case '+':
             switch (numGrado)
@@ -1102,52 +1163,100 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       switch (toupper(tecla))
       {
       case '0':
-         camaraActiva = 0;
-         change_projection();
-         change_observer();
-         cout << ">> CÁMARA 0 ACTIVADA" << endl;
+         if(camaras.size() >= 1){
+            camaraActiva = 0;
+            change_projection();
+            change_observer();
+            cout << "\n\n>> CÁMARA 0 ACTIVADA" << endl;
+         }
+         else{
+            cout << "\n\n>> NO HAY CÁMARA 0 DEFINIDA" << endl;
+         }
+         mostrarMenuSeleccionCamaras();
          break;
       case '1':
-         camaraActiva = 1;
-         change_projection();
-         change_observer();
-         cout << ">> CÁMARA 1 ACTIVADA" << endl;
+         if(camaras.size() >= 2){
+            camaraActiva = 1;
+            change_projection();
+            change_observer();
+            cout << "\n\n>> CÁMARA 1 ACTIVADA" << endl;
+         }
+         else{
+            cout << "\n\n>> NO HAY CÁMARA 1 DEFINIDA" << endl;
+         }
+         mostrarMenuSeleccionCamaras();
          break;
       case '2':
-         camaraActiva = 2;
-         change_projection();
-         change_observer();
-         cout << ">> CÁMARA 2 ACTIVADA" << endl;
+         if(camaras.size() >= 3){
+            camaraActiva = 2;
+            change_projection();
+            change_observer();
+            cout << "\n\n>> CÁMARA 2 ACTIVADA" << endl;
+         }
+         else{
+            cout << "\n\n>> NO HAY CÁMARA 2 DEFINIDA" << endl;
+         }
+         mostrarMenuSeleccionCamaras();
          break;
       case '3':
-         camaraActiva = 3;
-         change_projection();
-         change_observer();
-         cout << ">> CÁMARA 3 ACTIVADA" << endl;
+         if(camaras.size() >= 4){
+            camaraActiva = 3;
+            change_projection();
+            change_observer();
+            cout << "\n\n>> CÁMARA 3 ACTIVADA" << endl;
+         }
+         else{
+            cout << "\n\n>> NO HAY CÁMARA 3 DEFINIDA" << endl;
+         }
+         mostrarMenuSeleccionCamaras();
          break;
       case '4':
-         camaraActiva = 4;
-         change_projection();
-         change_observer();
-         cout << ">> CÁMARA 4 ACTIVADA" << endl;
+         if(camaras.size() >= 5){
+            camaraActiva = 4;
+            change_projection();
+            change_observer();
+            cout << "\n\n>> CÁMARA 4 ACTIVADA" << endl;
+         }
+         else{
+            cout << "\n\n>> NO HAY CÁMARA 4 DEFINIDA" << endl;
+         }
+         mostrarMenuSeleccionCamaras();
          break;
       case '5':
-         camaraActiva = 5;
-         change_projection();
-         change_observer();
-         cout << ">> CÁMARA 5 ACTIVADA" << endl;
+         if(camaras.size() >= 6){
+            camaraActiva = 5;
+            change_projection();
+            change_observer();
+            cout << "\n\n>> CÁMARA 5 ACTIVADA" << endl;
+         }
+         else{
+            cout << "\n\n>> NO HAY CÁMARA 5 DEFINIDA" << endl;
+         }
+         mostrarMenuSeleccionCamaras();
          break;
       case '6':
-         camaraActiva = 6;
-         change_projection();
-         change_observer();
-         cout << ">> CÁMARA 6 ACTIVADA" << endl;
+         if(camaras.size() >= 7){
+            camaraActiva = 6;
+            change_projection();
+            change_observer();
+            cout << "\n\n>> CÁMARA 6 ACTIVADA" << endl;
+         }
+         else{
+            cout << "\n\n>> NO HAY CÁMARA 6 DEFINIDA" << endl;
+         }
+         mostrarMenuSeleccionCamaras();
          break;
       case '7':
-         camaraActiva = 7;
-         change_projection();
-         change_observer();
-         cout << ">> CÁMARA 7 ACTIVADA" << endl;
+         if(camaras.size() >= 8){
+            camaraActiva = 7;
+            change_projection();
+            change_observer();
+            cout << "\n\n>> CÁMARA 7 ACTIVADA" << endl;
+         }
+         else{
+            cout << "\n\n>> NO HAY CÁMARA 7 DEFINIDA" << endl;
+         }
+         mostrarMenuSeleccionCamaras();
          break;
       default:
          break;
