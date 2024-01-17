@@ -24,9 +24,7 @@ void Pierna::draw(){
         glRotatef(giro_pierna, 1, 0, 0); // empiezo en 0
         glTranslatef(0, -h_pierna, 0);
 
-        glPushMatrix();
-            pie->draw();
-        glPopMatrix();
+        pie->draw();
         cilindro->draw();
     glPopMatrix();
 }

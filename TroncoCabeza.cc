@@ -11,8 +11,6 @@ TroncoCabeza::TroncoCabeza(float h=1, float r=0.5){
     tronco = new Cilindro(4, 10, h_tronco, r_tronco);
     cabeza = new Esfera(10, 20, r_tronco-r_tronco*0.40); // menos el 40%
 
-    // cabeza = new Cabeza(r_tronco-r_tronco*0.40);
-
     r_cabeza = cabeza->getRadio();
 
     cabeza->setColor(

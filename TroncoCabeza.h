@@ -5,8 +5,6 @@
 #include "objrevolucion.h"
 #include "esfera.h"
 #include "cilindro.h"
-#include "cabeza.h"
-
 
 // tronco y cabeza
 class TroncoCabeza : public ObjRevolucion

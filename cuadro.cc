@@ -42,6 +42,8 @@ Cuadro::Cuadro(const float lado) {
 
 }
 
+/// @brief Devuelve la longitud del lado del cuadro
+/// @return lado
 float Cuadro::getLado(){
     return lado;
 }

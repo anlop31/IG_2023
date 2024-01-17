@@ -10,6 +10,9 @@
 /// @param radio 
 Cono::Cono(const int num_vert_perfil = 2, const int num_instancias_perf = 20, const float altura = 1.0, const float radio = 1.0){
    std::vector<Tupla3f> vertices;
+   
+   this->radio = radio;
+   this->altura = altura;
 
    vertices.resize(num_vert_perfil);
 
@@ -26,4 +29,16 @@ Cono::Cono(const int num_vert_perfil = 2, const int num_instancias_perf = 20, co
    );
 
    modo_textura = CILINDRICA;
+}
+
+/// @brief Devuelve el radio del cono
+/// @return radio
+float Cono::getRadio(){
+   return radio;
+}
+
+/// @brief Devuelve la altura del cono
+/// @return altura
+float Cono::getAltura(){
+   return altura;
 }

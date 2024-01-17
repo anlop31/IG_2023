@@ -7,6 +7,7 @@
 Cubo::Cubo(float lado)
 {
    this->lado = lado;
+
    // inicializar la tabla de vértices
    v.resize(8);
 
@@ -57,7 +58,8 @@ Cubo::Cubo(float lado)
 
 }
 
-
+/// @brief Devuelve el lado del cubo
+/// @return lado
 float Cubo::getLado(){
    return lado;
 }

@@ -31,9 +31,9 @@ class Malla3D
 
    void calcularNormales();
    void asignarPuntosTextura(const modoTextura & modo);
-   void asignarPuntosTexturaCuadro(const modoTextura & modo);
-   void asignarPuntosTexturaCarretera(const modoTextura & modo);
-   void asignarPuntosTexturaMundo(const modoTextura & modo);
+   void asignarPuntosTexturaCuadro();
+   void asignarPuntosTexturaCarretera();
+   void asignarPuntosTexturaMundo();
    
    void calcularCentro();
    void calcularCentroVista();

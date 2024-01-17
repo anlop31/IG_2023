@@ -39,7 +39,8 @@ void Luz::setActivada(const bool nuevo_valor){
 }
 
 
-
+/// @brief Devuelve el id de la luz
+/// @return id
 int Luz::getId(){
     return id;
 }

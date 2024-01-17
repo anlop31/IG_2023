@@ -70,7 +70,7 @@ Escena::Escena()
    cuadro = new Cuadro(60.0);
 
    // Carretera
-   carretera = new Carretera(120, 2000);
+   carretera = new Carretera(120, 8000);
 
    // Mundo
    mundo = new Mundo(8000);
@@ -136,20 +136,19 @@ Escena::Escena()
       Tupla3f eye = {0, 150, 220}; 
       Tupla3f at = {0, 0, 0};
       Tupla3f up = {0, 1, 0};
-      Camara cam0(eye, at, up, 0, 50.0, 2000.0, -50.0, 50.0, -50.0, 50.0);
-      // constructor: eye, at, up, tipo(perspectiva), near, far, bottom, top, left, right
+      float near = 50.0, far = 2000.0;
+      float bottom = -50.0, top = 50.0, left = -50.0, right = 50.0;
+      Camara cam0(eye, at, up, 0, near, far, bottom, top, left, right);
 
       eye = {0, 100, 1000}; 
       at = {0, 0, 0};
       up = {0, 1, 0};
-      Camara cam1(eye, at, up, 1, 50.0, 2000.0, -50.0, 50.0, -50.0, 50.0);
-      // constructor: eye, at, up, tipo(ortogonal), near, far, bottom, top, left, right
+      Camara cam1(eye, at, up, 1, near, far, bottom, top, left, right);
 
-      eye = {-200, 100, 150}; 
-      at = {-50, 0, 0};
+      eye = {-150, 200, -150}; 
+      at = {0, 0, 100};
       up = {0, 1, 0};
-      Camara cam2(eye, at, up, 0, 50.0, 2000.0, -50.0, 50.0, -50.0, 50.0);
-      // constructor: eye, at, up, tipo(perspectiva), near, far, bottom, top, left, right
+      Camara cam2(eye, at, up, 0, near, far, bottom, top, left, right);
 
 
 
@@ -178,6 +177,9 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
    /////// Deshabilitar cosas para la selección
 
+
+   luz0->setActivada(true);
+   luz1->setActivada(true);
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
@@ -354,7 +356,7 @@ void Escena::dibujarObjetos(bool seleccion){
 
       //// BEETHOVEN (ObjPLY_2)
       glPushMatrix();
-         glTranslatef(200, 0, -300);
+         glTranslatef(200, 100, -300);
          glScalef(10, 10, 10);
          ObjPLY_2->draw(); // Beethoven
       glPopMatrix();
@@ -625,7 +627,7 @@ void Escena::pick(int x, int y){
       camaras[camaraActiva].setObjetoSeleccionado("CUADRO");   
    }
    else{
-      cout << "\tNada seleccionado!" << endl;
+      // cout << "\tNada seleccionado!" << endl;
       camaras[camaraActiva].setObjetoSeleccionado("NINGUNO");   
    }
 
@@ -824,6 +826,7 @@ void Escena::mostrarMenuGradosLibertad(){
 
 void Escena::mostrarMenuLuces(){
    cout << "\n\n\tMenú de luces: " << endl;
+   cout << "\t'I' -> Activar/desactivar luces " << endl;
    cout << "\t'0' a '2' -> seleccionar luz" << endl;
    cout << "\t'A' -> Activará el modo variación del ángulo alfa" << endl;
    cout << "\t'B' -> Activará el modo variación del ángulo beta" << endl;
@@ -835,7 +838,9 @@ void Escena::mostrarMenuLuces(){
 }
 
 void Escena::mostrarMenuAnimacionAutomatica(){
-   cout << "\n\n\t'+' -> Aumentar valor del grado de libertad seleccionado" << endl;
+   cout << "\n\n\tMenú animación automática: " << endl;
+   cout << "\t'A' -> Activar/desactivar animación automática" << endl;
+   cout << "\t'+' -> Aumentar valor del grado de libertad seleccionado" << endl;
    cout << "\t'-' -> Disminuir valor del grado de libertad seleccionado" << endl;
    cout << "\t'Q' -> Salir de este menú" << endl << endl;
 }
@@ -878,7 +883,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    {
       case 'Q' :
          if (modoMenu!=NADA){
-            modoMenu=NADA;            
+            modoMenu=NADA;           
+            primeraVezPulsadoI = true; 
             cout << "-->VOLVIENDO A MENÚ PRINCIPAL" << endl;
             mostrarMenuPrincipal();
          }
@@ -943,6 +949,23 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
             camaras[camaraActiva].mover(direccion(0), direccion(1), direccion(2));
          break;
+      case 'I': // activar iluminación
+         if(modoMenu==SELVISUALIZACION){
+            cout << "--ILUMINACIÓN " << (iluminacionActiva ? "ACTIVADA" : "DESACTIVADA") << endl << endl;
+            modoMenu = LUCES;
+            mostrarMenuLuces();
+         } else if(modoMenu==LUCES){
+            iluminacionActiva = !iluminacionActiva;
+            cout << "--ILUMINACIÓN " << (iluminacionActiva ? "ACTIVADA" : "DESACTIVADA") << endl << endl;
+            if(iluminacionActiva){
+               modoLinea = false;
+               modoPunto = false;
+               modoSolido = true;
+            }
+            mostrarMenuLuces();
+         }
+         
+         break;
    }
 
    // SELECCION OBJETO
@@ -982,17 +1005,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             modoSolido = !modoSolido; 
             cout << "\n\n--MODO SÓLIDO " << (modoSolido ? "ACTIVADO" : "DESACTIVADO") << endl << endl;
             mostrarMenuVisualizacion();
-            break;
-         case 'I': // activar iluminación
-            iluminacionActiva = !iluminacionActiva;
-            if(iluminacionActiva){
-               modoLinea = false;
-               modoPunto = false;
-               modoSolido = true;
-            }
-            cout << "--ILUMINACIÓN " << (iluminacionActiva ? "ACTIVADA" : "DESACTIVADA") << endl << endl;
-            modoMenu = LUCES;
-            mostrarMenuLuces();
             break;
       }
 

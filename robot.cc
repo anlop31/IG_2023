@@ -28,9 +28,7 @@ void Robot::draw(){
         glTranslatef(0, 0, desplazamiento);
 
         // RESTO DEL CUERPO
-        glPushMatrix();
-            troncoPiernas->draw();
-        glPopMatrix();
+        troncoPiernas->draw();
 
         // BRAZOS
         glPushMatrix();

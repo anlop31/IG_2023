@@ -7,11 +7,17 @@
 
 class Cono : public ObjRevolucion
 {
-   public:
-   Cono( const int num_vert_perfil,
-         const int num_instancias_perf,
-         const float altura,
-         const float radio );
+      private:
+      float altura, radio;
+
+      public:
+      Cono( const int num_vert_perfil,
+            const int num_instancias_perf,
+            const float altura,
+            const float radio );
+
+      float getRadio();
+      float getAltura();
 };
 
 #endif

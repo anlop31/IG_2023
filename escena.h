@@ -108,13 +108,15 @@ class Escena
     bool modoSolido = true;
 
     // Iluminacion activa
-    bool iluminacionActiva = false;
+    bool iluminacionActiva = true;
 
     // Variables para controlar las teclas pulsadas
     unsigned char ultimaPulsada = 'N';
 
     bool primeraVezPulsado0 = true;
     bool primeraVezPulsado1 = true;
+
+    bool primeraVezPulsadoI = true;
 
     bool entradoMenu = false;
 

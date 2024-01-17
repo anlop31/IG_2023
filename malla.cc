@@ -193,7 +193,7 @@ void Malla3D::asignarPuntosTextura(const modoTextura & modo){
 
 /// @brief Asigna los puntos de textura de la malla si es un cuadro
 /// @param modo 
-void Malla3D::asignarPuntosTexturaCuadro(const modoTextura & modo){
+void Malla3D::asignarPuntosTexturaCuadro(){
 
 	ct.clear();
    ct.resize(v.size());
@@ -206,7 +206,7 @@ void Malla3D::asignarPuntosTexturaCuadro(const modoTextura & modo){
 
 /// @brief Asignar los puntos de textura de la malla si es un cuadro
 /// @param modo 
-void Malla3D::asignarPuntosTexturaCarretera(const modoTextura & modo){
+void Malla3D::asignarPuntosTexturaCarretera(){
    ct.clear();
    ct.resize(v.size());
 
@@ -216,7 +216,9 @@ void Malla3D::asignarPuntosTexturaCarretera(const modoTextura & modo){
    ct[3] = {1.0f, 1.0f}; // (0,largo,0)
 }
 
-void Malla3D::asignarPuntosTexturaMundo(const modoTextura & modo){
+/// @brief Asignar los puntos de textura de la malla si es el mundo
+/// @param modo 
+void Malla3D::asignarPuntosTexturaMundo(){
    ct.clear();
    ct.resize(v.size());
 
@@ -287,11 +289,11 @@ void Malla3D::setTextura(const std::string & archivo){
 
 
    if(es_cuadro)
-      asignarPuntosTexturaCuadro(modo_textura);
+      asignarPuntosTexturaCuadro();
    else if(es_carretera)
-      asignarPuntosTexturaCarretera(modo_textura);
+      asignarPuntosTexturaCarretera();
    else if(es_mundo)
-      asignarPuntosTexturaMundo(modo_textura);
+      asignarPuntosTexturaMundo();
    // else
 	//    asignarPuntosTextura(modo_textura);
 

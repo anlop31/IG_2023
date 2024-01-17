@@ -1,0 +1,90 @@
+-- Proyecto final Informática Gráfica --
+
+** Funcionamiento del programa ** 
+El programa muestra en cada momento un menú con las opciones disponibles.
+Inicialmente se muestra un menú que muestra las opciones disponibles al principio. Las opciones disponibles son:
+    
+    Opciones de menú: 
+    'V' -> Menú visualización
+    'A' -> Animación automática
+    'M' -> Animación manual
+    'C' -> Selección de cámara
+    'Y' -> Mover la cámara hacia delante
+    'H' -> Mover la cámara hacia atrás
+    'G' -> Mover la cámara hacia la izquierda
+    'J' -> Mover la cámara hacia la derecha
+    'Q' -> Fin del programa
+
+
+Al entrar al menú de visualización con 'V':
+
+    Menú de visualización: 
+    'P' -> Activar/desactivar modo puntos
+    'L' -> Activar/desactivar modo lineas
+    'S' -> Activar/desactivar modo solido
+    'I' -> Entrar en modo luces
+    'Q' -> Salir de este menú
+
+
+Dentro del menú de visualización, podemos acceder al menú de luces con 'I':
+
+    Menú de luces: 
+    'I' -> Activar/desactivar luces 
+    '0' a '2' -> seleccionar luz
+    'A' -> Activará el modo variación del ángulo alfa
+    'B' -> Activará el modo variación del ángulo beta
+    '>' -> Incrementa el ángulo seleccionado
+    '<' -> Decrementa el ángulo seleccionado
+    'P' -> Se anima automáticamente la luz puntual
+    'D' -> Se anima automáticamente el color de la luz direccional
+    'Q' -> Salir de este menú
+
+
+En cualquier menú podemos volver al inicio con 'Q'.
+
+Cuando pulsamos 'A', vamos el menú de animación automática:
+    
+    Menú animación automática:
+    '+' -> Aumentar valor del grado de libertad seleccionado
+    '-' -> Disminuir valor del grado de libertad seleccionado
+    'Q' -> Salir de este menú
+
+
+Cuando pulsamos 'M', vamos al menú de animación manual. Tenemos 4 grados de libertad,
+que son la rotación de las dos piernas, la rotación de los dos brazos, el movimiento de la cabeza
+hacia delante y hacia atrás, y el movimiento general del cuerpo (para simular que anda).
+
+    Menú de animación manual: 
+    '0' a '3' -> Seleccionar grado de libertad
+    '+' -> Aumentar valor del grado de libertad seleccionado
+    '-' -> Disminuir valor del grado de libertad seleccionado
+    'Q' -> Salir de este menú
+
+        0->piernas
+        1->brazos
+        2->movimiento general
+        3->cabeza
+
+
+Cuando pulsamos 'C', vamos al menú de selección de cámara.
+
+    Menú de selección de cámaras
+    '0 a '7' -> Seleccionar cámara
+    'Q' -> Salir de este menú
+
+
+Actualmente hay 3 cámaras definidas, con ids: 0, 1, 2. La 0 y la 2 son perspectiva, y la 1 ortográfica.
+Se puede mover en primera persona dejando pulsado el click derecho y moviendo el ratón. También se puede
+hacer zoom con la rueda del ratón.
+
+
+Independientemente del menú en el que se esté, se puede mover la cámara con las siguientes teclas,
+que también se muestran en el menú principal:
+    'Y' -> Mover la cámara hacia delante
+    'H' -> Mover la cámara hacia atrás
+    'G' -> Mover la cámara hacia la izquierda
+    'J' -> Mover la cámara hacia la derecha
+
+     Y        ^
+   G H J    < v >
+

@@ -46,6 +46,8 @@ Mundo::Mundo(const float lado) {
 
 }
 
+/// @brief Devuelve la longitud del lado del mundo
+/// @return lado
 float Mundo::getLado(){
     return lado;
 }

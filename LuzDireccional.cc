@@ -137,10 +137,10 @@ void LuzDireccional::animarLuzDireccional(){
     cambiarColor();
 }
 
-/// @brief Actualizar la posició de la luz direccional según alpha y beta
+/// @brief Actualizar la posición de la luz direccional según alpha y beta
 void LuzDireccional::actualizarPosicion(){
     posicion(0) = sin(alpha) * cos(beta);
     posicion(1) = sin(beta);
     posicion(2) = cos(alpha) * cos(beta);
-    posicion(3) = 0;
+    posicion(3) = 0; // forzamos w=0
 }
