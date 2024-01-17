@@ -1,5 +1,7 @@
 -- Proyecto final Informática Gráfica --
 
+Nombre: Ana López Mohedano
+
 ** Funcionamiento del programa ** 
 El programa muestra en cada momento un menú con las opciones disponibles.
 Inicialmente se muestra un menú que muestra las opciones disponibles al principio. Las opciones disponibles son:

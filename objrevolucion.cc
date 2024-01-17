@@ -184,7 +184,6 @@ void ObjRevolucion::asignarPuntosTextura(const modoTextura & modo){
 				s += 0.5; // entre [0, 1]
 				s = fmod(s, 1.0); // asegurarnos que esté entre [0, 1]
 
-            // t = perfil[0](y) / (perfil[perfil.size](y) - perfil[0](y))
 				t = (h - perfil.front()(1) ) / (perfil.back()(1) - perfil.front()(1)) ;
 
 				ct[i] = {s, t};
